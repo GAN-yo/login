@@ -13,7 +13,8 @@
     <!-- 头部 -->
     <div class="head">
         <div class="container position-relative">
-            <a href="https://yzxs.wxeic.com/home" id="logo" class="fl"></a>
+            <!-- 顶部 logo 通过 background-image 设置，使用本地图片 -->
+            <a href="https://yzxs.wxeic.com/home" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover; -webkit-background-size:cover; -o-background-size:cover;"></a>
             <ul id="header_link">
                 <li><a href="https://yzxs.wxeic.com/home">首页</a></li>
                 <li><a href="https://yzxs.wxeic.com/article/index?cid=5">通知公告</a></li>
@@ -23,7 +24,7 @@
                 <a href="https://yzxs.wxeic.com/home" class="ci-btn"></a>
             </div>
             <div class="user-btn">
-                <a href="https://yzxs.wxeic.com/home"><img src="https://yzxs.wxeic.com/public/default/img/home.png" alt=""></a>
+                <a href="https://yzxs.wxeic.com/home"><img src="img/home.png" alt=""></a>
             </div>
         </div>
     </div>
@@ -31,7 +32,7 @@
     <div class="main-body">
         <div class="container">
             <div id="slider">
-                <img src="/upload/img/2022/07/08/u2fhm0bv6ll3ba932uhnbi79c68at7kv-1657265919.jpg">
+                <img src="img/banner.jpg" alt="轮播图">
             </div>
             <div class="box">
                 <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
@@ -51,7 +52,7 @@
                         <div class="swiper-container" style="height:245px;">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                    <img src="https://yzxs.wxeic.com/public/default/img/ewm.png" alt="">
+                                    <img src="img/ewm.png" alt="二维码">
                                     <div class="qrcode-description">
                                         (无锡一中微信公众号)<br />扫描二维码添加关注
                                     </div>
@@ -71,7 +72,7 @@
                     <div class="part border-default mt-10">
                         <div class="title-panel">
                             <div class="title-bar fl">
-                                <img src="https://yzxs.wxeic.com/public/default/img/notice.png" alt="">
+                                <img src="img/notice.png" alt="通知图标">
                                 学生登录
                             </div>
                         </div>
@@ -100,16 +101,19 @@
     <div class="foot">
         <div class="container">
             <a href="#" class="botLogo">
-                <img src="/upload/img/2026/07/09/mq7la8e9huegaq77r94ap7n9kposbjj5-1783608340.png" alt="">
+                <img src="img/footer_logo.png" alt="底部logo">
             </a>
             <p>Copyright © 2026 无锡市第一中学 All Rights Reserved.</p>
         </div>
     </div>
 </div>
 
+<!-- 由于我们直接在 a 标签的 style 中设置了背景，不再需要 JS 动态设置 logo，但为了保留原有 jQuery 初始化，可以保留空的 ready -->
 <script>
+    // 原有的 $(document).ready 已内联到 a 标签的 style，不再需要此处代码
+    // 但仍然保留以保持一致性
     $(document).ready(function(){
-        $("#logo").css({'background':'url(/upload/img/2026/07/09/mq7la8e9huegaq77r94ap7n9kposbjj5-1783608337.png) no-repeat','background-size':'cover','-webkit-background-size':'cover','-o-background-size':'cover'});
+        // logo 已在 a 标签中直接设置，无需再操作
     });
 </script>
 <script src="https://yzxs.wxeic.com/public/baidu.js"></script>

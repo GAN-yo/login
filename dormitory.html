@@ -8,50 +8,61 @@
     <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
     <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
     <style>
-        /* 弹窗样式 */
-        #secret-popup {
-            display: none;
-            position: fixed;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fffaf0;
-            border: 2px solid #8b0000;
-            padding: 25px 30px;
-            z-index: 9999;
-            font-size: 15px;
-            line-height: 1.8;
-            color: #3e2723;
-            box-shadow: 0 0 30px rgba(0,0,0,0.3);
-            max-width: 500px;
-            text-align: justify;
-            font-family: "宋体", "SimSun", serif;
+        /* 提示信息 */
+        .submit-status {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px 20px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #856404;
+            border-radius: 4px;
+            line-height: 1.6;
         }
-        #secret-popup h4 {
-            margin: 0 0 15px 0;
-            color: #8b0000;
-            text-align: center;
-            font-size: 16px;
+        .remark-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
         }
-        #popup-close {
-            display: block;
-            margin: 15px auto 0;
-            background: #8b0000;
-            color: #fff;
-            border: none;
-            padding: 6px 20px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-        .overlay {
-            display: none;
+        /* 弹窗遮罩 */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.4);
-            z-index: 9998;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-box {
+            background: #fffaf0;
+            border: 2px solid #b22222;
+            padding: 25px 30px;
+            max-width: 500px;
+            width: 90%;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #4a2e2e;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 22px;
+            color: #b22222;
+            font-weight: bold;
+        }
+        .download-link {
+            color: red;
+            text-decoration: underline;
+            font-weight: bold;
+            cursor: pointer;
         }
         .disclaimer {
             font-size: 11px;
@@ -60,44 +71,9 @@
             line-height: 1.5;
             text-align: center;
         }
-        .success-msg {
-            text-align: center;
-            color: #2e7d32;
-            font-size: 16px;
-            margin: 20px 0;
-            background: #f0f9f0;
-            padding: 10px;
-            border-radius: 4px;
-        }
-        .remark-counter {
-            font-size: 12px;
-            color: #999;
-            margin-left: 5px;
-        }
-        /* 下载链接强调 */
-        .download-link {
-            color: red;
-            text-decoration: underline;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
-<!-- 遮罩层 -->
-<div class="overlay" id="popup-overlay"></div>
-<!-- 隐藏弹窗 -->
-<div id="secret-popup">
-    <h4>[系统备注 · 档案号 110512-20110815]</h4>
-    <p>今天累死了，那间屋子我已经收拾干净了。柜子里留了一卷没用完的胶卷，如果有人能找到的话——不过那里现在大概早就不是原来的样子了吧。</p>
-    <p>说起来，暗房里最后显影的那张照片，我始终没等到它完全定影。</p>
-    <p>没有光，所以得在黑暗里摸。</p>
-    <p>我知道这听起来很怪。但如果你真的找到了这里，那你很厉害——你大概已经看见过那面墙了。</p>
-    <p>那就继续找吧。还有一些东西，我藏在别的地方。但不是实物。关于这栋楼，关于一百年。</p>
-    <p>项目编号HB101，如果它还在服务器里的话。</p>
-    <p style="text-align:right; margin-top:10px;">——林，2011.08.15</p>
-    <button id="popup-close">关闭</button>
-</div>
-
 <div class="wrapper">
     <!-- 头部 -->
     <div class="head">
@@ -153,41 +129,38 @@
                             <div class="title-bar fl"><img src="img/notice.png" alt="">住宿申请</div>
                             <div class="title-nav fr"></div>
                         </div>
+
+                        <!-- 提交状态提示 -->
+                        <div id="submit-status" class="submit-status" style="display:none;"></div>
+
                         <div class="form-box">
-                            <!-- 已提交状态提示 -->
-                            <div id="submit-success" class="success-msg" style="display:none;">
-                                ✔ 已提交，正在审核中，请耐心等待。如需修改备注，请在下方备注栏输入后点击「重新提交备注」。
-                            </div>
-                            <form id="dormitory-form" onsubmit="return submitDormitory(event)">
+                            <form id="dormitory-form" onsubmit="return handleSubmit(event)">
                                 <fieldset>
                                     <legend>住宿申请</legend>
                                     <div class="form-group">
-                                        <label>姓名:</label>
-                                        <div class="input-box">
-                                            <input type="text" id="student-name" disabled style="background:#eee; width:200px;">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <label>住宿申请:</label>
                                         <div class="radio-box">
-                                            <input type="radio" name="is_apply" value="1" id="apply-yes"> <label for="apply-yes">申请</label>
-                                            <input type="radio" name="is_apply" value="2" id="apply-no"> <label for="apply-no">不申请</label>
+                                            <input type="radio" name="is_apply" value="1" id="apply-yes"> 申请
+                                            <input type="radio" name="is_apply" value="2" id="apply-no"> 不申请
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>联系方式:</label>
-                                        <div class="input-box"><input type="text" name="reason" id="contact" placeholder="请输入手机号码" required></div>
+                                        <div class="input-box"><input type="text" name="reason" id="phone" placeholder="请输入手机号码"></div>
                                     </div>
-                                    <!-- 申请时显示 -->
-                                    <div class="apply_info" style="display:none;">
+
+                                    <!-- 申请住宿信息 -->
+                                    <div class="apply_info" id="apply-info-block">
                                         <div class="form-group">
                                             <label>健康状况:</label>
-                                            <select name="jkzk" id="health">
-                                                <option value="">选择健康状况</option>
-                                                <option value="健康">健康</option>
-                                                <option value="一般">一般</option>
-                                                <option value="2011" disabled style="color:#ccc;">2011</option>
-                                            </select>
+                                            <div class="select-box">
+                                                <select name="jkzk" id="health">
+                                                    <option value="">选择健康状况</option>
+                                                    <option value="健康">健康</option>
+                                                    <option value="一般">一般</option>
+                                                    <option value="2011" disabled style="color:#ccc;">2011</option>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label>既往病史:</label>
@@ -200,43 +173,48 @@
                                                 <small>请填写详细地址，如：某某区某某街道某某小区某某号</small>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label>特殊备注:</label>
+                                            <div class="input-box"><input type="text" name="remark" id="special-remark" placeholder="填写特殊身高，体重等情况"></div>
+                                        </div>
                                     </div>
-                                    <!-- 不申请时显示 -->
-                                    <div class="dis_apply_info" style="display:none;">
+
+                                    <!-- 不申请住宿信息 -->
+                                    <div class="dis_apply_info" id="noapply-info-block">
                                         <div class="form-group">
                                             <label>不申请理由:</label>
                                             <div class="radio-box">
-                                                <input type="radio" name="dis_reason" value="健康原因" id="reason1"> <label for="reason1">健康原因</label>
-                                                <input type="radio" name="dis_reason" value="家庭住址" id="reason2"> <label for="reason2">家庭住址</label>
-                                                <input type="radio" name="dis_reason" value="其他" id="reason3"> <label for="reason3">其他</label>
+                                                <input type="radio" name="dis_reason" value="健康原因"> 健康原因
+                                                <input type="radio" name="dis_reason" value="家庭住址"> 家庭住址
+                                                <input type="radio" name="dis_reason" value="其他"> 其他
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label>不申请说明:</label>
-                                            <textarea name="dis_remark" id="dis-remark-text" rows="5" style="width:400px;" placeholder="请说明不申请住宿的具体原因"></textarea>
+                                            <textarea name="dis_remark" id="noapply-desc" rows="5" style="width:400px;" placeholder="请详细说明不申请住宿的原因"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>不申请材料:</label>
                                             <input type="file" id="pdfFile" name="dis_path" accept=".pdf">
-                                            <p id="tip" style="color:#666;">未选择文件（须合并为一份PDF上传）</p>
-                                            <input type="hidden" id="saved-filename" value="">
+                                            <p id="file-tip" style="color:#666;">未上传</p>
                                         </div>
                                         <div class="apply-notice">
                                             <div class="notice-title">申请走读须知</div>
-                                            <p>学生申请走读须符合以下情形之一，并按要求提交真实、有效、完整的证明材料：</p>
-                                            <p class="notice-item">1. 健康原因：因身体或心理状况确需每日返家者，须提交公办医院出具的医疗证明。</p>
-                                            <p class="notice-item">2. 家庭住址：学生户籍或家庭住址距学校5公里以内者，须提交相关证明及距离截图。</p>
+                                            <p>学生申请走读须符合以下情形之一，并按要求提交真实、有效、完整的证明材料（所有材料合并为一份PDF文件上传）：</p>
+                                            <p class="notice-item">1. 健康原因：因身体或心理状况确需每日返家者，须提交公办医院出具的医疗证明，明确建议走读。</p>
+                                            <p class="notice-item">2. 家庭住址：学生户籍或家庭住址距学校5公里以内者，须提交户口本、房产证或租赁合同及距离截图。</p>
                                             <p class="notice-item">3. 其他：请详细说明情况并提供充分、有效的佐证材料。</p>
-                                            <p class="notice-item"><strong>4. 了解更多信息详情，请下载《无锡市第一中学走读与住宿日常管理细则（试行）》，<a href="files/无锡市第一中学走读与住宿日常管理细则（试行）.docx" download class="download-link">点击此处下载</a>。</strong></p>
+                                            <p class="notice-item" style="font-weight:bold;">4. 了解更多信息详情，请<a href="files/无锡市第一中学走读与住宿日常管理细则（试行）.docx" class="download-link" download>点击此处</a>下载文件。</p>
                                             <p class="notice-footer">以上材料不全或不符合要求者，不予同意。</p>
                                         </div>
                                     </div>
-                                    <!-- 备注栏（始终显示） -->
+
+                                    <!-- 统一备注（谜题验证） -->
                                     <div class="form-group" style="margin-top:20px;">
-                                        <label>备注（选填，限5个字符）:</label>
+                                        <label>备注 <span style="color:#999; font-size:12px;">(选填)</span>:</label>
                                         <div class="input-box">
-                                            <input type="text" id="remark-input" name="remark" maxlength="5" placeholder="限5个字符" style="width:200px;">
-                                            <span class="remark-counter" id="char-count">0/5</span>
+                                            <input type="text" name="memo" id="memo" maxlength="5" placeholder="限5个字符" autocomplete="off">
+                                            <div class="remark-hint">可填写特别说明，提交后仍可修改。</div>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -248,6 +226,21 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- 弹窗层 -->
+    <div id="modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <span class="modal-close" id="modal-close">&times;</span>
+            <p><strong>[系统备注 · 档案号 110512-20110815]</strong></p>
+            <p>今天累死了，那间屋子我已经收拾干净了。柜子里留了一卷没用完的胶卷，如果有人能找到的话——不过那里现在大概早就不是原来的样子了吧。</p>
+            <p>说起来，暗房里最后显影的那张照片，我始终没等到它完全定影。</p>
+            <p>没有光，所以得在黑暗里摸。</p>
+            <p>我知道这听起来很怪。但如果你真的找到了这里，那你很厉害——你大概已经看见过那面墙了。</p>
+            <p>那就继续找吧。还有一些东西，我藏在别的地方。但不是实物。关于这栋楼，关于一百年。</p>
+            <p>项目编号HB101，如果它还在服务器里的话。</p>
+            <p>——林，2011.08.15</p>
         </div>
     </div>
 
@@ -265,191 +258,216 @@
 </div>
 
 <script>
+    // 存储键名
+    const STORAGE_KEY = 'dormitory_data';
+
     // 加载用户信息
-    (function() {
+    function loadUserInfo() {
         var name = localStorage.getItem('studentName');
         if (!name) {
             window.location.href = 'login.html';
             return;
         }
         var surname = localStorage.getItem('studentSurname') || name.charAt(0);
-        var studentID = localStorage.getItem('studentID') || '270512';
+        var id = localStorage.getItem('studentID') || '270512';
         var gender = localStorage.getItem('studentGender') || '保密';
         document.getElementById('student-info').innerHTML =
-            '<div>你好，' + surname + '同学</div><div>学号：' + studentID + '</div><div>性别：' + gender + '</div>';
-        document.getElementById('student-name').value = name;
-    })();
+            '<div>你好，' + surname + '同学</div><div>学号：' + id + '</div><div>性别：' + gender + '</div>';
+    }
 
-    // 存储与恢复表单数据
-    var STORAGE_KEY = 'dormitory_form_data';
-    var isSubmitted = localStorage.getItem('dormitorySubmitted') === 'true';
+    // 从 localStorage 加载表单数据
+    function loadFormData() {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return null;
+        try {
+            return JSON.parse(saved);
+        } catch (e) {
+            return null;
+        }
+    }
 
-    function saveFormData() {
-        var data = {
-            isApply: document.querySelector('input[name="is_apply"]:checked')?.value || '',
-            contact: document.getElementById('contact').value,
-            health: document.getElementById('health').value,
-            history: document.getElementById('history').value,
-            address: document.getElementById('address').value,
-            disReason: document.querySelector('input[name="dis_reason"]:checked')?.value || '',
-            disRemark: document.getElementById('dis-remark-text').value,
-            filename: document.getElementById('saved-filename').value,
-            remark: document.getElementById('remark-input').value
-        };
+    // 保存表单数据到 localStorage
+    function saveFormData(data) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
-    function loadFormData() {
-        var saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return;
-        var data = JSON.parse(saved);
-
-        // 恢复住宿申请单选
-        if (data.isApply) {
-            var radio = document.querySelector('input[name="is_apply"][value="' + data.isApply + '"]');
-            if (radio) radio.checked = true;
-        }
-        // 恢复联系方式
-        if (data.contact) document.getElementById('contact').value = data.contact;
-        // 恢复健康状况
-        if (data.health) document.getElementById('health').value = data.health;
-        // 恢复既往病史
-        if (data.history) document.getElementById('history').value = data.history;
-        // 恢复家庭地址
-        if (data.address) document.getElementById('address').value = data.address;
-        // 恢复不申请理由
-        if (data.disReason) {
-            var disRadio = document.querySelector('input[name="dis_reason"][value="' + data.disReason + '"]');
-            if (disRadio) disRadio.checked = true;
-        }
-        // 恢复不申请说明
-        if (data.disRemark) document.getElementById('dis-remark-text').value = data.disRemark;
-        // 恢复文件名提示
-        if (data.filename) {
-            document.getElementById('saved-filename').value = data.filename;
-            document.getElementById('tip').innerHTML = '已上传：' + data.filename;
-        }
-        // 恢复备注
-        if (data.remark) {
-            document.getElementById('remark-input').value = data.remark;
-            document.getElementById('char-count').textContent = data.remark.length + '/5';
-        }
-        // 切换对应区块显示
-        toggleApplySections();
+    // 获取当前表单数据
+    function getCurrentFormData() {
+        return {
+            is_apply: document.querySelector('input[name="is_apply"]:checked')?.value || '',
+            reason: document.getElementById('phone').value,
+            jkzk: document.getElementById('health').value,
+            jwbs: document.getElementById('history').value,
+            address: document.getElementById('address').value,
+            special_remark: document.getElementById('special-remark').value,
+            dis_reason: document.querySelector('input[name="dis_reason"]:checked')?.value || '',
+            dis_remark: document.getElementById('noapply-desc').value,
+            dis_path: document.getElementById('pdfFile').value, // 文件路径无法完全保留，仅显示状态
+            memo: document.getElementById('memo').value,
+            submitted: true,
+            lightTriggered: localStorage.getItem('dormitory_light_triggered') === 'true' ? true : false
+        };
     }
 
-    function toggleApplySections() {
-        var val = document.querySelector('input[name="is_apply"]:checked');
-        var applyInfo = document.querySelector('.apply_info');
-        var disInfo = document.querySelector('.dis_apply_info');
-        if (val && val.value === '1') {
-            applyInfo.style.display = 'block';
-            disInfo.style.display = 'none';
-        } else if (val && val.value === '2') {
-            applyInfo.style.display = 'none';
-            disInfo.style.display = 'block';
+    // 恢复表单数据
+    function restoreFormData(data) {
+        if (!data) return;
+        // 申请/不申请
+        if (data.is_apply === '1') {
+            document.getElementById('apply-yes').checked = true;
+            document.getElementById('apply-no').checked = false;
+        } else if (data.is_apply === '2') {
+            document.getElementById('apply-yes').checked = false;
+            document.getElementById('apply-no').checked = true;
+        }
+        document.getElementById('phone').value = data.reason || '';
+        document.getElementById('health').value = data.jkzk || '';
+        document.getElementById('history').value = data.jwbs || '';
+        document.getElementById('address').value = data.address || '';
+        document.getElementById('special-remark').value = data.special_remark || '';
+        var disReason = data.dis_reason;
+        if (disReason) {
+            var radios = document.getElementsByName('dis_reason');
+            for (var i = 0; i < radios.length; i++) {
+                if (radios[i].value === disReason) {
+                    radios[i].checked = true;
+                    break;
+                }
+            }
+        }
+        document.getElementById('noapply-desc').value = data.dis_remark || '';
+        // 文件字段无法通过 value 恢复，仅显示提示
+        if (data.dis_path) {
+            document.getElementById('file-tip').innerHTML = '已上传文件（需重新选择）';
+        }
+        document.getElementById('memo').value = data.memo || '';
+        // 根据选项显示对应区块
+        toggleApplyFields();
+    }
+
+    // 切换申请/不申请区块显示
+    function toggleApplyFields() {
+        var val = document.querySelector('input[name="is_apply"]:checked')?.value;
+        var applyBlock = document.getElementById('apply-info-block');
+        var noapplyBlock = document.getElementById('noapply-info-block');
+        if (val === '1') {
+            applyBlock.style.display = 'block';
+            noapplyBlock.style.display = 'none';
         } else {
-            applyInfo.style.display = 'none';
-            disInfo.style.display = 'none';
+            applyBlock.style.display = 'none';
+            noapplyBlock.style.display = 'block';
         }
     }
 
-    // 监听切换
-    document.querySelectorAll('input[name="is_apply"]').forEach(function(r) {
-        r.addEventListener('change', function() {
-            toggleApplySections();
-            // 切换时保存当前数据
-            saveFormData();
-        });
-    });
-
-    // 文件选择监听（记录文件名）
-    document.getElementById('pdfFile').addEventListener('change', function() {
-        var file = this.files[0];
-        if (file) {
-            document.getElementById('saved-filename').value = file.name;
-            document.getElementById('tip').innerHTML = '已选择：' + file.name;
+    // 检查是否已提交，并设置界面状态
+    function checkSubmissionStatus() {
+        var data = loadFormData();
+        if (data && data.submitted) {
+            // 已提交状态
+            restoreFormData(data);
+            // 禁用除备注外的所有表单元素
+            disableFormExceptMemo();
+            // 显示状态提示
+            var statusDiv = document.getElementById('submit-status');
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = '✅ 你的住宿申请已成功提交，正在审核中，请耐心等待。<br>如需修改备注信息，可在下方备注栏修改后重新提交。';
+            // 提交按钮文案修改
+            document.getElementById('submit-btn').innerText = '更新备注';
         } else {
-            document.getElementById('saved-filename').value = '';
-            document.getElementById('tip').innerHTML = '未选择文件（须合并为一份PDF上传）';
+            // 未提交，正常显示
+            document.getElementById('submit-status').style.display = 'none';
+            document.getElementById('submit-btn').innerText = '提交申请';
+            enableForm();
+            toggleApplyFields();
         }
-        saveFormData();
-    });
-
-    // 其他输入框变动时保存
-    var formInputs = document.querySelectorAll('#dormitory-form input[type="text"], #dormitory-form textarea, #dormitory-form select');
-    formInputs.forEach(function(input) {
-        input.addEventListener('input', saveFormData);
-        input.addEventListener('change', saveFormData);
-    });
-
-    // 备注字数统计
-    var remarkInput = document.getElementById('remark-input');
-    var charCount = document.getElementById('char-count');
-    remarkInput.addEventListener('input', function() {
-        var len = this.value.length;
-        charCount.textContent = len + '/5';
-        saveFormData();
-    });
-
-    // 页面加载时恢复数据
-    loadFormData();
-    // 首次加载时也触发一次保存，以保证后续保存有基准
-    saveFormData();
-
-    // 已提交状态处理
-    if (isSubmitted) {
-        document.getElementById('submit-success').style.display = 'block';
-        document.getElementById('submit-btn').textContent = '重新提交备注';
-        // 禁用除备注和重新提交外的所有控件
-        var allInputs = document.querySelectorAll('#dormitory-form input:not(#remark-input):not(#submit-btn), #dormitory-form textarea, #dormitory-form select');
-        allInputs.forEach(function(el) {
-            el.disabled = true;
+        // 绑定切换事件
+        document.querySelectorAll('input[name="is_apply"]').forEach(function(radio) {
+            radio.addEventListener('change', toggleApplyFields);
         });
-        // 备注框保持可编辑
-        document.getElementById('remark-input').disabled = false;
+    }
+
+    // 禁用除备注外的所有字段
+    function disableFormExceptMemo() {
+        var form = document.getElementById('dormitory-form');
+        var elements = form.querySelectorAll('input, select, textarea');
+        elements.forEach(function(el) {
+            if (el.name !== 'memo' && el.type !== 'submit') {
+                el.disabled = true;
+            }
+        });
+        // 文件上传也禁用
+        var fileInput = document.getElementById('pdfFile');
+        if (fileInput) fileInput.disabled = true;
+        // 提交按钮不禁用
+    }
+
+    // 启用表单
+    function enableForm() {
+        var form = document.getElementById('dormitory-form');
+        var elements = form.querySelectorAll('input, select, textarea');
+        elements.forEach(function(el) {
+            el.disabled = false;
+        });
+    }
+
+    // 显示弹窗
+    function showModal() {
+        document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    // 隐藏弹窗
+    function hideModal() {
+        document.getElementById('modal-overlay').style.display = 'none';
     }
 
     // 提交处理
-    function submitDormitory(e) {
+    function handleSubmit(e) {
         e.preventDefault();
-        var remark = remarkInput.value.trim().toUpperCase();
+        var data = loadFormData();
+        var isSubmittedBefore = data && data.submitted;
+        var currentMemo = document.getElementById('memo').value.trim();
 
-        // 始终保存最新表单数据
-        saveFormData();
+        // 收集当前表单数据（部分可能被禁用，但不影响存储）
+        var formData = getCurrentFormData();
+        // 如果是已提交状态，保留之前的 submitted 和 lightTriggered
+        if (isSubmittedBefore) {
+            formData.submitted = true;
+            formData.lightTriggered = data.lightTriggered || false;
+        } else {
+            formData.submitted = true;
+            formData.lightTriggered = false;
+        }
+        // 保存数据
+        saveFormData(formData);
 
-        // 标记为已提交
-        localStorage.setItem('dormitorySubmitted', 'true');
-
-        // 判断备注是否为 LIGHT
-        if (remark === 'LIGHT') {
-            // 触发隐藏弹窗，不跳转
-            document.getElementById('popup-overlay').style.display = 'block';
-            document.getElementById('secret-popup').style.display = 'block';
-            // 如果当前不是已提交状态，需要刷新页面显示已提交界面（避免重复提交）
-            if (!isSubmitted) {
-                // 延迟刷新，让弹窗可见后刷新
-                setTimeout(function() {
-                    location.reload();
-                }, 500);
-            }
+        // 判断备注内容
+        if (currentMemo === 'LIGHT') {
+            // 触发弹窗
+            localStorage.setItem('dormitory_light_triggered', 'true');
+            showModal();
+            // 不跳转，更新界面为已提交状态
+            checkSubmissionStatus();
             return false;
         } else {
-            // 备注不正确，跳转主页
+            // 备注不正确或为空，跳转主页
+            localStorage.setItem('dormitorySubmitted', 'true');
             window.location.href = 'home.html';
             return false;
         }
     }
 
     // 关闭弹窗
-    document.getElementById('popup-close').addEventListener('click', function() {
-        document.getElementById('popup-overlay').style.display = 'none';
-        document.getElementById('secret-popup').style.display = 'none';
+    document.getElementById('modal-close').addEventListener('click', hideModal);
+    window.addEventListener('click', function(e) {
+        if (e.target === document.getElementById('modal-overlay')) {
+            hideModal();
+        }
     });
-    document.getElementById('popup-overlay').addEventListener('click', function() {
-        document.getElementById('popup-overlay').style.display = 'none';
-        document.getElementById('secret-popup').style.display = 'none';
-    });
+
+    // 初始化
+    loadUserInfo();
+    checkSubmissionStatus();
+    toggleApplyFields();
 </script>
 <script src="https://yzxs.wxeic.com/public/baidu.js"></script>
 </body>

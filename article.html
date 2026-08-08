@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文章详情 · 无锡市第一中学学生综合管理平台</title>
+    <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
+    <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
+    <style>
+        .article-body {
+            padding: 20px 40px;
+            line-height: 1.8;
+            font-size: 15px;
+            color: #333;
+            text-align: justify;
+        }
+        .article-body p {
+            text-indent: 2em;
+            margin-bottom: 1em;
+        }
+        .article-body h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            text-indent: 0;
+        }
+        .article-signature {
+            text-align: right;
+            padding: 20px 40px;
+            font-size: 15px;
+            color: #333;
+        }
+        .article-title-main {
+            text-align: center;
+            padding-top: 30px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.4;
+        }
+        .disclaimer {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.5;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <!-- 头部 -->
+    <div class="head">
+        <div class="container position-relative">
+            <a href="home.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover;"></a>
+            <ul id="header_link">
+                <li><a href="home.html">首页</a></li>
+                <li><a href="https://yzxs.wxeic.com/article/index?cid=5">通知公告</a></li>
+                <li><a href="https://yzxs.wxeic.com/article/index?cid=6">温馨提示</a></li>
+            </ul>
+            <div id="quick"><a href="home.html" class="ci-btn"></a></div>
+            <div class="user-btn"><a href="home.html"><img src="img/home.png" alt=""></a></div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="container">
+            <div id="slider"><img src="img/banner.jpg" alt=""></div>
+            <div class="box">
+                <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
+                <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
+
+                <div class="sidebar">
+                    <div class="user border-default">
+                        <img src="img/nophoto.jpg" class="fl avatar border-default">
+                        <div class="text" id="student-info"></div>
+                    </div>
+                    <div class="nav-list border-default">
+                        <ul>
+                            <li><a href="home.html">新生流程</a></li>
+                            <li><a href="login.html">退出登录</a></li>
+                        </ul>
+                    </div>
+                    <div class="ewm border-default">
+                        <div class="swiper-container" style="height:245px;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="img/ewm.png" alt="">
+                                    <div class="qrcode-description">(无锡一中微信公众号)<br>扫描二维码添加关注</div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <div class="blogroll">
+                        <ul class="nav"><li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li></ul>
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div class="part border-default mt-10" id="article-container">
+                        <!-- 文章内容由JS动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <div class="foot">
+        <div class="container">
+            <a href="#" class="botLogo"><img src="img/footer_logo.png" alt=""></a>
+            <p>Copyright &copy; 2026 无锡市第一中学 All Rights Reserved.</p>
+            <p class="disclaimer">
+                【免责声明】本作品为虚构的ARG网页解密游戏，所有人物、事件、机构、数据及历史线索均与现实无关。<br>
+                继续浏览或参与互动即表示您已充分理解并接受上述声明。
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 获取URL参数
+    function getQueryParam(param) {
+        var urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // 计算显示年份
+    function getDisplayYear() {
+        var now = new Date();
+        var currentYear = now.getFullYear();
+        var currentMonth = now.getMonth() + 1;
+        if (currentYear <= 2027) {
+            return 2027;
+        } else {
+            if (currentMonth < 7) {
+                return currentYear - 1;
+            } else {
+                return currentYear;
+            }
+        }
+    }
+
+    // 加载侧边栏用户信息
+    function loadUserInfo() {
+        var name = localStorage.getItem('studentName');
+        if (!name) {
+            window.location.href = 'login.html';
+            return;
+        }
+        var surname = localStorage.getItem('studentSurname') || name.charAt(0);
+        var studentID = localStorage.getItem('studentID') || '270512';
+        var gender = localStorage.getItem('studentGender') || '保密';
+        var infoHtml = '<div>你好，' + surname + '同学</div>';
+        infoHtml += '<div>学号：' + studentID + '</div>';
+        infoHtml += '<div>性别：' + gender + '</div>';
+        document.getElementById('student-info').innerHTML = infoHtml;
+    }
+
+    // 生成文章内容
+    function renderArticle() {
+        var articleId = getQueryParam('id');
+        var container = document.getElementById('article-container');
+        var displayYear = getDisplayYear();
+
+        if (articleId === '1') {
+            var title = '《致' + displayYear + '级新同学的一封信》';
+            var letterContent =
+                '<p>百舸争流，千帆竞发。当你展开这封信笺，你已正式成为无锡市第一中学' + displayYear + '级新生。在此，我们向你表示最热烈的祝贺与最诚挚的欢迎。</p>' +
+                '<p>年复一年，八角楼前的银杏黄了又绿，进贤亭边的紫藤谢了又开。而今天，这所走过一百一十六载春秋的学府，终于等来了你。从1911年建校至今，一代代一中人在这片土地上读书、明理、求进，将青春写进红楼的每一块砖瓦，将理想融入锡惠山下的每一缕晨光。</p>' +
+                '<p>中流击水，浪遏飞舟。高中三年，将是你人生中最为关键的一段旅程。在这里，你不仅要完成知识的积累，更要完成人格的塑造。我们的校训是“独立、协作、创造”——独立，是希望你在纷繁的声音中保持清醒的判断；协作，是期待你在集体中学会倾听与担当；创造，是鼓励你永远不满足于标准答案，勇敢走向未知的旷野。</p>' +
+                '<p>求木之长者，必固其根本；欲流之远者，必浚其泉源。一中的办学理念，是“为学生的终身发展奠基”。我们不追求速成的辉煌，而更在意你离开校园十年、二十年之后，依然保有对世界的好奇、对他人的善意、对自我的诚实。正如我们的校风所倡导的——“读书、明理、求进”，读书是起点，明理是过程，求进是永不止息的方向。</p>' +
+                '<p>进步从不是一蹴而就的事。你或许会在第一次月考后感到挫败，或许会在社团竞选中经历失落，或许会在深夜的自习室里怀疑努力的意义。这些都是高中生活真实的一部分。但请你记住，每一届一中人都是这样走过来的——他们在红楼的走廊里背过书，在操场的跑道上流过汗，在艺术楼的琴房里弹错过音，在实验室的操作台前打翻过试剂。然后他们拍拍身上的尘土，继续向前。这就是“求进”二字最朴素、也最深刻的含义。</p>' +
+                '<p>不积跬步，无以至千里。在报到之前，请认真完成新生平台的各项待办事项，包括住宿申请与校服订购。这些看似琐碎的事务，是你开启独立生活的第一步。请于8月25日前提交全部材料，以便学校做好开学准备。同时，请仔细阅读《新生暑期自主学习指南》，合理安排假期时间，为即将到来的高中学习做好衔接。</p>' +
+                '<p>止于至善，是《大学》开篇的训诫，也是一中人的精神坐标。我们不求你成为完美的学生，只愿你永远保持向上的姿态。无论你将来走向何方，从事何种事业，希望你始终记得，有一所叫无锡一中的学校，曾在你十六岁的夏天，对你说过一声——“欢迎你，求进青年。”</p>';
+
+            var signature = '<p>无锡市第一中学<br>' + displayYear + '年7月</p>';
+
+            container.innerHTML =
+                '<div class="title-panel">' +
+                '  <div class="title-bar fl"><img src="img/notice.png" alt="">通知公告</div>' +
+                '  <div class="title-nav fr"></div>' +
+                '</div>' +
+                '<div style="background:#fff;">' +
+                '  <div class="article-title-main">' + title + '</div>' +
+                '  <div class="article-body">' + letterContent + '</div>' +
+                '  <div class="article-signature">' + signature + '</div>' +
+                '</div>';
+        } else if (articleId === '2') {
+            var guideTitle = displayYear + '级新生暑期自主学习指南';
+            var guideContent =
+                '<p>亲爱的' + displayYear + '级新同学：</p>' +
+                '<p>为了帮助大家顺利衔接初高中学习，度过一个充实而有意义的暑假，学校特制定本学习指南。请同学们认真阅读，合理安排假期时间。</p>' +
+                '<h3>一、语文</h3>' +
+                '<p>为学之道，首在读书。暑期建议你精读《乡土中国》（费孝通）与《红楼梦》前四十回，并各撰写一篇不少于800字的读书笔记。高中语文不再局限于课本，更注重思辨与审美。建议你每天保持半小时以上的课外阅读时间，广泛涉猎历史、哲学、文学经典。读书时随手批注，读完后用自己的话复述内容——这是检验是否真正读懂的最有效方法。</p>' +
+                '<p>学习的节奏因人而异，不必盲目追赶他人进度，但务必保持每天都有输入和输出。每周写一篇随笔，记录你的所见所闻、所思所感，字数不限，贵在坚持。</p>' +
+                '<h3>二、数学</h3>' +
+                '<p>生疏是学习最大的敌人。暑期请自行复习初中数学中的函数、几何证明、概率统计三大模块，这三部分是高中数学的重要基础。建议你准备一本错题本，将复习过程中遇到的错题整理归纳，分析错误原因，总结解题方法。高中数学对逻辑推理和抽象思维的要求明显提高，建议你提前预习必修一第一章“集合与常用逻辑用语”，尝试完成课后练习题，标记不理解的地方，开学后带着问题听课。</p>' +
+                '<h3>三、英语</h3>' +
+                '<p>的确，语言学习没有捷径，但有方法。暑期建议你坚持每天背诵20个高中词汇（使用高考3500词词汇表），并每周完成两篇英语阅读训练。此外，推荐观看BBC纪录片《Planet Earth》系列（带英文字幕），每天20分钟，既锻炼听力，又拓展视野。开学后学校将组织英语摸底测试，检测暑期自主学习成果。</p>' +
+                '<h3>四、综合学科</h3>' +
+                '<p>终身受益的习惯，往往在高一开始养成。物理、化学、生物、政治、历史、地理六门学科，建议你利用暑期对各科必修一教材进行浏览式预习，了解基本框架即可，不必深入钻研。重点关注教材的目录和章节导语，建立对每门学科的初步认知。如果你对某一学科有浓厚兴趣，可以阅读相关的科普书籍或纪录片，让兴趣成为最好的引路人。</p>' +
+                '<h3>五、时间管理与身体锻炼</h3>' +
+                '<p>身体是革命的本钱。暑期请保持规律的作息，每天保证至少一小时的户外运动。跑步、游泳、球类运动皆可，选择你喜欢的并坚持下去。同时，尝试制定一份周计划表，合理分配学习、运动、休息和社交的时间。高中三年，时间管理能力将直接影响你的学习效率和生活质量。</p>' +
+                '<h3>六、心态调整</h3>' +
+                '<p>发展的道路上，心态决定状态。从初中到高中，你将面临知识难度、学习节奏、竞争环境的多重变化。不必焦虑，每一位高一新生都在同一起跑线上。如果暑期学习中遇到困难，可以记录下来，开学后向老师或同学请教。记住，敢于提问是一种能力，善于求助是一种智慧。</p>' +
+                '<h3>七、开学准备</h3>' +
+                '<p>展开新旅程之前，请确认你已完成以下事项：</p>' +
+                '<p>登录新生综合管理平台，完成住宿申请</p>' +
+                '<p>填写校服订购信息并提交</p>' +
+                '<p>准备好必要的学习用品和生活用品</p>' +
+                '<p>将本指南中的学习任务合理分配到每周，形成自己的暑期学习计划</p>' +
+                '<h3>八、写在最后</h3>' +
+                '<p>奠定未来的，从来不是天赋，而是每一天看似微小的积累。这个暑假，或许是你人生中第一个真正意义上的“自主”假期——没有老师全天候督促，没有固定的课表和铃声。你如何度过这个暑假，很大程度上决定了你将以怎样的姿态开启高中生活。</p>' +
+                '<p>基础扎实，方能行稳致远。我们不要求你把所有时间都花在学习上，但我们希望，当九月来临、你踏入一中校门的那一刻，你能够自信地说：我已做好准备。</p>' +
+                '<p>期待在红楼前与你相见。</p>';
+
+            var guideSignature = '<p>无锡市第一中学 教务处<br>' + displayYear + '年8月</p>';
+
+            container.innerHTML =
+                '<div class="title-panel">' +
+                '  <div class="title-bar fl"><img src="img/notice.png" alt="">通知公告</div>' +
+                '  <div class="title-nav fr"></div>' +
+                '</div>' +
+                '<div style="background:#fff;">' +
+                '  <div class="article-title-main">' + guideTitle + '</div>' +
+                '  <div class="article-body">' + guideContent + '</div>' +
+                '  <div class="article-signature">' + guideSignature + '</div>' +
+                '</div>';
+        } else if (articleId === '3') {
+            var cardTitle = '关于' + displayYear + '级新生校园一卡通信息采集的通知';
+            var cardContent =
+                '<p>各位' + displayYear + '级新同学：</p>' +
+                '<p>我校校园一卡通是集食堂消费、图书借阅、宿舍门禁、考勤签到等功能于一体的校内综合身份凭证，是你在校期间最重要的随身证件。为保障开学后各项校园生活顺利开展，现就一卡通信息采集工作通知如下。</p>' +
+                '<p>会涉及照片采集，请各位同学高度重视。本次采集的证件照将直接印制于校园卡卡面，并同步用于校内学籍档案系统。学校承诺严格保护学生个人信息，采集信息不会用于任何商业用途或对外公开。</p>' +
+                '<p>一寸免冠正面彩色证件照是本次采集的唯一规格要求。具体参数如下：照片尺寸为358像素（宽）×441像素（高），分辨率不低于300dpi，文件大小控制在10KB至100KB之间，格式为JPG或PNG，背景须为白色或浅蓝色。</p>' +
+                '<p>直接使用手机自拍或生活照是不符合要求的。请务必拍摄正规证件照，面部清晰，五官完整，双眼平视镜头，表情自然。戴眼镜的同学请确保镜片无反光、镜框不遮挡眼睛。不得佩戴帽子、头巾等遮挡物，不得使用过度美颜或滤镜。</p>' +
+                '<p>找准拍摄光线很重要。建议选择白天自然光充足的环境，面向光源拍摄，避免面部出现阴影或过曝。光线不均匀是照片被打回的最常见原因之一，请拍摄前多加留意。</p>' +
+                '<p>找到一面干净的白色墙壁作为背景，是最简便的拍摄方案。如果家中条件有限，建议前往照相馆请专业人员拍摄。告知店家“一寸证件照，白底，需电子版”即可，费用通常在十五元至三十元之间。</p>' +
+                '<p>找一个合适的拍摄距离：身体正对镜头，头部居中，头顶上方留适当空白，肩部入镜。不要距离镜头太近，以免面部变形；也不要太远，以免头部在画面中占比过小。</p>' +
+                '<p>找对表情也需要用心。自然微笑即可，不必刻意板脸也不必大笑。双眼睁开，嘴巴闭合，面部肌肉放松。一张好的证件照，是你在校园卡上三年的“门面”。</p>' +
+                '<p>找到着装上的小讲究：建议穿着深色有领上衣，与浅色背景形成对比。避免穿白色或浅色衣服，以免与背景融为一体。不要穿吊带衫或无袖上衣拍摄证件照。</p>' +
+                '<p>找人帮忙拍摄比自拍效果更好。自拍时手臂距离有限，容易导致透视变形。请家人或朋友帮忙，从正面约一米处拍摄，确保头部比例正常，双肩水平。</p>' +
+                '<p>找准上传入口：请登录新生综合管理平台，在首页“待办事项”区域找到“一卡通照片上传”选项，点击进入上传页面。系统将对照片进行自动合规检测，检测通过后显示“上传成功”。</p>' +
+                '<p>找出原图再上传，不要使用微信或QQ等聊天工具传输过的压缩图片。压缩后的图片像素和文件大小都可能发生变化，导致不合规。请使用数据线或网盘传输原始照片文件。</p>' +
+                '<p>找到本通知的附件：《校园一卡通照片拍摄示范图》。请参考示范图中的正确与错误示例对照，确保你的照片符合每一项要求。附件可在新生平台本通知页面底部下载。</p>' +
+                '<p>找时间尽早完成：本次信息采集截止时间为' + displayYear + '年8月22日24时。逾期未提交的同学，需在开学后携带电子版照片到八角楼一楼信息技术中心现场办理，周期较长，务必提早提交。</p>' +
+                '<p>到达截止时间后，系统将关闭上传入口，进入批量制卡阶段。校园卡将在开学报到当天由各班主任统一发放。请妥善保管，如有遗失需另行补办。</p>' +
+                '<p>你的这张校园卡，将陪伴你走过一中三年的每一天——食堂打饭、图书馆借阅、宿舍门禁、实验室签到。它很小，却是你与这所学校最日常的联结。请认真对待这张照片，也认真对待即将开始的高中生活。</p>' +
+                '<p>如有疑问，请联系信息技术中心：行政楼一楼，办公时间工作日8:30-11:30、14:00-17:00，或发送邮件至yzcard@wxeic.com，若想了解更多拍摄要求，请访问<a href="https://www.dianzizhao.com/help/gongjiaoka/591221712" target="_blank">https://www.dianzizhao.com/help/gongjiaoka/591221712</a>。</p>';
+
+            var cardSignature = '<p>无锡市第一中学 信息技术中心<br>' + displayYear + '年8月</p>';
+
+            container.innerHTML =
+                '<div class="title-panel">' +
+                '  <div class="title-bar fl"><img src="img/notice.png" alt="">通知公告</div>' +
+                '  <div class="title-nav fr"></div>' +
+                '</div>' +
+                '<div style="background:#fff;">' +
+                '  <div class="article-title-main">' + cardTitle + '</div>' +
+                '  <div class="article-body">' + cardContent + '</div>' +
+                '  <div class="article-signature">' + cardSignature + '</div>' +
+                '</div>';
+        } else {
+            container.innerHTML =
+                '<div class="title-panel">' +
+                '  <div class="title-bar fl"><img src="img/notice.png" alt="">文章详情</div>' +
+                '  <div class="title-nav fr"></div>' +
+                '</div>' +
+                '<div style="background:#fff; text-align:center; padding:60px 20px; font-size:16px; color:#999;">该文章暂未开放，请返回首页查看其他通知。</div>';
+        }
+    }
+
+    // 初始化
+    loadUserInfo();
+    renderArticle();
+</script>
+<script src="https://yzxs.wxeic.com/public/baidu.js"></script>
+</body>
+</html>

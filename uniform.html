@@ -30,9 +30,7 @@
             border-bottom: 1px solid #ddd;
             color: #333;
         }
-        .expand-header:hover {
-            background: #e9e9e9;
-        }
+        .expand-header:hover { background: #e9e9e9; }
         .expand-body {
             padding: 15px;
             display: none;
@@ -45,13 +43,13 @@
             border: 1px solid #ccc;
         }
         .submit-status {
-            background: #e8f5e9;
-            border: 1px solid #4caf50;
+            background: #f8f8f8;
+            border: 1px solid #ccc;
             padding: 15px 20px;
             margin: 15px 0;
             font-size: 14px;
-            color: #2e7d32;
-            border-radius: 4px;
+            color: #555;
+            border-radius: 3px;
             display: none;
         }
         .remark-hint {
@@ -59,13 +57,9 @@
             color: #666;
             margin-top: 5px;
         }
-        /* 弹窗遮罩 */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6);
             z-index: 9999;
             display: flex;
@@ -73,21 +67,20 @@
             justify-content: center;
         }
         .modal-box {
-            background: #fffaf0;
-            border: 2px solid #b22222;
+            background: #fff;
+            border: 1px solid #b22222;
             padding: 25px 30px;
             max-width: 500px;
             width: 90%;
             font-size: 15px;
             line-height: 1.8;
-            color: #4a2e2e;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            color: #333;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
             position: relative;
         }
         .modal-close {
             position: absolute;
-            top: 8px;
-            right: 15px;
+            top: 8px; right: 15px;
             cursor: pointer;
             font-size: 22px;
             color: #b22222;
@@ -97,7 +90,6 @@
 </head>
 <body>
 <div class="wrapper">
-    <!-- 头部 -->
     <div class="head">
         <div class="container position-relative">
             <a href="home.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover;"></a>
@@ -152,7 +144,6 @@
                             <div class="title-nav fr"></div>
                         </div>
 
-                        <!-- 提交状态提示 -->
                         <div id="submit-status" class="submit-status" style="display:none;"></div>
 
                         <div class="form-box">
@@ -183,7 +174,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- 特体定制说明（可展开） -->
                                     <div class="expand-section">
                                         <div class="expand-header" id="expand-header">▼ 关于特体定制的说明</div>
                                         <div class="expand-body" id="expand-body">
@@ -194,7 +184,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- 备注（谜题验证） -->
                                     <div class="form-group" style="margin-top:20px;">
                                         <label>备注 <span style="color:#999; font-size:12px;">(选填，限4个字符)</span>:</label>
                                         <div class="input-box">
@@ -203,7 +192,6 @@
                                         </div>
                                     </div>
                                 </fieldset>
-
                                 <p style="text-align:center; margin-top:20px;">
                                     <button type="submit" class="btn btn-red" id="submit-btn">确认订购</button>
                                 </p>
@@ -215,7 +203,6 @@
         </div>
     </div>
 
-    <!-- 弹窗层 -->
     <div id="modal-overlay" class="modal-overlay" style="display:none;">
         <div class="modal-box">
             <span class="modal-close" id="modal-close">&times;</span>
@@ -226,7 +213,6 @@
         </div>
     </div>
 
-    <!-- 尾部 -->
     <div class="foot">
         <div class="container">
             <a href="#" class="botLogo"><img src="img/footer_logo.png" alt=""></a>
@@ -242,13 +228,9 @@
 <script>
     const STORAGE_KEY = 'uniform_data';
 
-    // 加载用户信息
     function loadUserInfo() {
         var name = localStorage.getItem('studentName');
-        if (!name) {
-            window.location.href = 'login.html';
-            return;
-        }
+        if (!name) { window.location.href = 'login.html'; return; }
         var surname = localStorage.getItem('studentSurname') || name.charAt(0);
         var id = localStorage.getItem('studentID') || '270512';
         var gender = localStorage.getItem('studentGender') || '保密';
@@ -256,23 +238,15 @@
             '<div>你好，' + surname + '同学</div><div>学号：' + id + '</div><div>性别：' + gender + '</div>';
     }
 
-    // 加载保存的表单数据
     function loadFormData() {
         var saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return null;
-        try {
-            return JSON.parse(saved);
-        } catch (e) {
-            return null;
-        }
+        return saved ? JSON.parse(saved) : null;
     }
 
-    // 保存表单数据
     function saveFormData(data) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
-    // 获取当前表单数据
     function getCurrentFormData() {
         return {
             height: document.getElementById('height-select').value,
@@ -283,47 +257,34 @@
         };
     }
 
-    // 恢复表单数据
     function restoreFormData(data) {
         if (!data) return;
-        if (data.height) {
-            document.getElementById('height-select').value = data.height;
-        }
+        document.getElementById('height-select').value = data.height || '';
         if (data.fit) {
             var radios = document.getElementsByName('fit');
             for (var i = 0; i < radios.length; i++) {
-                if (radios[i].value === data.fit) {
-                    radios[i].checked = true;
-                    break;
-                }
+                if (radios[i].value === data.fit) { radios[i].checked = true; break; }
             }
         }
         document.getElementById('memo').value = data.memo || '';
     }
 
-    // 禁用除备注外的所有字段
     function disableFormExceptMemo() {
         var form = document.getElementById('uniform-form');
         var elements = form.querySelectorAll('input, select, textarea');
         elements.forEach(function(el) {
-            if (el.name !== 'memo' && el.type !== 'submit') {
-                el.disabled = true;
-            }
+            if (el.name !== 'memo' && el.type !== 'submit') el.disabled = true;
         });
         document.getElementById('submit-btn').innerText = '更新备注';
     }
 
-    // 启用表单
     function enableForm() {
         var form = document.getElementById('uniform-form');
         var elements = form.querySelectorAll('input, select, textarea');
-        elements.forEach(function(el) {
-            el.disabled = false;
-        });
+        elements.forEach(function(el) { el.disabled = false; });
         document.getElementById('submit-btn').innerText = '确认订购';
     }
 
-    // 检查提交状态
     function checkSubmissionStatus() {
         var data = loadFormData();
         if (data && data.submitted) {
@@ -331,24 +292,16 @@
             disableFormExceptMemo();
             var statusDiv = document.getElementById('submit-status');
             statusDiv.style.display = 'block';
-            statusDiv.innerHTML = '✅ 校服订购信息已成功提交。如需修改备注，可在下方备注栏修改后重新提交。';
+            statusDiv.innerHTML = '校服订购信息已成功提交。如需修改备注，可在下方备注栏修改后重新提交。';
         } else {
             document.getElementById('submit-status').style.display = 'none';
             enableForm();
         }
     }
 
-    // 显示弹窗
-    function showModal() {
-        document.getElementById('modal-overlay').style.display = 'flex';
-    }
+    function showModal() { document.getElementById('modal-overlay').style.display = 'flex'; }
+    function hideModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
-    // 隐藏弹窗
-    function hideModal() {
-        document.getElementById('modal-overlay').style.display = 'none';
-    }
-
-    // 提交处理
     function handleSubmit(e) {
         e.preventDefault();
         var data = loadFormData();
@@ -364,30 +317,25 @@
             formData.lensTriggered = false;
         }
         saveFormData(formData);
+        // 关键修复：无论是否触发谜题，都标记校服已完成
+        localStorage.setItem('uniformSubmitted', 'true');
 
         if (currentMemo === 'LENS') {
             localStorage.setItem('uniform_lens_triggered', 'true');
             showModal();
-            // 更新界面为已提交状态
             checkSubmissionStatus();
             return false;
         } else {
-            // 标记校服已提交（主页用）
-            localStorage.setItem('uniformSubmitted', 'true');
             window.location.href = 'home.html';
             return false;
         }
     }
 
-    // 关闭弹窗事件
     document.getElementById('modal-close').addEventListener('click', hideModal);
     window.addEventListener('click', function(e) {
-        if (e.target === document.getElementById('modal-overlay')) {
-            hideModal();
-        }
+        if (e.target === document.getElementById('modal-overlay')) hideModal();
     });
 
-    // 展开/折叠说明
     document.getElementById('expand-header').addEventListener('click', function() {
         var body = document.getElementById('expand-body');
         var header = document.getElementById('expand-header');
@@ -400,15 +348,11 @@
         }
     });
 
-    // 图片点击放大
     var chartImg = document.querySelector('.expand-body img');
     if (chartImg) {
-        chartImg.addEventListener('click', function() {
-            window.open(this.src, '_blank');
-        });
+        chartImg.addEventListener('click', function() { window.open(this.src, '_blank'); });
     }
 
-    // 初始化
     loadUserInfo();
     checkSubmissionStatus();
 </script>

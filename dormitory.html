@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>住宿申请 · 无锡市第一中学学生综合管理平台</title>
+    <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
+    <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
+    <style>
+        /* 弹窗样式 */
+        #secret-popup {
+            display: none;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fffaf0;
+            border: 2px solid #8b0000;
+            padding: 25px 30px;
+            z-index: 9999;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #3e2723;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+            max-width: 500px;
+            text-align: justify;
+            font-family: "宋体", "SimSun", serif;
+        }
+        #secret-popup h4 {
+            margin: 0 0 15px 0;
+            color: #8b0000;
+            text-align: center;
+            font-size: 16px;
+        }
+        #popup-close {
+            display: block;
+            margin: 15px auto 0;
+            background: #8b0000;
+            color: #fff;
+            border: none;
+            padding: 6px 20px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 9998;
+        }
+        .disclaimer {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .success-msg {
+            text-align: center;
+            color: #2e7d32;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        /* 备注输入框限制字符样式 */
+        .remark-counter {
+            font-size: 12px;
+            color: #999;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- 遮罩层 -->
+<div class="overlay" id="popup-overlay"></div>
+<!-- 隐藏弹窗 -->
+<div id="secret-popup">
+    <h4>[系统备注 · 档案号 110512-20110815]</h4>
+    <p>今天累死了，那间屋子我已经收拾干净了。柜子里留了一卷没用完的胶卷，如果有人能找到的话——不过那里现在大概早就不是原来的样子了吧。</p>
+    <p>说起来，暗房里最后显影的那张照片，我始终没等到它完全定影。</p>
+    <p>没有光，所以得在黑暗里摸。</p>
+    <p>我知道这听起来很怪。但如果你真的找到了这里，那你很厉害——你大概已经看见过那面墙了。</p>
+    <p>那就继续找吧。还有一些东西，我藏在别的地方。但不是实物。关于这栋楼，关于一百年。</p>
+    <p>项目编号HB101，如果它还在服务器里的话。</p>
+    <p style="text-align:right; margin-top:10px;">——林，2011.08.15</p>
+    <button id="popup-close">关闭</button>
+</div>
+
+<div class="wrapper">
+    <!-- 头部 -->
+    <div class="head">
+        <div class="container position-relative">
+            <a href="home.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover;"></a>
+            <ul id="header_link">
+                <li><a href="home.html">首页</a></li>
+                <li><a href="article.html">通知公告</a></li>
+                <li><a href="article.html">温馨提示</a></li>
+            </ul>
+            <div id="quick"><a href="home.html" class="ci-btn"></a></div>
+            <div class="user-btn"><a href="home.html"><img src="img/home.png" alt=""></a></div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="container">
+            <div id="slider"><img src="img/banner.jpg" alt=""></div>
+            <div class="box">
+                <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
+                <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
+
+                <div class="sidebar">
+                    <div class="user border-default">
+                        <img src="img/nophoto.jpg" class="fl avatar border-default">
+                        <div class="text" id="student-info"></div>
+                    </div>
+                    <div class="nav-list border-default">
+                        <ul>
+                            <li><a href="home.html">新生流程</a></li>
+                            <li><a href="login.html">退出登录</a></li>
+                        </ul>
+                    </div>
+                    <div class="ewm border-default">
+                        <div class="swiper-container" style="height:245px;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="img/ewm.png" alt="">
+                                    <div class="qrcode-description">(无锡一中微信公众号)<br>扫描二维码添加关注</div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <div class="blogroll">
+                        <ul class="nav"><li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li></ul>
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div class="part border-default mt-10">
+                        <div class="title-panel">
+                            <div class="title-bar fl"><img src="img/notice.png" alt="">住宿申请</div>
+                            <div class="title-nav fr"></div>
+                        </div>
+                        <div class="form-box">
+                            <div id="submit-success" class="success-msg" style="display:none;">
+                                ✓ 你的住宿申请已成功提交。如需修改备注，请直接在下方备注栏填写后重新提交。
+                            </div>
+                            <form id="dormitory-form" onsubmit="return submitDormitory(event)">
+                                <fieldset>
+                                    <legend>住宿申请</legend>
+                                    <div class="form-group">
+                                        <label>姓名:</label>
+                                        <div class="input-box">
+                                            <input type="text" id="student-name" disabled style="background:#eee; width:200px;">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>住宿申请:</label>
+                                        <div class="radio-box">
+                                            <input type="radio" name="is_apply" value="1"> 申请
+                                            <input type="radio" name="is_apply" value="2"> 不申请
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>联系方式:</label>
+                                        <div class="input-box"><input type="text" name="reason" placeholder="请输入手机号码" required></div>
+                                    </div>
+                                    <!-- 申请时显示 -->
+                                    <div class="apply_info" style="display:none;">
+                                        <div class="form-group">
+                                            <label>健康状况:</label>
+                                            <select name="jkzk">
+                                                <option value="">选择健康状况</option>
+                                                <option value="健康">健康</option>
+                                                <option value="一般">一般</option>
+                                                <option value="2011" disabled style="color:#ccc;">2011</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>既往病史:</label>
+                                            <div class="input-box"><input type="text" name="jwbs" placeholder="没有请填写无"></div>
+                                        </div>
+                                        <div class="form-group" style="padding-bottom:40px;">
+                                            <label>家庭地址:</label>
+                                            <div class="input-box">
+                                                <input type="text" name="address" placeholder="请填写详细地址">
+                                                <small>请填写详细地址，如：某某区某某街道某某小区某某号</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 不申请时显示 -->
+                                    <div class="dis_apply_info" style="display:none;">
+                                        <div class="form-group">
+                                            <label>不申请理由:</label>
+                                            <div class="radio-box">
+                                                <input type="radio" name="dis_reason" value="健康原因">健康原因
+                                                <input type="radio" name="dis_reason" value="家庭住址">家庭住址
+                                                <input type="radio" name="dis_reason" value="其他">其他
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>不申请说明:</label>
+                                            <textarea name="dis_remark" rows="5" style="width:400px;" placeholder="请说明不申请住宿的具体原因"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>不申请材料:</label>
+                                            <input type="file" id="pdfFile" name="dis_path" accept=".pdf">
+                                            <p id="tip" style="color:#666;">未选择文件（须合并为一份PDF上传）</p>
+                                        </div>
+                                        <div class="apply-notice">
+                                            <div class="notice-title">申请走读须知</div>
+                                            <p>学生申请走读须符合以下情形之一，并按要求提交真实、有效、完整的证明材料：</p>
+                                            <p class="notice-item">1. 健康原因：因身体或心理状况确需每日返家者，须提交公办医院出具的医疗证明。</p>
+                                            <p class="notice-item">2. 家庭住址：学生户籍或家庭住址距学校5公里以内者，须提交相关证明及距离截图。</p>
+                                            <p class="notice-item">3. 其他：请详细说明情况并提供充分、有效的佐证材料。</p>
+                                            <p class="notice-item"><strong>4. 了解更多信息详情，请下载《无锡市第一中学走读与住宿日常管理细则（试行）》，<a href="files/无锡市第一中学走读与住宿日常管理细则（试行）.docx" download>点击此处下载</a>。</strong></p>
+                                            <p class="notice-footer">以上材料不全或不符合要求者，不予同意。</p>
+                                        </div>
+                                    </div>
+                                    <!-- 备注栏（始终显示） -->
+                                    <div class="form-group" style="margin-top:20px;">
+                                        <label>备注（选填，限5个字符）:</label>
+                                        <div class="input-box">
+                                            <input type="text" id="remark-input" name="remark" maxlength="5" placeholder="限5个字符" style="width:200px;">
+                                            <span class="remark-counter" id="char-count">0/5</span>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <p style="text-align:center; margin-top:20px;">
+                                    <button type="submit" class="btn btn-red" id="submit-btn">提交申请</button>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <div class="foot">
+        <div class="container">
+            <a href="#" class="botLogo"><img src="img/footer_logo.png" alt=""></a>
+            <p>Copyright &copy; 2026 无锡市第一中学 All Rights Reserved.</p>
+            <p class="disclaimer">
+                【免责声明】本作品为虚构的ARG网页解密游戏，所有人物、事件、机构、数据及历史线索均与现实无关。<br>
+                继续浏览或参与互动即表示您已充分理解并接受上述声明。
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 加载用户信息
+    (function() {
+        var name = localStorage.getItem('studentName');
+        if (!name) {
+            window.location.href = 'login.html';
+            return;
+        }
+        var surname = localStorage.getItem('studentSurname') || name.charAt(0);
+        var studentID = localStorage.getItem('studentID') || '270512';
+        var gender = localStorage.getItem('studentGender') || '保密';
+        document.getElementById('student-info').innerHTML =
+            '<div>你好，' + surname + '同学</div><div>学号：' + studentID + '</div><div>性别：' + gender + '</div>';
+        // 自动填充姓名
+        document.getElementById('student-name').value = name;
+    })();
+
+    // 申请/不申请切换
+    (function() {
+        var applyRadios = document.querySelectorAll('input[name="is_apply"]');
+        var applyInfo = document.querySelector('.apply_info');
+        var disInfo = document.querySelector('.dis_apply_info');
+        function toggle() {
+            var val = document.querySelector('input[name="is_apply"]:checked');
+            if (val && val.value === '1') {
+                applyInfo.style.display = 'block';
+                disInfo.style.display = 'none';
+            } else if (val && val.value === '2') {
+                applyInfo.style.display = 'none';
+                disInfo.style.display = 'block';
+            } else {
+                applyInfo.style.display = 'none';
+                disInfo.style.display = 'none';
+            }
+        }
+        applyRadios.forEach(function(r) { r.addEventListener('change', toggle); });
+        // 初始状态：都不显示
+        toggle();
+    })();
+
+    // 备注字数统计
+    var remarkInput = document.getElementById('remark-input');
+    var charCount = document.getElementById('char-count');
+    remarkInput.addEventListener('input', function() {
+        var len = this.value.length;
+        charCount.textContent = len + '/5';
+    });
+
+    // 检查是否已提交过
+    var isSubmitted = localStorage.getItem('dormitorySubmitted') === 'true';
+    if (isSubmitted) {
+        document.getElementById('submit-success').style.display = 'block';
+        document.getElementById('submit-btn').textContent = '重新提交备注';
+    }
+
+    // 提交处理
+    function submitDormitory(e) {
+        e.preventDefault();
+        var remark = remarkInput.value.trim().toUpperCase();
+
+        // 检查备注是否为 LIGHT
+        if (remark === 'LIGHT') {
+            // 触发隐藏弹窗
+            document.getElementById('popup-overlay').style.display = 'block';
+            document.getElementById('secret-popup').style.display = 'block';
+        }
+
+        // 标记已提交
+        localStorage.setItem('dormitorySubmitted', 'true');
+        // 如果不是从已提交状态来的，则跳转主页
+        if (!isSubmitted) {
+            window.location.href = 'home.html';
+        } else {
+            // 已提交状态，仅更新备注，显示提示
+            alert('备注已更新。');
+            // 刷新页面以显示可能的变化
+            location.reload();
+        }
+        return false;
+    }
+
+    // 关闭弹窗
+    document.getElementById('popup-close').addEventListener('click', function() {
+        document.getElementById('popup-overlay').style.display = 'none';
+        document.getElementById('secret-popup').style.display = 'none';
+    });
+    document.getElementById('popup-overlay').addEventListener('click', function() {
+        document.getElementById('popup-overlay').style.display = 'none';
+        document.getElementById('secret-popup').style.display = 'none';
+    });
+</script>
+<script src="https://yzxs.wxeic.com/public/baidu.js"></script>
+</body>
+</html>

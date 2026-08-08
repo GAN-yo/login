@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>无锡市第一中学学生综合管理平台</title>
+    <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
+    <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
+    <style>
+        /* 任务卡片悬停效果 */
+        .grid-list li a:hover {
+            opacity: 0.85;
+            text-decoration: none;
+        }
+        .grid-list .title {
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        /* 侧边栏个人信息微调 */
+        .user .text div {
+            line-height: 1.6;
+        }
+        .disclaimer {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.5;
+            text-align: center;
+        }
+        /* 文章列表样式 */
+        .article-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .article-list li {
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        .article-list li a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .article-list li a:hover {
+            color: #b22222;
+        }
+        .article-summary {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <!-- 头部 -->
+    <div class="head">
+        <div class="container position-relative">
+            <!-- 使用本地校徽图片 -->
+            <a href="home.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover; -webkit-background-size:cover; -o-background-size:cover;"></a>
+            <ul id="header_link">
+                <li><a href="home.html">首页</a></li>
+                <li><a href="https://yzxs.wxeic.com/article/index?cid=5">通知公告</a></li>
+                <li><a href="https://yzxs.wxeic.com/article/index?cid=6">温馨提示</a></li>
+            </ul>
+            <div id="quick">
+                <a href="home.html" class="ci-btn"></a>
+            </div>
+            <div class="user-btn">
+                <a href="home.html"><img src="img/home.png" alt=""></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="container">
+            <!-- 轮播图（正常校园风光） -->
+            <div id="slider">
+                <img src="img/banner.jpg" alt="校园风光">
+            </div>
+
+            <div class="box">
+                <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
+                <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
+
+                <!-- 侧边栏 -->
+                <div class="sidebar">
+                    <!-- 动态个人信息 -->
+                    <div class="user border-default">
+                        <img src="img/nophoto.jpg" class="fl avatar border-default" alt="头像">
+                        <div class="text" id="student-info">
+                            <!-- 由JS动态填充 -->
+                        </div>
+                    </div>
+
+                    <!-- 导航列表 -->
+                    <div class="nav-list border-default">
+                        <ul>
+                            <li><a href="home.html">新生流程</a></li>
+                            <li><a href="login.html">退出登录</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- 二维码 -->
+                    <div class="ewm border-default">
+                        <div class="swiper-container" style="height:245px;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="img/ewm.png" alt="二维码">
+                                    <div class="qrcode-description">
+                                        (无锡一中微信公众号)<br />扫描二维码添加关注
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+
+                    <!-- 学校主页链接 -->
+                    <div class="blogroll">
+                        <ul class="nav">
+                            <li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 主内容区域 -->
+                <div class="main-content">
+                    <!-- 新生待办事项卡片 -->
+                    <div class="part border-default mt-10">
+                        <div class="title-panel">
+                            <div class="title-bar fl">
+                                <img src="img/notice.png" alt="流程图标">
+                                新生待办事项
+                            </div>
+                            <div class="title-nav fr">
+                                <span style="color:#b22222;font-size:13px;">请于8月25日前完成</span>
+                            </div>
+                        </div>
+                        <div class="grid-list">
+                            <ul>
+                                <li>
+                                    <a href="dormitory.html">
+                                        <div class="pic">
+                                            <img src="img/notice.png" alt="住宿申请">
+                                        </div>
+                                        <div class="title">住宿申请</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="uniform.html">
+                                        <div class="pic">
+                                            <img src="img/notice.png" alt="校服订购">
+                                        </div>
+                                        <div class="title">校服订购</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="task-status" style="text-align:center; padding:10px; font-size:13px; color:#666;"></div>
+                    </div>
+
+                    <!-- 通知公告 / 温馨提示文章列表 -->
+                    <div class="part border-default mt-10">
+                        <div class="title-panel">
+                            <div class="title-bar fl">
+                                <img src="img/notice.png" alt="公告图标">
+                                通知公告 · 温馨提示
+                            </div>
+                            <div class="title-nav fr"></div>
+                        </div>
+                        <div class="article-list">
+                            <ul>
+                                <li>
+                                    <a href="article.html?id=1">《致2027级新同学的一封信》</a>
+                                    <div class="article-summary">亲爱的同学们，祝贺你成为无锡市第一中学的一员。这座百年学府期待与你共同书写新的篇章……</div>
+                                </li>
+                                <li>
+                                    <a href="article.html?id=2">《新生暑期自主学习指南》</a>
+                                    <div class="article-summary">请同学们合理安排暑期时间，为即将到来的高中生活做好充分准备……</div>
+                                </li>
+                                <li>
+                                    <a href="article.html?id=3">《关于校园一卡通信息采集的通知》</a>
+                                    <div class="article-summary">请各位新生在8月20日前上传一寸免冠照片，用于制作校园一卡通……</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 流程说明（可保留为提示信息） -->
+                    <div class="part border-default mt-10">
+                        <div class="title-panel">
+                            <div class="title-bar fl">
+                                <img src="img/notice.png" alt="说明图标">
+                                温馨提示
+                            </div>
+                            <div class="title-nav fr"></div>
+                        </div>
+                        <div class="grid-list" style="padding:20px 40px;line-height: 30px;">
+                            <p>完成住宿申请与校服订购后，你的新生报到流程即告完成。如有疑问，请联系系统管理员。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <div class="foot">
+        <div class="container">
+            <a href="#" class="botLogo">
+                <img src="img/footer_logo.png" alt="底部logo">
+            </a>
+            <p>Copyright &copy; 2026 无锡市第一中学 All Rights Reserved.</p>
+            <p class="disclaimer">
+                【免责声明】本作品为虚构的ARG网页解密游戏，所有人物、事件、机构、数据及历史线索均与现实无关。<br>
+                继续浏览或参与互动即表示您已充分理解并接受上述声明。本游戏不包含任何真实个人信息，不会对现实造成任何影响。
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 检查登录状态，若未登录则跳回登录页
+    (function() {
+        var studentName = localStorage.getItem('studentName');
+        if (!studentName) {
+            window.location.href = 'login.html';
+            return;
+        }
+        var surname = localStorage.getItem('studentSurname') || studentName.charAt(0);
+        var studentID = localStorage.getItem('studentID') || '270512';
+
+        // 更新侧边栏个人信息
+        var infoHtml = '<div>你好，' + surname + '同学</div>';
+        infoHtml += '<div>学号：' + studentID + '</div>';
+        infoHtml += '<div>性别：男</div>';  // 可虚构或删除
+        document.getElementById('student-info').innerHTML = infoHtml;
+
+        // 读取待办事项完成状态
+        var dormitoryDone = localStorage.getItem('dormitorySubmitted') === 'true';
+        var uniformDone = localStorage.getItem('uniformSubmitted') === 'true';
+        var statusDiv = document.getElementById('task-status');
+        if (dormitoryDone && uniformDone) {
+            statusDiv.innerHTML = '✓ 你已完成全部待办事项。';
+            statusDiv.style.color = '#2e7d32';
+        } else {
+            var remaining = [];
+            if (!dormitoryDone) remaining.push('住宿申请');
+            if (!uniformDone) remaining.push('校服订购');
+            statusDiv.innerHTML = '待完成：' + remaining.join('、');
+            statusDiv.style.color = '#b22222';
+        }
+    })();
+</script>
+
+<!-- 可选保留百度统计脚本，实际环境可移除 -->
+<script src="https://yzxs.wxeic.com/public/baidu.js"></script>
+</body>
+</html>

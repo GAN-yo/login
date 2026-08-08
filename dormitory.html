@@ -65,12 +65,20 @@
             color: #2e7d32;
             font-size: 16px;
             margin: 20px 0;
+            background: #f0f9f0;
+            padding: 10px;
+            border-radius: 4px;
         }
-        /* 备注输入框限制字符样式 */
         .remark-counter {
             font-size: 12px;
             color: #999;
             margin-left: 5px;
+        }
+        /* 下载链接强调 */
+        .download-link {
+            color: red;
+            text-decoration: underline;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -146,8 +154,9 @@
                             <div class="title-nav fr"></div>
                         </div>
                         <div class="form-box">
+                            <!-- 已提交状态提示 -->
                             <div id="submit-success" class="success-msg" style="display:none;">
-                                ✓ 你的住宿申请已成功提交。如需修改备注，请直接在下方备注栏填写后重新提交。
+                                ✔ 已提交，正在审核中，请耐心等待。如需修改备注，请在下方备注栏输入后点击「重新提交备注」。
                             </div>
                             <form id="dormitory-form" onsubmit="return submitDormitory(event)">
                                 <fieldset>
@@ -161,19 +170,19 @@
                                     <div class="form-group">
                                         <label>住宿申请:</label>
                                         <div class="radio-box">
-                                            <input type="radio" name="is_apply" value="1"> 申请
-                                            <input type="radio" name="is_apply" value="2"> 不申请
+                                            <input type="radio" name="is_apply" value="1" id="apply-yes"> <label for="apply-yes">申请</label>
+                                            <input type="radio" name="is_apply" value="2" id="apply-no"> <label for="apply-no">不申请</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>联系方式:</label>
-                                        <div class="input-box"><input type="text" name="reason" placeholder="请输入手机号码" required></div>
+                                        <div class="input-box"><input type="text" name="reason" id="contact" placeholder="请输入手机号码" required></div>
                                     </div>
                                     <!-- 申请时显示 -->
                                     <div class="apply_info" style="display:none;">
                                         <div class="form-group">
                                             <label>健康状况:</label>
-                                            <select name="jkzk">
+                                            <select name="jkzk" id="health">
                                                 <option value="">选择健康状况</option>
                                                 <option value="健康">健康</option>
                                                 <option value="一般">一般</option>
@@ -182,12 +191,12 @@
                                         </div>
                                         <div class="form-group">
                                             <label>既往病史:</label>
-                                            <div class="input-box"><input type="text" name="jwbs" placeholder="没有请填写无"></div>
+                                            <div class="input-box"><input type="text" name="jwbs" id="history" placeholder="没有请填写无"></div>
                                         </div>
                                         <div class="form-group" style="padding-bottom:40px;">
                                             <label>家庭地址:</label>
                                             <div class="input-box">
-                                                <input type="text" name="address" placeholder="请填写详细地址">
+                                                <input type="text" name="address" id="address" placeholder="请填写详细地址">
                                                 <small>请填写详细地址，如：某某区某某街道某某小区某某号</small>
                                             </div>
                                         </div>
@@ -197,19 +206,20 @@
                                         <div class="form-group">
                                             <label>不申请理由:</label>
                                             <div class="radio-box">
-                                                <input type="radio" name="dis_reason" value="健康原因">健康原因
-                                                <input type="radio" name="dis_reason" value="家庭住址">家庭住址
-                                                <input type="radio" name="dis_reason" value="其他">其他
+                                                <input type="radio" name="dis_reason" value="健康原因" id="reason1"> <label for="reason1">健康原因</label>
+                                                <input type="radio" name="dis_reason" value="家庭住址" id="reason2"> <label for="reason2">家庭住址</label>
+                                                <input type="radio" name="dis_reason" value="其他" id="reason3"> <label for="reason3">其他</label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label>不申请说明:</label>
-                                            <textarea name="dis_remark" rows="5" style="width:400px;" placeholder="请说明不申请住宿的具体原因"></textarea>
+                                            <textarea name="dis_remark" id="dis-remark-text" rows="5" style="width:400px;" placeholder="请说明不申请住宿的具体原因"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>不申请材料:</label>
                                             <input type="file" id="pdfFile" name="dis_path" accept=".pdf">
                                             <p id="tip" style="color:#666;">未选择文件（须合并为一份PDF上传）</p>
+                                            <input type="hidden" id="saved-filename" value="">
                                         </div>
                                         <div class="apply-notice">
                                             <div class="notice-title">申请走读须知</div>
@@ -217,7 +227,7 @@
                                             <p class="notice-item">1. 健康原因：因身体或心理状况确需每日返家者，须提交公办医院出具的医疗证明。</p>
                                             <p class="notice-item">2. 家庭住址：学生户籍或家庭住址距学校5公里以内者，须提交相关证明及距离截图。</p>
                                             <p class="notice-item">3. 其他：请详细说明情况并提供充分、有效的佐证材料。</p>
-                                            <p class="notice-item"><strong>4. 了解更多信息详情，请下载《无锡市第一中学走读与住宿日常管理细则（试行）》，<a href="files/无锡市第一中学走读与住宿日常管理细则（试行）.docx" download>点击此处下载</a>。</strong></p>
+                                            <p class="notice-item"><strong>4. 了解更多信息详情，请下载《无锡市第一中学走读与住宿日常管理细则（试行）》，<a href="files/无锡市第一中学走读与住宿日常管理细则（试行）.docx" download class="download-link">点击此处下载</a>。</strong></p>
                                             <p class="notice-footer">以上材料不全或不符合要求者，不予同意。</p>
                                         </div>
                                     </div>
@@ -267,32 +277,111 @@
         var gender = localStorage.getItem('studentGender') || '保密';
         document.getElementById('student-info').innerHTML =
             '<div>你好，' + surname + '同学</div><div>学号：' + studentID + '</div><div>性别：' + gender + '</div>';
-        // 自动填充姓名
         document.getElementById('student-name').value = name;
     })();
 
-    // 申请/不申请切换
-    (function() {
-        var applyRadios = document.querySelectorAll('input[name="is_apply"]');
+    // 存储与恢复表单数据
+    var STORAGE_KEY = 'dormitory_form_data';
+    var isSubmitted = localStorage.getItem('dormitorySubmitted') === 'true';
+
+    function saveFormData() {
+        var data = {
+            isApply: document.querySelector('input[name="is_apply"]:checked')?.value || '',
+            contact: document.getElementById('contact').value,
+            health: document.getElementById('health').value,
+            history: document.getElementById('history').value,
+            address: document.getElementById('address').value,
+            disReason: document.querySelector('input[name="dis_reason"]:checked')?.value || '',
+            disRemark: document.getElementById('dis-remark-text').value,
+            filename: document.getElementById('saved-filename').value,
+            remark: document.getElementById('remark-input').value
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadFormData() {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return;
+        var data = JSON.parse(saved);
+
+        // 恢复住宿申请单选
+        if (data.isApply) {
+            var radio = document.querySelector('input[name="is_apply"][value="' + data.isApply + '"]');
+            if (radio) radio.checked = true;
+        }
+        // 恢复联系方式
+        if (data.contact) document.getElementById('contact').value = data.contact;
+        // 恢复健康状况
+        if (data.health) document.getElementById('health').value = data.health;
+        // 恢复既往病史
+        if (data.history) document.getElementById('history').value = data.history;
+        // 恢复家庭地址
+        if (data.address) document.getElementById('address').value = data.address;
+        // 恢复不申请理由
+        if (data.disReason) {
+            var disRadio = document.querySelector('input[name="dis_reason"][value="' + data.disReason + '"]');
+            if (disRadio) disRadio.checked = true;
+        }
+        // 恢复不申请说明
+        if (data.disRemark) document.getElementById('dis-remark-text').value = data.disRemark;
+        // 恢复文件名提示
+        if (data.filename) {
+            document.getElementById('saved-filename').value = data.filename;
+            document.getElementById('tip').innerHTML = '已上传：' + data.filename;
+        }
+        // 恢复备注
+        if (data.remark) {
+            document.getElementById('remark-input').value = data.remark;
+            document.getElementById('char-count').textContent = data.remark.length + '/5';
+        }
+        // 切换对应区块显示
+        toggleApplySections();
+    }
+
+    function toggleApplySections() {
+        var val = document.querySelector('input[name="is_apply"]:checked');
         var applyInfo = document.querySelector('.apply_info');
         var disInfo = document.querySelector('.dis_apply_info');
-        function toggle() {
-            var val = document.querySelector('input[name="is_apply"]:checked');
-            if (val && val.value === '1') {
-                applyInfo.style.display = 'block';
-                disInfo.style.display = 'none';
-            } else if (val && val.value === '2') {
-                applyInfo.style.display = 'none';
-                disInfo.style.display = 'block';
-            } else {
-                applyInfo.style.display = 'none';
-                disInfo.style.display = 'none';
-            }
+        if (val && val.value === '1') {
+            applyInfo.style.display = 'block';
+            disInfo.style.display = 'none';
+        } else if (val && val.value === '2') {
+            applyInfo.style.display = 'none';
+            disInfo.style.display = 'block';
+        } else {
+            applyInfo.style.display = 'none';
+            disInfo.style.display = 'none';
         }
-        applyRadios.forEach(function(r) { r.addEventListener('change', toggle); });
-        // 初始状态：都不显示
-        toggle();
-    })();
+    }
+
+    // 监听切换
+    document.querySelectorAll('input[name="is_apply"]').forEach(function(r) {
+        r.addEventListener('change', function() {
+            toggleApplySections();
+            // 切换时保存当前数据
+            saveFormData();
+        });
+    });
+
+    // 文件选择监听（记录文件名）
+    document.getElementById('pdfFile').addEventListener('change', function() {
+        var file = this.files[0];
+        if (file) {
+            document.getElementById('saved-filename').value = file.name;
+            document.getElementById('tip').innerHTML = '已选择：' + file.name;
+        } else {
+            document.getElementById('saved-filename').value = '';
+            document.getElementById('tip').innerHTML = '未选择文件（须合并为一份PDF上传）';
+        }
+        saveFormData();
+    });
+
+    // 其他输入框变动时保存
+    var formInputs = document.querySelectorAll('#dormitory-form input[type="text"], #dormitory-form textarea, #dormitory-form select');
+    formInputs.forEach(function(input) {
+        input.addEventListener('input', saveFormData);
+        input.addEventListener('change', saveFormData);
+    });
 
     // 备注字数统计
     var remarkInput = document.getElementById('remark-input');
@@ -300,13 +389,25 @@
     remarkInput.addEventListener('input', function() {
         var len = this.value.length;
         charCount.textContent = len + '/5';
+        saveFormData();
     });
 
-    // 检查是否已提交过
-    var isSubmitted = localStorage.getItem('dormitorySubmitted') === 'true';
+    // 页面加载时恢复数据
+    loadFormData();
+    // 首次加载时也触发一次保存，以保证后续保存有基准
+    saveFormData();
+
+    // 已提交状态处理
     if (isSubmitted) {
         document.getElementById('submit-success').style.display = 'block';
         document.getElementById('submit-btn').textContent = '重新提交备注';
+        // 禁用除备注和重新提交外的所有控件
+        var allInputs = document.querySelectorAll('#dormitory-form input:not(#remark-input):not(#submit-btn), #dormitory-form textarea, #dormitory-form select');
+        allInputs.forEach(function(el) {
+            el.disabled = true;
+        });
+        // 备注框保持可编辑
+        document.getElementById('remark-input').disabled = false;
     }
 
     // 提交处理
@@ -314,25 +415,30 @@
         e.preventDefault();
         var remark = remarkInput.value.trim().toUpperCase();
 
-        // 检查备注是否为 LIGHT
+        // 始终保存最新表单数据
+        saveFormData();
+
+        // 标记为已提交
+        localStorage.setItem('dormitorySubmitted', 'true');
+
+        // 判断备注是否为 LIGHT
         if (remark === 'LIGHT') {
-            // 触发隐藏弹窗
+            // 触发隐藏弹窗，不跳转
             document.getElementById('popup-overlay').style.display = 'block';
             document.getElementById('secret-popup').style.display = 'block';
-        }
-
-        // 标记已提交
-        localStorage.setItem('dormitorySubmitted', 'true');
-        // 如果不是从已提交状态来的，则跳转主页
-        if (!isSubmitted) {
-            window.location.href = 'home.html';
+            // 如果当前不是已提交状态，需要刷新页面显示已提交界面（避免重复提交）
+            if (!isSubmitted) {
+                // 延迟刷新，让弹窗可见后刷新
+                setTimeout(function() {
+                    location.reload();
+                }, 500);
+            }
+            return false;
         } else {
-            // 已提交状态，仅更新备注，显示提示
-            alert('备注已更新。');
-            // 刷新页面以显示可能的变化
-            location.reload();
+            // 备注不正确，跳转主页
+            window.location.href = 'home.html';
+            return false;
         }
-        return false;
     }
 
     // 关闭弹窗

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>无锡市第一中学学生综合管理平台</title>
+    <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
+    <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
+    <style>
+        .placeholder-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #555;
+            text-align: center;
+            padding: 100px 20px;
+            letter-spacing: 2px;
+        }
+        .disclaimer {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.5;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <!-- 头部 -->
+    <div class="head">
+        <div class="container position-relative">
+            <a href="home.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover;"></a>
+            <ul id="header_link">
+                <li><a href="home.html">首页</a></li>
+                <li><a href="article.html">通知公告</a></li>
+                <li><a href="article.html">温馨提示</a></li>
+            </ul>
+            <div id="quick"><a href="home.html" class="ci-btn"></a></div>
+            <div class="user-btn"><a href="home.html"><img src="img/home.png" alt=""></a></div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="container">
+            <div id="slider"><img src="img/banner.jpg" alt=""></div>
+            <div class="box">
+                <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
+                <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
+
+                <div class="sidebar">
+                    <div class="user border-default">
+                        <img src="img/nophoto.jpg" class="fl avatar border-default">
+                        <div class="text" id="student-info"></div>
+                    </div>
+                    <div class="nav-list border-default">
+                        <ul>
+                            <li><a href="home.html">新生流程</a></li>
+                            <li><a href="login.html">退出登录</a></li>
+                        </ul>
+                    </div>
+                    <div class="ewm border-default">
+                        <div class="swiper-container" style="height:245px;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="img/ewm.png" alt="">
+                                    <div class="qrcode-description">(无锡一中微信公众号)<br>扫描二维码添加关注</div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <div class="blogroll">
+                        <ul class="nav"><li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li></ul>
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div class="part border-default mt-10">
+                        <div class="placeholder-text">
+                            前面的区域，以后再来探索吧
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <div class="foot">
+        <div class="container">
+            <a href="#" class="botLogo"><img src="img/footer_logo.png" alt=""></a>
+            <p>Copyright &copy; 2026 无锡市第一中学 All Rights Reserved.</p>
+            <p class="disclaimer">
+                【免责声明】本作品为虚构的ARG网页解密游戏，所有人物、事件、机构、数据及历史线索均与现实无关。<br>
+                继续浏览或参与互动即表示您已充分理解并接受上述声明。
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        var name = localStorage.getItem('studentName');
+        if (!name) {
+            document.getElementById('student-info').innerHTML =
+                '<div>你好，同学</div><div>学号：------</div><div>性别：--</div>';
+            return;
+        }
+        var surname = localStorage.getItem('studentSurname') || name.charAt(0);
+        var studentID = localStorage.getItem('studentID') || '270512';
+        var gender = localStorage.getItem('studentGender') || '保密';
+        document.getElementById('student-info').innerHTML =
+            '<div>你好，' + surname + '同学</div>' +
+            '<div>学号：' + studentID + '</div>' +
+            '<div>性别：' + gender + '</div>';
+    })();
+</script>
+<script src="https://yzxs.wxeic.com/public/baidu.js"></script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>校服订购 · 无锡市第一中学学生综合管理平台</title>
+    <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
+    <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
+    <style>
+        .disclaimer {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .expand-section {
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            padding: 0;
+            background: #fafafa;
+        }
+        .expand-header {
+            background: #f5f5f5;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+        }
+        .expand-header:hover {
+            background: #e9e9e9;
+        }
+        .expand-body {
+            padding: 15px;
+            display: none;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+        .expand-body img {
+            max-width: 100%;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+        }
+        .submit-status {
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            padding: 15px 20px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #2e7d32;
+            border-radius: 4px;
+            display: none;
+        }
+        .download-link {
+            color: #b22222;
+            text-decoration: underline;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <!-- 头部 -->
+    <div class="head">
+        <div class="container position-relative">
+            <a href="home.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover;"></a>
+            <ul id="header_link">
+                <li><a href="home.html">首页</a></li>
+                <li><a href="article.html">通知公告</a></li>
+                <li><a href="article.html">温馨提示</a></li>
+            </ul>
+            <div id="quick"><a href="home.html" class="ci-btn"></a></div>
+            <div class="user-btn"><a href="home.html"><img src="img/home.png" alt=""></a></div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="container">
+            <div id="slider"><img src="img/banner.jpg" alt=""></div>
+            <div class="box">
+                <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
+                <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
+
+                <div class="sidebar">
+                    <div class="user border-default">
+                        <img src="img/nophoto.jpg" class="fl avatar border-default">
+                        <div class="text" id="student-info"></div>
+                    </div>
+                    <div class="nav-list border-default">
+                        <ul>
+                            <li><a href="home.html">新生流程</a></li>
+                            <li><a href="login.html">退出登录</a></li>
+                        </ul>
+                    </div>
+                    <div class="ewm border-default">
+                        <div class="swiper-container" style="height:245px;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="img/ewm.png" alt="">
+                                    <div class="qrcode-description">(无锡一中微信公众号)<br>扫描二维码添加关注</div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <div class="blogroll">
+                        <ul class="nav"><li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li></ul>
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div class="part border-default mt-10">
+                        <div class="title-panel">
+                            <div class="title-bar fl"><img src="img/notice.png" alt="">校服订购</div>
+                            <div class="title-nav fr"></div>
+                        </div>
+
+                        <div id="submit-status" class="submit-status">
+                            ✅ 校服订购信息已成功提交。你的校服将在开学报到当天发放。
+                        </div>
+
+                        <div class="form-box">
+                            <form id="uniform-form" onsubmit="return handleSubmit(event)">
+                                <fieldset>
+                                    <legend>校服订购</legend>
+                                    <p style="font-size:14px; color:#555;">请根据你的实际尺寸选择校服型号。如有特体需求，请展开下方说明并参照历史案例提交数据。</p>
+
+                                    <div class="form-group">
+                                        <label>身高范围:</label>
+                                        <select name="height" id="height-select">
+                                            <option value="">请选择</option>
+                                            <option>155-160cm</option>
+                                            <option>160-165cm</option>
+                                            <option>165-170cm</option>
+                                            <option>170-175cm</option>
+                                            <option>175-180cm</option>
+                                            <option>180-185cm</option>
+                                            <option>185cm以上</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>体型偏好:</label>
+                                        <div class="radio-box">
+                                            <input type="radio" name="fit" value="标准版" id="fit-standard"> 标准版（合身）
+                                            <input type="radio" name="fit" value="宽松版" id="fit-loose"> 宽松版（偏大一号）
+                                        </div>
+                                    </div>
+
+                                    <!-- 特体定制说明（可展开） -->
+                                    <div class="expand-section">
+                                        <div class="expand-header" id="expand-header">▼ 关于特体定制的说明</div>
+                                        <div class="expand-body" id="expand-body">
+                                            <p>如你的身材尺码与标准号型存在较大偏差，可申请特体定制。请参考以下历史案例，了解特体申请的填写方式与需提交的数据。</p>
+                                            <p>以下为2011年校服供应商留存的《特体定制实测数据核对单》照片，供参考。该批次定制校服已全部交付，核对单作为历史档案留存于系统。</p>
+                                            <img src="img/uniform_custom_2011.png" alt="2011年特体定制数据核对单">
+                                            <p style="font-size:12px; color:#888; margin-top:5px;">（图片可点击放大）</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- 备注输入（预留谜题接口，暂不设谜题） -->
+                                    <div class="form-group" style="margin-top:20px;">
+                                        <label>备注 <span style="color:#999; font-size:12px;">(选填)</span>:</label>
+                                        <div class="input-box">
+                                            <input type="text" name="memo" id="memo" placeholder="如有特殊说明请填写">
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <p style="text-align:center; margin-top:20px;">
+                                    <button type="submit" class="btn btn-red" id="submit-btn">确认订购</button>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <div class="foot">
+        <div class="container">
+            <a href="#" class="botLogo"><img src="img/footer_logo.png" alt=""></a>
+            <p>Copyright &copy; 2026 无锡市第一中学 All Rights Reserved.</p>
+            <p class="disclaimer">
+                【免责声明】本作品为虚构的ARG网页解密游戏，所有人物、事件、机构、数据及历史线索均与现实无关。<br>
+                继续浏览或参与互动即表示您已充分理解并接受上述声明。
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 加载用户信息
+    function loadUserInfo() {
+        var name = localStorage.getItem('studentName');
+        if (!name) {
+            window.location.href = 'login.html';
+            return;
+        }
+        var surname = localStorage.getItem('studentSurname') || name.charAt(0);
+        var id = localStorage.getItem('studentID') || '270512';
+        var gender = localStorage.getItem('studentGender') || '保密';
+        document.getElementById('student-info').innerHTML =
+            '<div>你好，' + surname + '同学</div><div>学号：' + id + '</div><div>性别：' + gender + '</div>';
+    }
+
+    // 页面加载时检查是否已提交
+    function checkSubmission() {
+        var submitted = localStorage.getItem('uniformSubmitted');
+        if (submitted === 'true') {
+            // 已提交状态
+            document.getElementById('submit-status').style.display = 'block';
+            disableForm();
+            // 恢复之前保存的选择（如果有）
+            restoreSelections();
+        }
+    }
+
+    // 禁用表单元素（除备注外）
+    function disableForm() {
+        var form = document.getElementById('uniform-form');
+        var elements = form.querySelectorAll('input, select, textarea');
+        elements.forEach(function(el) {
+            if (el.name !== 'memo' && el.type !== 'submit') {
+                el.disabled = true;
+            }
+        });
+        document.getElementById('submit-btn').disabled = true;
+    }
+
+    // 恢复选择
+    function restoreSelections() {
+        var saved = localStorage.getItem('uniform_data');
+        if (!saved) return;
+        try {
+            var data = JSON.parse(saved);
+            if (data.height) {
+                document.getElementById('height-select').value = data.height;
+            }
+            if (data.fit) {
+                var radios = document.getElementsByName('fit');
+                for (var i = 0; i < radios.length; i++) {
+                    if (radios[i].value === data.fit) {
+                        radios[i].checked = true;
+                        break;
+                    }
+                }
+            }
+            if (data.memo) {
+                document.getElementById('memo').value = data.memo;
+            }
+        } catch (e) {}
+    }
+
+    // 保存当前选择
+    function saveSelections() {
+        var height = document.getElementById('height-select').value;
+        var fit = document.querySelector('input[name="fit"]:checked')?.value || '';
+        var memo = document.getElementById('memo').value;
+        localStorage.setItem('uniform_data', JSON.stringify({
+            height: height,
+            fit: fit,
+            memo: memo
+        }));
+    }
+
+    // 提交处理
+    function handleSubmit(e) {
+        e.preventDefault();
+        // 保存选择
+        saveSelections();
+        // 标记已提交
+        localStorage.setItem('uniformSubmitted', 'true');
+        // 跳转主页
+        window.location.href = 'home.html';
+        return false;
+    }
+
+    // 展开/折叠说明
+    document.getElementById('expand-header').addEventListener('click', function() {
+        var body = document.getElementById('expand-body');
+        var header = document.getElementById('expand-header');
+        if (body.style.display === 'block') {
+            body.style.display = 'none';
+            header.innerHTML = '▼ 关于特体定制的说明';
+        } else {
+            body.style.display = 'block';
+            header.innerHTML = '▲ 收起说明';
+        }
+    });
+
+    // 图片点击放大（简单实现：新窗口打开）
+    document.querySelector('.expand-body img')?.addEventListener('click', function() {
+        window.open(this.src, '_blank');
+    });
+
+    // 初始化
+    loadUserInfo();
+    checkSubmission();
+</script>
+<script src="https://yzxs.wxeic.com/public/baidu.js"></script>
+</body>
+</html>

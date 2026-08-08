@@ -123,12 +123,8 @@
                             <div class="title-bar fl"><img src="img/notice.png" alt="公告图标">通知公告 · 温馨提示</div>
                             <div class="title-nav fr"></div>
                         </div>
-                        <div class="article-list">
-                            <ul>
-                                <li><a href="article.html?id=1">《致2027级新同学的一封信》</a><div class="article-summary">亲爱的同学们，祝贺你成为无锡市第一中学的一员。这座百年学府期待与你共同书写新的篇章……</div></li>
-                                <li><a href="article.html?id=2">《新生暑期自主学习指南》</a><div class="article-summary">请同学们合理安排暑期时间，为即将到来的高中生活做好充分准备……</div></li>
-                                <li><a href="article.html?id=3">《关于校园一卡通信息采集的通知》</a><div class="article-summary">请各位新生在8月20日前上传一寸免冠照片，用于制作校园一卡通……</div></li>
-                            </ul>
+                        <div class="article-list" id="article-list">
+                            <!-- 文章列表由JS动态生成 -->
                         </div>
                     </div>
 
@@ -159,6 +155,22 @@
 </div>
 
 <script>
+    // 计算显示年份（与 article.html 保持一致）
+    function getDisplayYear() {
+        var now = new Date();
+        var currentYear = now.getFullYear();
+        var currentMonth = now.getMonth() + 1;
+        if (currentYear <= 2027) {
+            return 2027;
+        } else {
+            if (currentMonth < 7) {
+                return currentYear - 1;
+            } else {
+                return currentYear;
+            }
+        }
+    }
+
     (function() {
         var studentName = localStorage.getItem('studentName');
         if (!studentName) {
@@ -167,13 +179,14 @@
         }
         var surname = localStorage.getItem('studentSurname') || studentName.charAt(0);
         var studentID = localStorage.getItem('studentID') || '270512';
-        var gender = localStorage.getItem('studentGender') || '保密'; // 读取性别
+        var gender = localStorage.getItem('studentGender') || '保密';
 
         var infoHtml = '<div>你好，' + surname + '同学</div>';
         infoHtml += '<div>学号：' + studentID + '</div>';
         infoHtml += '<div>性别：' + gender + '</div>';
         document.getElementById('student-info').innerHTML = infoHtml;
 
+        // 待办事项状态
         var dormitoryDone = localStorage.getItem('dormitorySubmitted') === 'true';
         var uniformDone = localStorage.getItem('uniformSubmitted') === 'true';
         var statusDiv = document.getElementById('task-status');
@@ -187,6 +200,36 @@
             statusDiv.innerHTML = '待完成：' + remaining.join('、');
             statusDiv.style.color = '#b22222';
         }
+
+        // 动态生成文章列表
+        var displayYear = getDisplayYear();
+        var articles = [
+            {
+                title: '《致' + displayYear + '级新同学的一封信》',
+                summary: '亲爱的同学们，祝贺你成为无锡市第一中学的一员。这座百年学府期待与你共同书写新的篇章……',
+                id: 1
+            },
+            {
+                title: '《' + displayYear + '级新生暑期自主学习指南》',
+                summary: '请同学们合理安排暑期时间，为即将到来的高中生活做好充分准备……',
+                id: 2
+            },
+            {
+                title: '《关于' + displayYear + '级新生校园一卡通信息采集的通知》',
+                summary: '请各位新生在8月20日前上传一寸免冠照片，用于制作校园一卡通……',
+                id: 3
+            }
+        ];
+
+        var listHtml = '<ul>';
+        for (var i = 0; i < articles.length; i++) {
+            listHtml += '<li>';
+            listHtml += '<a href="article.html?id=' + articles[i].id + '">' + articles[i].title + '</a>';
+            listHtml += '<div class="article-summary">' + articles[i].summary + '</div>';
+            listHtml += '</li>';
+        }
+        listHtml += '</ul>';
+        document.getElementById('article-list').innerHTML = listHtml;
     })();
 </script>
 <script src="https://yzxs.wxeic.com/public/baidu.js"></script>

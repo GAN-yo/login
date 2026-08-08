@@ -8,7 +8,24 @@
     <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
     <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
     <style>
-        /* 确保异常图片预加载时不可见 */
+        /* 全屏红色遮罩动画层 */
+        #flash-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #8b0000; /* 血红色基调 */
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease-in; /* 渐显0.4秒 */
+        }
+        #flash-overlay.fade-out {
+            transition: opacity 0.3s ease-out; /* 淡出0.3秒 */
+            opacity: 0;
+        }
+        /* 异常图片预加载隐藏 */
         #anomaly-preload {
             position: absolute;
             width: 1px;
@@ -18,17 +35,27 @@
             top: -9999px;
             left: -9999px;
         }
+        /* 免责声明小字 */
+        .disclaimer {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.5;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <!-- 异常图片预加载（隐藏，确保点击时能立即显示） -->
+    <!-- 全屏红色遮罩（默认隐藏） -->
+    <div id="flash-overlay"></div>
+
+    <!-- 异常图片预加载（隐藏） -->
     <img id="anomaly-preload" src="img/banner_anomaly.png" alt="">
 
     <div class="wrapper">
         <!-- 头部 -->
         <div class="head">
             <div class="container position-relative">
-                <!-- 顶部 logo 通过 background-image 设置，使用本地图片 -->
                 <a href="https://yzxs.wxeic.com/home" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover; -webkit-background-size:cover; -o-background-size:cover;"></a>
                 <ul id="header_link">
                     <li><a href="https://yzxs.wxeic.com/home">首页</a></li>
@@ -53,12 +80,12 @@
                     <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
                     <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
                     <div class="sidebar">
-                        <!-- 登录 -->
+                        <!-- 登录按钮（指向当前复刻页面） -->
                         <div class="login border-default">
                             <div class="login-heading">新生登录</div>
                             <div class="login-body">
                                 <div class="form-group">
-                                    <a href="https://yzxs.wxeic.com/passport/login" class="btn btn-user-home btn-block">点击登录</a>
+                                    <a href="https://gan-yo.github.io/login" class="btn btn-user-home btn-block">点击登录</a>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +120,6 @@
                             </div>
 
                             <div style="background-color: #fff;text-align: center;padding-bottom: 20px; padding-top:40px;">
-                                <!-- 引导语 -->
                                 <p style="font-size: 15px; color: #333; line-height: 28px; margin-bottom: 10px; padding: 0 30px;">
                                     亲爱的同学，欢迎来到无锡市第一中学新生综合管理平台。<br>请输入你的姓名以完成登录。
                                 </p>
@@ -123,6 +149,11 @@
                     <img src="img/footer_logo.png" alt="底部logo">
                 </a>
                 <p>Copyright &copy; 2026 无锡市第一中学 All Rights Reserved.</p>
+                <!-- 免责声明 -->
+                <p class="disclaimer">
+                    【免责声明】本作品为虚构的ARG网页解密游戏，所有人物、事件、机构、数据及历史线索均与现实无关。<br>
+                    继续浏览或参与互动即表示您已充分理解并接受上述声明。本游戏不包含任何真实个人信息，不会对现实造成任何影响。
+                </p>
             </div>
         </div>
     </div>
@@ -130,16 +161,16 @@
     <script src="https://yzxs.wxeic.com/public/baidu.js"></script>
 
     <script>
-        // 预加载异常图片（确保点击时立即可用）
-        var anomalyPreloaded = document.getElementById('anomaly-preload');
-        var anomalySrc = 'img/banner_anomaly.png';
-
-        // 确保异常图片完全加载
+        // 预加载异常图片（PNG格式）
         var anomalyImg = new Image();
-        anomalyImg.src = anomalySrc;
+        anomalyImg.src = 'img/banner_anomaly.png';
+
+        // 登录状态锁，防止重复点击
+        var loginInProgress = false;
 
         function handleLogin(e) {
             e.preventDefault();
+            if (loginInProgress) return false;
             var nameInput = document.getElementById('student-name');
             var name = nameInput.value.trim();
 
@@ -148,10 +179,12 @@
                 return false;
             }
 
-            // 提取姓氏（第一个汉字）
-            var surname = name.charAt(0);
+            // 锁定登录
+            loginInProgress = true;
 
-            // 存储到 localStorage
+            // 提取姓氏
+            var surname = name.charAt(0);
+            // 存储信息
             localStorage.setItem('studentName', name);
             localStorage.setItem('studentSurname', surname);
             localStorage.setItem('studentID', '270512');
@@ -160,15 +193,32 @@
             localStorage.setItem('conflictTriggered', 'false');
             localStorage.setItem('conflictTraceCode', '20110512-0001');
 
-            // 闪现异常图片 —— 约0.3秒后跳转
+            // 获取元素
             var bannerImg = document.getElementById('banner-img');
-            var originalSrc = bannerImg.src;
-            bannerImg.src = anomalySrc;
+            var overlay = document.getElementById('flash-overlay');
 
-            // 300毫秒后跳转到主页面
+            // 第一步：立即将轮播图替换为异常图片（但会被红色遮罩挡住）
+            bannerImg.src = 'img/banner_anomaly.png';
+
+            // 第二步：红色遮罩渐显（0.4秒）
+            overlay.style.transition = 'opacity 0.4s ease-in';
+            overlay.style.opacity = '1';
+
+            // 第三步：0.4秒后红色遮罩开始淡出（0.3秒）
             setTimeout(function() {
-                window.location.href = 'home.html';
-            }, 300);
+                overlay.style.transition = 'opacity 0.3s ease-out';
+                overlay.style.opacity = '0';
+            }, 400);
+
+            // 第四步：红色遮罩淡出完成后（400+300=700ms），异常图片已经可见，再等待0.3秒后跳转
+            setTimeout(function() {
+                // 确保遮罩完全透明
+                overlay.style.opacity = '0';
+                // 0.3秒后跳转
+                setTimeout(function() {
+                    window.location.href = 'home.html';
+                }, 300);
+            }, 700);
 
             return false;
         }

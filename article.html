@@ -55,6 +55,25 @@
             text-indent: 0;
             color: #444;
         }
+        /* 文章列表样式 */
+        .article-list-local ul {
+            list-style: none;
+            padding: 20px 40px;
+            margin: 0;
+        }
+        .article-list-local li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+        }
+        .article-list-local li a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .article-list-local li a:hover {
+            color: #b22222;
+        }
     </style>
 </head>
 <body>
@@ -65,8 +84,8 @@
             <a href="home.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover;"></a>
             <ul id="header_link">
                 <li><a href="home.html">首页</a></li>
-                <li><a href="https://yzxs.wxeic.com/article/index?cid=5">通知公告</a></li>
-                <li><a href="https://yzxs.wxeic.com/article/index?cid=6">温馨提示</a></li>
+                <li><a href="article.html">通知公告</a></li>
+                <li><a href="article.html">温馨提示</a></li>
             </ul>
             <div id="quick"><a href="home.html" class="ci-btn"></a></div>
             <div class="user-btn"><a href="home.html"><img src="img/home.png" alt=""></a></div>
@@ -109,7 +128,7 @@
 
                 <div class="main-content">
                     <div class="part border-default mt-10" id="article-container">
-                        <!-- 文章内容由JS动态生成 -->
+                        <!-- 文章内容或列表由JS动态生成 -->
                     </div>
                 </div>
             </div>
@@ -130,13 +149,11 @@
 </div>
 
 <script>
-    // 获取URL参数
     function getQueryParam(param) {
         var urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     }
 
-    // 计算显示年份
     function getDisplayYear() {
         var now = new Date();
         var currentYear = now.getFullYear();
@@ -152,7 +169,6 @@
         }
     }
 
-    // 加载侧边栏用户信息
     function loadUserInfo() {
         var name = localStorage.getItem('studentName');
         if (!name) {
@@ -162,21 +178,41 @@
         var surname = localStorage.getItem('studentSurname') || name.charAt(0);
         var studentID = localStorage.getItem('studentID') || '270512';
         var gender = localStorage.getItem('studentGender') || '保密';
-        var infoHtml = '<div>你好，' + surname + '同学</div>';
-        infoHtml += '<div>学号：' + studentID + '</div>';
-        infoHtml += '<div>性别：' + gender + '</div>';
-        document.getElementById('student-info').innerHTML = infoHtml;
+        document.getElementById('student-info').innerHTML =
+            '<div>你好，' + surname + '同学</div>' +
+            '<div>学号：' + studentID + '</div>' +
+            '<div>性别：' + gender + '</div>';
     }
 
-    // 生成文章内容
+    function renderArticleList() {
+        var displayYear = getDisplayYear();
+        var articles = [
+            { title: '《致' + displayYear + '级新同学的一封信》', id: 1 },
+            { title: '《' + displayYear + '级新生暑期自主学习指南》', id: 2 },
+            { title: '《关于' + displayYear + '级新生校园一卡通信息采集的通知》', id: 3 }
+        ];
+
+        var html = '<div class="title-panel"><div class="title-bar fl"><img src="img/notice.png" alt="">通知公告 · 温馨提示</div><div class="title-nav fr"></div></div>';
+        html += '<div style="background:#fff;" class="article-list-local"><ul>';
+        for (var i = 0; i < articles.length; i++) {
+            html += '<li><a href="article.html?id=' + articles[i].id + '">' + articles[i].title + '</a></li>';
+        }
+        html += '</ul></div>';
+        document.getElementById('article-container').innerHTML = html;
+    }
+
     function renderArticle() {
         var articleId = getQueryParam('id');
+        if (!articleId) {
+            renderArticleList();
+            return;
+        }
+
         var container = document.getElementById('article-container');
         var displayYear = getDisplayYear();
 
         if (articleId === '1') {
             var title = '《致' + displayYear + '级新同学的一封信》';
-            // 插入新段落
             var letterContent =
                 '<p>百舸争流，千帆竞发。当你展开这封信笺，你已正式成为无锡市第一中学' + displayYear + '级新生。在此，我们向你表示最热烈的祝贺与最诚挚的欢迎。</p>' +
                 '<p>年复一年，八角楼前的银杏黄了又绿，进贤亭边的紫藤谢了又开。而今天，这所走过一百一十六载春秋的学府，终于等来了你。从1911年建校至今，一代代一中人在这片土地上读书、明理、求进，将青春写进红楼的每一块砖瓦，将理想融入锡惠山下的每一缕晨光。</p>' +
@@ -187,21 +223,15 @@
                 '<p>不积跬步，无以至千里。在报到之前，请认真完成新生平台的各项待办事项，包括住宿申请与校服订购。这些看似琐碎的事务，是你开启独立生活的第一步。请于8月25日前提交全部材料，以便学校做好开学准备。同时，请仔细阅读《新生暑期自主学习指南》，合理安排假期时间，为即将到来的高中学习做好衔接。</p>' +
                 '<p>止于至善，是《大学》开篇的训诫，也是一中人的精神坐标。我们不求你成为完美的学生，只愿你永远保持向上的姿态。无论你将来走向何方，从事何种事业，希望你始终记得，有一所叫无锡一中的学校，曾在你十六岁的夏天，对你说过一声——“欢迎你，求进青年。”</p>';
 
-            var signature = '<p>无锡市第一中学<br>' + displayYear + '年7月</p>';
-
             container.innerHTML =
-                '<div class="title-panel">' +
-                '  <div class="title-bar fl"><img src="img/notice.png" alt="">通知公告</div>' +
-                '  <div class="title-nav fr"></div>' +
-                '</div>' +
+                '<div class="title-panel"><div class="title-bar fl"><img src="img/notice.png" alt="">通知公告</div><div class="title-nav fr"></div></div>' +
                 '<div style="background:#fff;">' +
-                '  <div class="article-title-main">' + title + '</div>' +
-                '  <div class="article-body">' + letterContent + '</div>' +
-                '  <div class="article-signature">' + signature + '</div>' +
+                '<div class="article-title-main">' + title + '</div>' +
+                '<div class="article-body">' + letterContent + '</div>' +
+                '<div class="article-signature"><p>无锡市第一中学<br>' + displayYear + '年7月</p></div>' +
                 '</div>';
         } else if (articleId === '2') {
             var guideTitle = displayYear + '级新生暑期自主学习指南';
-            // 待办事项添加 task-item 类
             var guideContent =
                 '<p>亲爱的' + displayYear + '级新同学：</p>' +
                 '<p>为了帮助大家顺利衔接初高中学习，度过一个充实而有意义的暑假，学校特制定本学习指南。请同学们认真阅读，合理安排假期时间。</p>' +
@@ -229,17 +259,12 @@
                 '<p>基础扎实，方能行稳致远。我们不要求你把所有时间都花在学习上，但我们希望，当九月来临、你踏入一中校门的那一刻，你能够自信地说：我已做好准备。</p>' +
                 '<p>期待在红楼前与你相见。</p>';
 
-            var guideSignature = '<p>无锡市第一中学 教务处<br>' + displayYear + '年7月</p>';
-
             container.innerHTML =
-                '<div class="title-panel">' +
-                '  <div class="title-bar fl"><img src="img/notice.png" alt="">通知公告</div>' +
-                '  <div class="title-nav fr"></div>' +
-                '</div>' +
+                '<div class="title-panel"><div class="title-bar fl"><img src="img/notice.png" alt="">通知公告</div><div class="title-nav fr"></div></div>' +
                 '<div style="background:#fff;">' +
-                '  <div class="article-title-main">' + guideTitle + '</div>' +
-                '  <div class="article-body">' + guideContent + '</div>' +
-                '  <div class="article-signature">' + guideSignature + '</div>' +
+                '<div class="article-title-main">' + guideTitle + '</div>' +
+                '<div class="article-body">' + guideContent + '</div>' +
+                '<div class="article-signature"><p>无锡市第一中学 教务处<br>' + displayYear + '年7月</p></div>' +
                 '</div>';
         } else if (articleId === '3') {
             var cardTitle = '关于' + displayYear + '级新生校园一卡通信息采集的通知';
@@ -263,29 +288,20 @@
                 '<p>你的这张校园卡，将陪伴你走过一中三年的每一天——食堂打饭、图书馆借阅、宿舍门禁、实验室签到。它很小，却是你与这所学校最日常的联结。请认真对待这张照片，也认真对待即将开始的高中生活。</p>' +
                 '<p>如有疑问，请联系信息技术中心：行政楼一楼，办公时间工作日8:30-11:30、14:00-17:00，或发送邮件至yzcard@wxeic.com，若想了解更多拍摄要求，请访问<a href="https://www.dianzizhao.com/help/gongjiaoka/591221712" target="_blank">https://www.dianzizhao.com/help/gongjiaoka/591221712</a>。</p>';
 
-            var cardSignature = '<p>无锡市第一中学 信息技术中心<br>' + displayYear + '年7月</p>';
-
             container.innerHTML =
-                '<div class="title-panel">' +
-                '  <div class="title-bar fl"><img src="img/notice.png" alt="">通知公告</div>' +
-                '  <div class="title-nav fr"></div>' +
-                '</div>' +
+                '<div class="title-panel"><div class="title-bar fl"><img src="img/notice.png" alt="">通知公告</div><div class="title-nav fr"></div></div>' +
                 '<div style="background:#fff;">' +
-                '  <div class="article-title-main">' + cardTitle + '</div>' +
-                '  <div class="article-body">' + cardContent + '</div>' +
-                '  <div class="article-signature">' + cardSignature + '</div>' +
+                '<div class="article-title-main">' + cardTitle + '</div>' +
+                '<div class="article-body">' + cardContent + '</div>' +
+                '<div class="article-signature"><p>无锡市第一中学 信息技术中心<br>' + displayYear + '年7月</p></div>' +
                 '</div>';
         } else {
             container.innerHTML =
-                '<div class="title-panel">' +
-                '  <div class="title-bar fl"><img src="img/notice.png" alt="">文章详情</div>' +
-                '  <div class="title-nav fr"></div>' +
-                '</div>' +
+                '<div class="title-panel"><div class="title-bar fl"><img src="img/notice.png" alt="">文章详情</div><div class="title-nav fr"></div></div>' +
                 '<div style="background:#fff; text-align:center; padding:60px 20px; font-size:16px; color:#999;">该文章暂未开放，请返回首页查看其他通知。</div>';
         }
     }
 
-    // 初始化
     loadUserInfo();
     renderArticle();
 </script>

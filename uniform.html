@@ -54,11 +54,44 @@
             border-radius: 4px;
             display: none;
         }
-        .download-link {
-            color: #b22222;
-            text-decoration: underline;
-            font-weight: bold;
+        .remark-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        /* 弹窗遮罩 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-box {
+            background: #fffaf0;
+            border: 2px solid #b22222;
+            padding: 25px 30px;
+            max-width: 500px;
+            width: 90%;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #4a2e2e;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 8px;
+            right: 15px;
             cursor: pointer;
+            font-size: 22px;
+            color: #b22222;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -119,9 +152,8 @@
                             <div class="title-nav fr"></div>
                         </div>
 
-                        <div id="submit-status" class="submit-status">
-                            ✅ 校服订购信息已成功提交。你的校服将在开学报到当天发放。
-                        </div>
+                        <!-- 提交状态提示 -->
+                        <div id="submit-status" class="submit-status" style="display:none;"></div>
 
                         <div class="form-box">
                             <form id="uniform-form" onsubmit="return handleSubmit(event)">
@@ -162,11 +194,12 @@
                                         </div>
                                     </div>
 
-                                    <!-- 备注输入（预留谜题接口，暂不设谜题） -->
+                                    <!-- 备注（谜题验证） -->
                                     <div class="form-group" style="margin-top:20px;">
-                                        <label>备注 <span style="color:#999; font-size:12px;">(选填)</span>:</label>
+                                        <label>备注 <span style="color:#999; font-size:12px;">(选填，限4个字符)</span>:</label>
                                         <div class="input-box">
-                                            <input type="text" name="memo" id="memo" placeholder="如有特殊说明请填写">
+                                            <input type="text" name="memo" id="memo" maxlength="4" placeholder="限4个字符" autocomplete="off">
+                                            <div class="remark-hint">如有特别说明请在此填写，提交后仍可修改。</div>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -179,6 +212,17 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- 弹窗层 -->
+    <div id="modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <span class="modal-close" id="modal-close">&times;</span>
+            <p><strong>[系统备注 · 2011-09-14]</strong></p>
+            <p>尺码照我报的做就行，不是填错了。我需要一件能完全遮光的校服外套，越大越好。暗房里那点红光都嫌多，门缝窗缝都得靠衣服堵。B楼302靠走廊那侧下午西晒最厉害，冲卷的时候只能用身子挡着，有件大衣服能省不少事。</p>
+            <p>对了，帽衫那款如果有特大号也给我订一件，帽子拉紧能当遮光罩用。不是什么奇怪的要求，是真的用得上。</p>
+            <p>——2011年9月14日</p>
         </div>
     </div>
 
@@ -196,6 +240,8 @@
 </div>
 
 <script>
+    const STORAGE_KEY = 'uniform_data';
+
     // 加载用户信息
     function loadUserInfo() {
         var name = localStorage.getItem('studentName');
@@ -210,20 +256,53 @@
             '<div>你好，' + surname + '同学</div><div>学号：' + id + '</div><div>性别：' + gender + '</div>';
     }
 
-    // 页面加载时检查是否已提交
-    function checkSubmission() {
-        var submitted = localStorage.getItem('uniformSubmitted');
-        if (submitted === 'true') {
-            // 已提交状态
-            document.getElementById('submit-status').style.display = 'block';
-            disableForm();
-            // 恢复之前保存的选择（如果有）
-            restoreSelections();
+    // 加载保存的表单数据
+    function loadFormData() {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return null;
+        try {
+            return JSON.parse(saved);
+        } catch (e) {
+            return null;
         }
     }
 
-    // 禁用表单元素（除备注外）
-    function disableForm() {
+    // 保存表单数据
+    function saveFormData(data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    // 获取当前表单数据
+    function getCurrentFormData() {
+        return {
+            height: document.getElementById('height-select').value,
+            fit: document.querySelector('input[name="fit"]:checked')?.value || '',
+            memo: document.getElementById('memo').value,
+            submitted: true,
+            lensTriggered: localStorage.getItem('uniform_lens_triggered') === 'true' ? true : false
+        };
+    }
+
+    // 恢复表单数据
+    function restoreFormData(data) {
+        if (!data) return;
+        if (data.height) {
+            document.getElementById('height-select').value = data.height;
+        }
+        if (data.fit) {
+            var radios = document.getElementsByName('fit');
+            for (var i = 0; i < radios.length; i++) {
+                if (radios[i].value === data.fit) {
+                    radios[i].checked = true;
+                    break;
+                }
+            }
+        }
+        document.getElementById('memo').value = data.memo || '';
+    }
+
+    // 禁用除备注外的所有字段
+    function disableFormExceptMemo() {
         var form = document.getElementById('uniform-form');
         var elements = form.querySelectorAll('input, select, textarea');
         elements.forEach(function(el) {
@@ -231,56 +310,82 @@
                 el.disabled = true;
             }
         });
-        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('submit-btn').innerText = '更新备注';
     }
 
-    // 恢复选择
-    function restoreSelections() {
-        var saved = localStorage.getItem('uniform_data');
-        if (!saved) return;
-        try {
-            var data = JSON.parse(saved);
-            if (data.height) {
-                document.getElementById('height-select').value = data.height;
-            }
-            if (data.fit) {
-                var radios = document.getElementsByName('fit');
-                for (var i = 0; i < radios.length; i++) {
-                    if (radios[i].value === data.fit) {
-                        radios[i].checked = true;
-                        break;
-                    }
-                }
-            }
-            if (data.memo) {
-                document.getElementById('memo').value = data.memo;
-            }
-        } catch (e) {}
+    // 启用表单
+    function enableForm() {
+        var form = document.getElementById('uniform-form');
+        var elements = form.querySelectorAll('input, select, textarea');
+        elements.forEach(function(el) {
+            el.disabled = false;
+        });
+        document.getElementById('submit-btn').innerText = '确认订购';
     }
 
-    // 保存当前选择
-    function saveSelections() {
-        var height = document.getElementById('height-select').value;
-        var fit = document.querySelector('input[name="fit"]:checked')?.value || '';
-        var memo = document.getElementById('memo').value;
-        localStorage.setItem('uniform_data', JSON.stringify({
-            height: height,
-            fit: fit,
-            memo: memo
-        }));
+    // 检查提交状态
+    function checkSubmissionStatus() {
+        var data = loadFormData();
+        if (data && data.submitted) {
+            restoreFormData(data);
+            disableFormExceptMemo();
+            var statusDiv = document.getElementById('submit-status');
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = '✅ 校服订购信息已成功提交。如需修改备注，可在下方备注栏修改后重新提交。';
+        } else {
+            document.getElementById('submit-status').style.display = 'none';
+            enableForm();
+        }
+    }
+
+    // 显示弹窗
+    function showModal() {
+        document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    // 隐藏弹窗
+    function hideModal() {
+        document.getElementById('modal-overlay').style.display = 'none';
     }
 
     // 提交处理
     function handleSubmit(e) {
         e.preventDefault();
-        // 保存选择
-        saveSelections();
-        // 标记已提交
-        localStorage.setItem('uniformSubmitted', 'true');
-        // 跳转主页
-        window.location.href = 'home.html';
-        return false;
+        var data = loadFormData();
+        var isSubmittedBefore = data && data.submitted;
+        var currentMemo = document.getElementById('memo').value.trim();
+
+        var formData = getCurrentFormData();
+        if (isSubmittedBefore) {
+            formData.submitted = true;
+            formData.lensTriggered = data.lensTriggered || false;
+        } else {
+            formData.submitted = true;
+            formData.lensTriggered = false;
+        }
+        saveFormData(formData);
+
+        if (currentMemo === 'LENS') {
+            localStorage.setItem('uniform_lens_triggered', 'true');
+            showModal();
+            // 更新界面为已提交状态
+            checkSubmissionStatus();
+            return false;
+        } else {
+            // 标记校服已提交（主页用）
+            localStorage.setItem('uniformSubmitted', 'true');
+            window.location.href = 'home.html';
+            return false;
+        }
     }
+
+    // 关闭弹窗事件
+    document.getElementById('modal-close').addEventListener('click', hideModal);
+    window.addEventListener('click', function(e) {
+        if (e.target === document.getElementById('modal-overlay')) {
+            hideModal();
+        }
+    });
 
     // 展开/折叠说明
     document.getElementById('expand-header').addEventListener('click', function() {
@@ -295,14 +400,17 @@
         }
     });
 
-    // 图片点击放大（简单实现：新窗口打开）
-    document.querySelector('.expand-body img')?.addEventListener('click', function() {
-        window.open(this.src, '_blank');
-    });
+    // 图片点击放大
+    var chartImg = document.querySelector('.expand-body img');
+    if (chartImg) {
+        chartImg.addEventListener('click', function() {
+            window.open(this.src, '_blank');
+        });
+    }
 
     // 初始化
     loadUserInfo();
-    checkSubmission();
+    checkSubmissionStatus();
 </script>
 <script src="https://yzxs.wxeic.com/public/baidu.js"></script>
 </body>

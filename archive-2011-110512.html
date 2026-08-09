@@ -1,0 +1,484 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<title>无锡市第一中学学生综合管理平台 - 2011</title>
+
+<style type="text/css">
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #d9d9d9;
+    color: #333333;
+    font-family: Arial, "宋体", SimSun, sans-serif;
+    font-size: 12px;
+}
+body {
+    text-align: center;
+    background-image: linear-gradient(to bottom, #ededed 0px, #d7d7d7 170px, #d9d9d9 100%);
+}
+a { color: #333333; text-decoration: none; }
+a:hover { color: #990000; text-decoration: underline; }
+img { border: 0; }
+.clear { clear: both; height: 0; overflow: hidden; line-height: 0; }
+
+#page { width: 100%; min-width: 980px; margin: 0 auto; text-align: left; }
+#page-inner { width: 960px; margin: 0 auto; }
+
+/* 顶部红色品牌栏 */
+#header {
+    height: 78px;
+    border-top: 1px solid #600000;
+    border-bottom: 4px solid #5b0000;
+    background: linear-gradient(to bottom, #c62b35 0px, #ae101d 30px, #970714 54px, #790007 78px);
+    box-shadow: 0 2px 4px #777777;
+}
+#header-inner {
+    width: 960px; height: 78px; margin: 0 auto;
+    position: relative;
+    border-left: 1px solid #d2535b;
+    border-right: 1px solid #690006;
+}
+#brand {
+    position: absolute; left: 9px; top: 10px;
+    height: 58px;
+}
+/* 校徽长图，高度适应红色区域 */
+#brand-logo {
+    height: 58px;
+    width: auto;
+    display: block;
+}
+/* 平台标题移到校徽右侧，保留旧版样式 */
+#brand-platform {
+    position: absolute; left: 280px; top: 21px;
+    height: 37px; padding-left: 19px;
+    border-left: 1px solid #e06970;
+    color: #ffffff;
+    font-family: "宋体", SimSun, serif;
+    font-size: 21px; font-weight: bold;
+    line-height: 37px;
+    text-shadow: 1px 1px 0 #560006, -1px -1px 0 #d95c64;
+}
+
+/* 黑色导航 */
+#black-nav {
+    height: 29px;
+    border-top: 1px solid #111111; border-bottom: 1px solid #000000;
+    background: linear-gradient(to bottom, #4c4c4c 0px, #292929 9px, #111111 10px, #292929 100%);
+    box-shadow: inset 0 1px 0 #777777, 0 1px 2px #999999;
+}
+#black-nav-inner { width: 960px; height: 29px; margin: 0 auto; }
+#black-nav ul { margin: 0; padding: 0; list-style: none; height: 29px; }
+#black-nav li { float: left; height: 29px; border-right: 1px solid #555555; border-left: 1px solid #111111; }
+#black-nav li a {
+    display: block; height: 29px; padding: 0 18px;
+    color: #ffffff; font-family: Arial, "宋体", sans-serif;
+    font-size: 12px; font-weight: bold; line-height: 29px;
+    text-shadow: 1px 1px 0 #000000;
+}
+#black-nav li a:hover, #black-nav li.current a {
+    color: #ffffff; text-decoration: none;
+    background: linear-gradient(to bottom, #a91824 0px, #7e000a 12px, #5d0007 13px, #8d0712 100%);
+    box-shadow: inset 1px 1px 0 #d45d64, inset -1px -1px 0 #350003;
+}
+
+/* 主工作区 */
+#workspace {
+    width: 958px; margin: 10px auto 0 auto; padding: 0;
+    background: #eeeeee; border: 1px solid #a0a0a0;
+    box-shadow: 1px 1px 0 #ffffff, 3px 3px 5px #999999;
+}
+
+/* 信息条 */
+#info-strip {
+    height: 25px; border-bottom: 1px solid #777777;
+    background: linear-gradient(to bottom, #fefefe 0px, #e8e8e8 10px, #cfcfcf 11px, #f5f5f5 100%);
+    color: #555555; line-height: 25px; font-family: Arial, "宋体", sans-serif;
+    font-size: 11px; text-indent: 10px;
+    box-shadow: inset 0 1px 0 #ffffff, inset 0 -1px 0 #b0b0b0;
+}
+#info-strip .right { float: right; margin-right: 10px; text-indent: 0; color: #777777; }
+
+/* 功能条 */
+#utility-bar {
+    height: 38px; border-bottom: 1px solid #8a8a8a;
+    background: linear-gradient(to bottom, #ffffff 0px, #f2f2f2 10px, #d0d0d0 11px, #e9e9e9 100%);
+}
+#utility-blue { float: left; width: 8px; height: 38px; background: linear-gradient(to right, #153c8a, #4478c6, #153c8a); border-right: 1px solid #102e68; }
+#utility-title { float: left; height: 38px; padding-left: 12px; padding-right: 15px; color: #8b0713; font-family: "宋体", SimSun, serif; font-size: 17px; font-weight: bold; line-height: 38px; text-shadow: 1px 1px 0 #ffffff; }
+#utility-search { float: right; height: 38px; line-height: 38px; margin-right: 9px; }
+#utility-search input { width: 175px; height: 19px; padding: 0 5px; border: 1px solid #777777; background: #ffffff; font-family: Arial, "宋体", sans-serif; font-size: 12px; box-shadow: inset 1px 1px 2px #aaaaaa, 1px 1px 0 #ffffff; }
+#utility-search button { height: 22px; padding: 0 12px; border: 1px solid #5b0007; color: #ffffff; background: linear-gradient(to bottom, #d13a45 0px, #a10e1a 9px, #750008 10px, #a90f1b 100%); font-family: "宋体", SimSun, sans-serif; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: inset 1px 1px 0 #ed7d83, inset -1px -1px 0 #4c0005, 1px 1px 0 #ffffff; }
+
+/* Banner */
+#banner-wrap { width: 946px; height: 250px; margin: 6px; padding: 4px; border: 1px solid #777777; background: #d1d1d1; box-shadow: inset 2px 2px 3px #888888, inset -2px -2px 2px #ffffff, 1px 1px 0 #ffffff; }
+#banner { width: 946px; height: 250px; position: relative; overflow: hidden; background: #777777; }
+#banner-image { display: block; width: 946px; height: 250px; border: 1px solid #555555; }
+#banner-title { position: absolute; left: 17px; bottom: 13px; color: #ffffff; font-family: "宋体", SimSun, serif; font-size: 19px; font-weight: bold; letter-spacing: 2px; text-shadow: 1px 1px 1px #000000, 2px 2px 3px #333333; }
+#banner-index { position: absolute; right: 12px; bottom: 10px; }
+#banner-index a { display: inline-block; width: 16px; height: 15px; margin-left: 4px; border: 1px solid #560006; color: #ffffff; background: linear-gradient(to bottom, #d5414c 0px, #a70e1a 7px, #6d0008 8px, #a70e1a 100%); font: bold 10px/15px Arial, sans-serif; text-align: center; box-shadow: inset 1px 1px 0 #f18a90, inset -1px -1px 0 #4a0005; }
+
+/* 主体三栏 */
+#content { width: 946px; margin: 0 6px 8px 6px; }
+#content-table { width: 946px; border-collapse: separate; border-spacing: 0; }
+#left { width: 218px; vertical-align: top; padding-right: 7px; }
+#middle { width: 463px; vertical-align: top; padding-right: 7px; }
+#right { width: 258px; vertical-align: top; }
+
+/* 复古模块 */
+.module { margin-bottom: 8px; border: 1px solid #898989; background: #ffffff; box-shadow: 1px 1px 0 #ffffff, 2px 2px 0 #b8b8b8; }
+.module-title { height: 30px; border: 1px solid #f8f8f8; border-bottom: 1px solid #777777; background: linear-gradient(to bottom, #ffffff 0px, #f1f1f1 7px, #d2d2d2 8px, #bcbcbc 15px, #dedede 16px, #eeeeee 100%); color: #8b0713; font-family: "宋体", SimSun, serif; font-size: 14px; font-weight: bold; line-height: 30px; text-shadow: 1px 1px 0 #ffffff; white-space: nowrap; }
+.module-title .flag { display: inline-block; width: 9px; height: 12px; margin-left: 9px; margin-right: 7px; vertical-align: -2px; background: linear-gradient(to right, #d93e49, #9d0c18, #6d0008); border: 1px solid #5d0007; box-shadow: inset 1px 1px 0 #ee858b, inset -1px -1px 0 #480004; }
+.module-title .more { float: right; margin-right: 9px; font-size: 11px; font-weight: normal; }
+.module-title .more a { color: #8b0713; }
+.module-body { background: linear-gradient(to bottom, #ffffff 0%, #f4f4f4 100%); }
+
+/* 个人资料 */
+.profile { height: 116px; }
+.profile-photo { float: left; width: 79px; padding: 14px 0 0 11px; }
+.profile-photo img { width: 68px; height: 68px; padding: 3px; border: 1px solid #777777; background: #eeeeee; box-shadow: inset 1px 1px 2px #888888, inset -1px -1px 2px #ffffff, 2px 2px 0 #c5c5c5; }
+.profile-text { float: left; padding-top: 13px; line-height: 22px; font-family: Arial, "宋体", sans-serif; }
+.profile-text .big { font-size: 14px; font-weight: bold; color: #111111; }
+.profile-text .number { color: #8b0713; font-family: Arial, sans-serif; }
+
+/* 功能菜单 */
+.old-menu { padding: 5px 8px 7px 8px; background: #ededed; }
+.old-menu a { display: block; height: 29px; margin-bottom: 3px; padding-left: 10px; border: 1px solid #aaaaaa; color: #174b92; background: linear-gradient(to bottom, #ffffff 0px, #eeeeee 12px, #d2d2d2 13px, #f4f4f4 100%); font-size: 12px; font-weight: bold; line-height: 29px; text-shadow: 1px 1px 0 #ffffff; box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #999999; }
+.old-menu a:hover { color: #ffffff; text-decoration: none; background: linear-gradient(to bottom, #315e9f 0px, #17447e 13px, #0c315e 14px, #2a5792 100%); border-color: #0a2850; text-shadow: 1px 1px 0 #09223d; }
+.old-menu a .ico { display: inline-block; width: 16px; margin-right: 7px; text-align: center; color: #a40d19; font-weight: bold; }
+
+/* QR */
+.qr { text-align: center; padding: 10px 0 11px 0; }
+.qr img { width: 137px; height: 137px; padding: 4px; border: 1px solid #777777; background: #ffffff; box-shadow: inset 2px 2px 2px #888888, inset -2px -2px 2px #ffffff, 2px 2px 0 #c0c0c0; }
+.qr p { margin: 6px 0 0 0; padding: 0; line-height: 18px; }
+
+/* 学校主页按钮 */
+.home-button { height: 34px; border: 1px solid #5d0007; background: linear-gradient(to bottom, #d83c47 0px, #b1111e 12px, #780008 13px, #a70e19 100%); color: #ffffff; font-size: 13px; font-weight: bold; line-height: 34px; text-shadow: 1px 1px 0 #520005; box-shadow: inset 1px 1px 0 #ef858a, inset -1px -1px 0 #4d0005, 2px 2px 0 #b7b7b7; }
+.home-button span { margin: 0 10px; font-size: 16px; }
+
+/* 待办事项 */
+.todo-row { height: 41px; border-bottom: 1px solid #d0d0d0; background: linear-gradient(to bottom, #ffffff 0px, #f3f3f3 20px, #e1e1e1 21px, #ffffff 100%); line-height: 41px; }
+.todo-row.last { border-bottom: 0; }
+.todo-n { float: left; width: 39px; text-align: center; }
+.todo-n span { display: inline-block; width: 23px; height: 23px; margin-top: 8px; border: 1px solid #610006; background: linear-gradient(to bottom, #d83c47 0px, #a80d19 10px, #720008 11px, #a80d19 100%); color: #ffffff; font: bold 16px/23px Arial, sans-serif; box-shadow: inset 1px 1px 0 #ef8288, inset -1px -1px 0 #4a0005; }
+.todo-name { float: left; font-weight: bold; font-size: 13px; }
+.todo-status { float: right; margin-right: 11px; color: #a00a16; }
+
+/* 公告 */
+.notice { padding: 3px 10px 5px 10px; }
+.notice-item { height: 31px; border-bottom: 1px dotted #999999; line-height: 31px; white-space: nowrap; overflow: hidden; }
+.notice-item.last { border-bottom: 0; }
+.notice-item .dot { color: #8b0713; margin-right: 5px; }
+.notice-item .date { float: right; color: #777777; font-family: Arial, sans-serif; }
+
+/* 右侧小列表 */
+.small-list { padding: 6px 10px; }
+.small-list div { height: 27px; line-height: 27px; border-bottom: 1px dotted #aaaaaa; }
+.small-list div.last { border-bottom: 0; }
+.small-list .dot { color: #b00000; padding-right: 5px; }
+
+/* 温馨提示 */
+.tips { padding: 10px 12px 12px 12px; line-height: 22px; background: linear-gradient(to bottom, #ffffff 0px, #f1f1f1 100%); }
+.tips strong { color: #8b0713; }
+
+/* 帮助条 */
+.helpbar { height: 27px; margin-top: 1px; border: 1px solid #999999; background: linear-gradient(to bottom, #fafafa 0px, #dddddd 12px, #c5c5c5 13px, #eeeeee 100%); color: #555555; line-height: 27px; text-indent: 10px; box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #aaaaaa; }
+.helpbar span { float: right; margin-right: 10px; color: #777777; }
+
+/* 页脚 */
+#footer { margin-top: 12px; padding: 17px 0 22px 0; border-top: 3px solid #600007; background: linear-gradient(to bottom, #bd1b27 0px, #9d0b17 13px, #7b0008 14px, #8d0711 100%); color: #ffffff; text-align: center; box-shadow: inset 0 1px 0 #df666d, 0 -2px 4px #999999; }
+#footer .nav { font-size: 12px; line-height: 24px; }
+#footer .nav a { color: #ffffff; margin: 0 7px; }
+#footer .nav a:hover { color: #fff0b0; }
+#footer .line { width: 900px; height: 1px; margin: 7px auto; background: #6c0007; border-top: 1px solid #d86b72; }
+#footer .copy { font-size: 12px; line-height: 22px; font-weight: bold; }
+#footer .address { font-size: 11px; line-height: 21px; }
+#footer .browser { color: #f0cccc; font-size: 11px; line-height: 21px; }
+
+/* 底部状态 */
+#bottom-status { width: 960px; height: 22px; margin: 0 auto; border: 1px solid #999999; border-top: 0; background: linear-gradient(to bottom, #f8f8f8 0px, #dddddd 10px, #c8c8c8 11px, #eeeeee 100%); color: #666666; font: 11px/22px Arial, "宋体", sans-serif; text-align: left; text-indent: 8px; box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #aaaaaa; }
+#bottom-status .right { float: right; margin-right: 8px; text-indent: 0; }
+</style>
+
+<script type="text/javascript">
+// 轮播图配置：仅两张图片
+var bannerImages = ["img/banner.jpg", "img/banner_centennial.png"];
+var bannerIndex = 0;
+var bannerTimer = null;
+
+function changeBanner(n) {
+    if (n < 0 || n >= bannerImages.length) n = 0;
+    bannerIndex = n;
+    var image = document.getElementById("banner-image");
+    if (image) image.src = bannerImages[bannerIndex];
+    for (var i = 0; i < bannerImages.length; i++) {
+        var b = document.getElementById("banner-" + i);
+        if (b) {
+            if (i == bannerIndex) {
+                b.style.backgroundColor = "#ffffff";
+                b.style.color = "#8b0713";
+            } else {
+                b.style.backgroundColor = "#9c0d18";
+                b.style.color = "#ffffff";
+            }
+        }
+    }
+}
+
+function stopBanner() {
+    if (bannerTimer != null) { window.clearInterval(bannerTimer); bannerTimer = null; }
+}
+
+function startBanner() {
+    stopBanner();
+    bannerTimer = window.setInterval(function () {
+        bannerIndex++;
+        if (bannerIndex >= bannerImages.length) bannerIndex = 0;
+        changeBanner(bannerIndex);
+    }, 5000);
+}
+
+function chooseBanner(n) {
+    stopBanner();
+    changeBanner(n);
+    startBanner();
+}
+
+function oldAlert(text) {
+    window.alert(text);
+}
+
+function doSearch() {
+    var input = document.getElementById("search-input");
+    if (input && input.value != "") {
+        window.alert("站内搜索功能：\n\n“" + input.value + "”\n\n这是2011版学生综合管理平台演示页面。");
+    } else {
+        window.alert("请输入搜索内容。");
+    }
+}
+
+// 页面访问验证：必须已完成住宿申请和校服订购
+function checkAccess() {
+    var dormitoryDone = localStorage.getItem('dormitorySubmitted') === 'true';
+    var uniformDone = localStorage.getItem('uniformSubmitted') === 'true';
+    if (!dormitoryDone || !uniformDone) {
+        document.body.innerHTML = '<div style="text-align:center; padding:100px; font-family:SimSun,宋体; font-size:18px; color:#8b0713;">该页面已丢失或不存在。<br>请返回首页继续操作。</div>';
+        return false;
+    }
+    return true;
+}
+
+window.onload = function () {
+    if (!checkAccess()) return;
+    changeBanner(0);
+    startBanner();
+};
+</script>
+</head>
+
+<body>
+
+<div id="page">
+
+    <!-- 红色品牌栏：只留校徽长图，删除文字 -->
+    <div id="header">
+        <div id="header-inner">
+            <div id="brand">
+                <img id="brand-logo" src="img/logo_long.png" alt="无锡市第一中学" />
+            </div>
+            <div id="brand-platform">学生综合管理平台</div>
+        </div>
+    </div>
+
+    <!-- 黑色导航 -->
+    <div id="black-nav">
+        <div id="black-nav-inner">
+            <ul>
+                <li class="current"><a href="javascript:void(0);">首页</a></li>
+                <li><a href="#notice">通知公告</a></li>
+                <li><a href="#tips">温馨提示</a></li>
+                <li><a href="javascript:void(0);" onclick="oldAlert('新生流程页面。');">新生流程</a></li>
+                <li><a href="javascript:void(0);" onclick="oldAlert('帮助中心。');">帮助中心</a></li>
+                <li><a href="javascript:void(0);" onclick="oldAlert('您确定退出登录吗？');">退出登录</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="page-inner">
+
+        <div id="workspace">
+
+            <div id="info-strip">
+                无锡市第一中学　&gt;　学生综合管理平台　&gt;　首页
+                <span class="right">当前日期：2011-07-10　|　欢迎您，林同学</span>
+            </div>
+
+            <div id="utility-bar">
+                <div id="utility-blue"></div>
+                <div id="utility-title">学生综合管理平台</div>
+                <div id="utility-search">
+                    <input type="text" id="search-input" value="" />
+                    <button type="button" onclick="doSearch();">站内搜索</button>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <!-- Banner 轮播（两张） -->
+            <div id="banner-wrap">
+                <div id="banner" onmouseover="stopBanner();" onmouseout="startBanner();">
+                    <img id="banner-image" src="img/banner.jpg" width="946" height="250" alt="校园风貌" />
+                    <div id="banner-title">百年一中，求进不止</div>
+                    <div id="banner-index">
+                        <a href="javascript:void(0);" id="banner-0" onclick="chooseBanner(0);">1</a>
+                        <a href="javascript:void(0);" id="banner-1" onclick="chooseBanner(1);">2</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 三栏内容 -->
+            <div id="content">
+                <table id="content-table" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td id="left">
+                            <div class="module">
+                                <div class="module-title"><span class="flag"></span>个人信息</div>
+                                <div class="module-body profile">
+                                    <div class="profile-photo">
+                                        <img src="img/avatar.png" width="68" height="68" alt="学生头像" />
+                                    </div>
+                                    <div class="profile-text">
+                                        <div class="big">林同学</div>
+                                        <div>学号：<span class="number">110512</span></div>
+                                        <div>性别：男</div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+
+                            <div class="module">
+                                <div class="module-title"><span class="flag"></span>功能菜单</div>
+                                <div class="module-body old-menu">
+                                    <a href="javascript:void(0);" onclick="oldAlert('新生流程：请按照学校通知完成报到。');"><span class="ico">◆</span>新生流程</a>
+                                    <a href="javascript:void(0);" onclick="oldAlert('修改密码功能。');"><span class="ico">◆</span>修改密码</a>
+                                    <a href="javascript:void(0);" onclick="oldAlert('确定退出登录吗？');"><span class="ico">◆</span>退出登录</a>
+                                </div>
+                            </div>
+
+                            <div class="module">
+                                <div class="module-title"><span class="flag"></span>关注我们</div>
+                                <div class="module-body qr">
+                                    <img src="img/ewm.png" width="137" height="137" alt="二维码" />
+                                    <p>扫描二维码<br />关注无锡市第一中学</p>
+                                </div>
+                            </div>
+
+                            <div class="home-button"><span>○</span>学校主页</div>
+                        </td>
+
+                        <td id="middle">
+                            <div class="module">
+                                <div class="module-title"><span class="flag"></span>新生待办事项<span class="more"><a href="javascript:void(0);">更多&gt;&gt;</a></span></div>
+                                <div class="module-body">
+                                    <div class="todo-row">
+                                        <div class="todo-n"><span>N</span></div>
+                                        <div class="todo-name">住宿申请</div>
+                                        <div class="todo-status">已完成</div>
+                                        <div class="clear"></div>
+                                    </div>
+                                    <div class="todo-row last">
+                                        <div class="todo-n"><span>N</span></div>
+                                        <div class="todo-name">校服订购</div>
+                                        <div class="todo-status">已完成</div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="module" id="notice">
+                                <div class="module-title"><span class="flag"></span>通知公告<span class="more"><a href="javascript:void(0);">更多&gt;&gt;</a></span></div>
+                                <div class="module-body notice">
+                                    <div class="notice-item"><span class="dot">◆</span><a href="javascript:void(0);" onclick="oldAlert('致2011级新同学的一封信');">致2011级新同学的一封信</a><span class="date">2011-07-10</span></div>
+                                    <div class="notice-item"><span class="dot">◆</span><a href="javascript:void(0);" onclick="oldAlert('2011级新生报到注意事项');">2011级新生报到注意事项</a><span class="date">2011-07-08</span></div>
+                                    <div class="notice-item"><span class="dot">◆</span><a href="javascript:void(0);" onclick="oldAlert('关于2011级新生校园卡办理的通知');">关于2011级新生校园卡办理的通知</a><span class="date">2011-07-01</span></div>
+                                    <div class="notice-item"><span class="dot">◆</span><a href="javascript:void(0);" onclick="oldAlert('关于2011级新生军训安排的通知');">关于2011级新生军训安排的通知</a><span class="date">2011-06-28</span></div>
+                                    <div class="notice-item last"><span class="dot">◆</span><a href="javascript:void(0);" onclick="oldAlert('无锡市第一中学学生手册（2011版）');">无锡市第一中学学生手册（2011版）</a><span class="date">2011-06-20</span></div>
+                                </div>
+                            </div>
+
+                            <div class="module">
+                                <div class="module-title"><span class="flag"></span>校园动态<span class="more"><a href="javascript:void(0);">更多&gt;&gt;</a></span></div>
+                                <div class="module-body small-list">
+                                    <div><span class="dot">·</span><a href="javascript:void(0);">暑期校园开放时间安排</a></div>
+                                    <div><span class="dot">·</span><a href="javascript:void(0);">2011级新生报到工作安排</a></div>
+                                    <div><span class="dot">·</span><a href="javascript:void(0);">学生宿舍分配情况查询</a></div>
+                                    <div class="last"><span class="dot">·</span><a href="javascript:void(0);">校服领取时间通知</a></div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td id="right">
+                            <div class="module" id="tips">
+                                <div class="module-title"><span class="flag"></span>温馨提示<span class="more"><a href="javascript:void(0);">更多&gt;&gt;</a></span></div>
+                                <div class="module-body tips">
+                                    <strong>温馨提示：</strong><br />
+                                    完成住宿申请与校服订购后，你的新生报到流程即告完成。<br />
+                                    如有疑问，请联系学校相关部门。
+                                </div>
+                            </div>
+
+                            <div class="module">
+                                <div class="module-title"><span class="flag"></span>快速服务</div>
+                                <div class="module-body old-menu">
+                                    <a href="javascript:void(0);" onclick="oldAlert('学生成绩查询。');"><span class="ico">◆</span>成绩查询</a>
+                                    <a href="javascript:void(0);" onclick="oldAlert('课程信息查询。');"><span class="ico">◆</span>课程信息</a>
+                                    <a href="javascript:void(0);" onclick="oldAlert('宿舍信息查询。');"><span class="ico">◆</span>宿舍信息</a>
+                                    <a href="javascript:void(0);" onclick="oldAlert('校园卡服务。');"><span class="ico">◆</span>校园卡服务</a>
+                                </div>
+                            </div>
+
+                            <div class="module">
+                                <div class="module-title"><span class="flag"></span>系统公告</div>
+                                <div class="module-body small-list">
+                                    <div><span class="dot">·</span>系统维护时间：22:00-23:00</div>
+                                    <div><span class="dot">·</span>请妥善保管登录密码</div>
+                                    <div><span class="dot">·</span>建议使用 IE 浏览器访问</div>
+                                    <div class="last"><span class="dot">·</span>建议分辨率 1024×768</div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="helpbar">
+                    当前状态：系统运行正常
+                    <span>建议使用 IE7.0 以上浏览器</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div id="footer">
+            <div class="nav">
+                <a href="javascript:void(0);">关于学校</a> |
+                <a href="javascript:void(0);">网站导航</a> |
+                <a href="javascript:void(0);">联系我们</a> |
+                <a href="javascript:void(0);">意见反馈</a> |
+                <a href="javascript:void(0);">帮助中心</a>
+            </div>
+            <div class="line"></div>
+            <div class="copy">无锡市第一中学　© 2011 版权所有</div>
+            <div class="address">地址：江苏省无锡市运河东路98号　　邮编：214002　　电话：0510-85027666　　苏ICP备05012345号</div>
+            <div class="browser">推荐使用 IE7.0 以上浏览器，分辨率 1024×768，16 位以上颜色</div>
+        </div>
+
+        <div id="bottom-status">
+            无锡市第一中学学生综合管理平台　|　当前用户：林同学　|　学号：110512
+            <span class="right">2011-07-10　欢迎登录</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

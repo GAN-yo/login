@@ -1,52 +1,29 @@
 // js/replies.js
 // 管理员自动回复系统
-// 版本：2.0
+// 版本：2.1
 // 说明：可通过追加 AUTO_REPLIES 数组对象扩展关键词回复，
+//        每个回复建议使用函数以获取实时数据。
 //        通过追加 PUZZLE_HINTS 对象中的分支数组扩展谜题提示流。
 
 // ===========================
-// 工具函数（函数声明，确保作用域提升）
-// ===========================
-
-// 获取当前系统推算的显示年份
-function getDisplayYear() {
-    // 优先使用全局函数（如果已加载 common.js）
-    if (typeof window.getDisplayYear === 'function') {
-        return window.getDisplayYear();
-    }
-    // 降级方案
-    var now = new Date();
-    var currentYear = now.getFullYear();
-    var currentMonth = now.getMonth() + 1;
-    if (currentYear <= 2027) return 2027;
-    else return currentMonth < 7 ? currentYear - 1 : currentYear;
-}
-
-// 根据年份生成当前学号
-function getStudentID() {
-    if (typeof window.StorageManager !== 'undefined' && StorageManager.getStudentID) {
-        return StorageManager.getStudentID();
-    }
-    // 降级
-    var year = getDisplayYear();
-    var yearSuffix = (year % 100).toString();
-    return yearSuffix + '0512';
-}
-
-// ===========================
-// 预设关键词回复库（可随意扩充）
+// 预设关键词回复库
+// 每项的 replies 可以是字符串或函数，函数返回最终回复文本
 // ===========================
 var AUTO_REPLIES = [
     {
         keywords: ["住宿申请", "住宿"],
         replies: [
-            "关于住宿申请\n\n请在新生平台首页点击“住宿申请”进入填写页面。你需要填写姓名、家庭住址、选择是否有住宿需求，并可选择性填写特殊睡眠习惯。提交后审核结果将在3个工作日内通过平台通知。\n\n如提交时遇到页面报错，可能是网络波动导致，请刷新后重试。如反复报错，建议更换浏览器（推荐使用Chrome或Edge最新版本）。\n\n如有特殊住宿需求，可在“其他原因”的备注栏中说明，审核老师会酌情考虑。\n\n申请截止时间：" + getDisplayYear() + "年8月25日。"
+            function() {
+                return "关于住宿申请\n\n请在新生平台首页点击“住宿申请”进入填写页面。你需要填写姓名、家庭住址、选择是否有住宿需求，并可选择性填写特殊睡眠习惯。提交后审核结果将在3个工作日内通过平台通知。\n\n如提交时遇到页面报错，可能是网络波动导致，请刷新后重试。如反复报错，建议更换浏览器（推荐使用Chrome或Edge最新版本）。\n\n如有特殊住宿需求，可在“其他原因”的备注栏中说明，审核老师会酌情考虑。\n\n申请截止时间：" + getDisplayYear() + "年8月25日。";
+            }
         ]
     },
     {
         keywords: ["校服订购"],
         replies: [
-            "关于校服订购\n\n请在新生平台首页点击“校服订购”进入填写页面。你需要选择身高范围和体型偏好（标准版或宽松版）。标准号型尺码对照表可在页面内折叠区域展开查看。\n\n如你的身材尺码与标准号型存在较大偏差，可参考页面底部的《特体定制历史案例》。该案例为2011年供应商留档资料，仅供参考，不代表当前定制流程。\n\n当前批次校服不支持自定义尺寸。如有特殊需求，请开学后前往总务处单独申请。\n\n订购截止时间：" + getDisplayYear() + "年8月25日。"
+            function() {
+                return "关于校服订购\n\n请在新生平台首页点击“校服订购”进入填写页面。你需要选择身高范围和体型偏好（标准版或宽松版）。标准号型尺码对照表可在页面内折叠区域展开查看。\n\n如你的身材尺码与标准号型存在较大偏差，可参考页面底部的《特体定制历史案例》。该案例为2011年供应商留档资料，仅供参考，不代表当前定制流程。\n\n当前批次校服不支持自定义尺寸。如有特殊需求，请开学后前往总务处单独申请。\n\n订购截止时间：" + getDisplayYear() + "年8月25日。";
+            }
         ]
     },
     {
@@ -64,13 +41,17 @@ var AUTO_REPLIES = [
     {
         keywords: ["照片上传", "一卡通", "证件照"],
         replies: [
-            "关于照片上传\n\n请查看平台通知公告中的《关于" + getDisplayYear() + "级新生校园一卡通信息采集的通知》。照片要求：358×441像素，白底或浅蓝底，JPG或PNG格式，文件大小10KB-100KB。\n\n请勿使用手机自拍或过度美颜的照片。建议前往正规照相馆拍摄，告知“一寸证件照，白底，需电子版”即可。\n\n上传后系统会自动检测合规性。如显示“上传成功”即表示通过。截止时间前可重新上传覆盖。\n\n截止时间：" + getDisplayYear() + "年8月22日。"
+            function() {
+                return "关于照片上传\n\n请查看平台通知公告中的《关于" + getDisplayYear() + "级新生校园一卡通信息采集的通知》。照片要求：358×441像素，白底或浅蓝底，JPG或PNG格式，文件大小10KB-100KB。\n\n请勿使用手机自拍或过度美颜的照片。建议前往正规照相馆拍摄，告知“一寸证件照，白底，需电子版”即可。\n\n上传后系统会自动检测合规性。如显示“上传成功”即表示通过。截止时间前可重新上传覆盖。\n\n截止时间：" + getDisplayYear() + "年8月22日。";
+            }
         ]
     },
     {
         keywords: ["查看通知", "通知公告", "文章"],
         replies: [
-            "关于查看通知\n\n平台首页设有“通知公告”和“温馨提示”两个栏目。目前共有三篇文章需要你仔细阅读：\n\n《致" + getDisplayYear() + "级新同学的一封信》\n《" + getDisplayYear() + "级新生暑期自主学习指南》\n《关于" + getDisplayYear() + "级新生校园一卡通信息采集的通知》\n\n每篇文章均包含重要的入学信息和时间节点，建议逐篇完整阅读。如有疑问，可在本留言中提出。"
+            function() {
+                return "关于查看通知\n\n平台首页设有“通知公告”和“温馨提示”两个栏目。目前共有三篇文章需要你仔细阅读：\n\n《致" + getDisplayYear() + "级新同学的一封信》\n《" + getDisplayYear() + "级新生暑期自主学习指南》\n《关于" + getDisplayYear() + "级新生校园一卡通信息采集的通知》\n\n每篇文章均包含重要的入学信息和时间节点，建议逐篇完整阅读。如有疑问，可在本留言中提出。";
+            }
         ]
     },
     {
@@ -82,7 +63,9 @@ var AUTO_REPLIES = [
     {
         keywords: ["截止时间", "截止日期", "什么时候"],
         replies: [
-            "关于截止时间\n\n一卡通照片上传截止：" + getDisplayYear() + "年8月22日24时\n住宿申请提交截止：" + getDisplayYear() + "年8月25日24时\n校服订购提交截止：" + getDisplayYear() + "年8月25日24时\n\n请务必在截止时间前完成所有待办事项。逾期需在开学后现场办理，手续较为繁琐。"
+            function() {
+                return "关于截止时间\n\n一卡通照片上传截止：" + getDisplayYear() + "年8月22日24时\n住宿申请提交截止：" + getDisplayYear() + "年8月25日24时\n校服订购提交截止：" + getDisplayYear() + "年8月25日24时\n\n请务必在截止时间前完成所有待办事项。逾期需在开学后现场办理，手续较为繁琐。";
+            }
         ]
     },
     {
@@ -104,9 +87,11 @@ var AUTO_REPLIES = [
         ]
     },
     {
-        keywords: ["学号", "110512", "270512", "0512", "280512"],
+        keywords: ["学号", "110512", "270512"],
         replies: [
-            "学号索引查询\n\n学号" + getStudentID() + "为当前年度（" + getDisplayYear() + "）系统分配学号，归属人可在个人信息页查看。\n\n学号110512为2011年度历史学号，对应记录已归档。两条记录因数据库迁移时索引字段耦合存在关联，属正常现象，不影响各自数据完整性。\n\n如需查询110512的详细归档内容，请输入“数据索引”。"
+            function() {
+                return "学号索引查询\n\n学号" + getStudentID() + "为当前年度（" + getDisplayYear() + "）系统分配学号，归属人可在个人信息页查看。\n\n学号110512为2011年度历史学号，对应记录已归档。两条记录因数据库迁移时索引字段耦合存在关联，属正常现象，不影响各自数据完整性。\n\n如需查询110512的详细归档内容，请输入“数据索引”。";
+            }
         ]
     },
     {
@@ -128,7 +113,7 @@ var AUTO_REPLIES = [
         ]
     },
     {
-        keywords: ["暗房", "摄影", "照片", "胶卷"],
+        keywords: ["暗房", "摄影", "胶卷"],
         replies: [
             "未匹配到相关结果\n\n你所查询的内容未收录在本系统的帮助文档中。如果你是在历史归档中发现相关内容，这可能属于2011级学生的个人项目记录，超出了当前新生平台的服务范围。\n\n如有具体索引号，请提供以便进一步查询。"
         ]
@@ -136,7 +121,9 @@ var AUTO_REPLIES = [
     {
         keywords: ["报到", "开学", "什么时候开学"],
         replies: [
-            "关于开学时间\n\n" + getDisplayYear() + "级新生报到时间将在8月下旬通过平台通知公告公布，请密切关注首页的“通知公告”栏目。\n\n往年报到时间一般在8月30日至8月31日之间，具体以当年通知为准。"
+            function() {
+                return "关于开学时间\n\n" + getDisplayYear() + "级新生报到时间将在8月下旬通过平台通知公告公布，请密切关注首页的“通知公告”栏目。\n\n往年报到时间一般在8月30日至8月31日之间，具体以当年通知为准。";
+            }
         ]
     },
     {
@@ -175,7 +162,7 @@ var AUTO_REPLIES = [
             "关于附件下载\n\n平台部分页面提供参考资料和附件的下载，包括校服尺码对照表、历史案例照片等。点击对应链接即可下载查看。\n\n如附件下载失败，可能是浏览器拦截了弹窗或下载请求。请检查浏览器设置，允许本网站弹出窗口和下载文件。\n\n如仍未解决，请告知具体哪个页面的附件无法下载。"
         ]
     },
-    // 默认兜底回复（务必放在最后一项，且keywords为空数组）
+    // 默认兜底回复（务必放在最后，keywords 为空数组）
     {
         keywords: [],
         replies: [
@@ -205,19 +192,19 @@ var PUZZLE_HINTS = {
 // ===========================
 // 状态机变量（由 contact.html 调用）
 // ===========================
-var currentState = 'normal';          // 状态：'normal' | 'awaiting_module' | 'hinting_dormitory' | 'hinting_uniform'
-var hintIndex = 0;                   // 当前提示索引
-var lastHintTime = 0;                // 上次获取提示的时间戳（毫秒）
-var currentPuzzleModule = '';        // 当前选择的谜题模块
+var currentState = 'normal';          // 'normal' | 'awaiting_module' | 'hinting_dormitory' | 'hinting_uniform'
+var hintIndex = 0;
+var lastHintTime = 0;
+var currentPuzzleModule = '';
 
 // ===========================
-// 核心函数：获取回复并更新状态
+// 核心函数：根据用户输入获取回复
 // ===========================
 function getAutoReply(input) {
     var inputLower = input.trim().toLowerCase();
     var nowTime = new Date().getTime();
 
-    // 冷却状态检查（谜题提示流中）
+    // 谜题提示流状态处理
     if (currentState === 'hinting_dormitory' || currentState === 'hinting_uniform') {
         if (inputLower === '我还是不懂') {
             var coolDown = 20 * 1000; // 20秒冷却
@@ -230,7 +217,6 @@ function getAutoReply(input) {
             if (hints && hintIndex < hints.length) {
                 if (hintIndex === hints.length - 1) {
                     var finalReply = hints[hintIndex];
-                    // 自动结束谜题流
                     currentState = 'normal';
                     hintIndex = 0;
                     currentPuzzleModule = '';
@@ -238,7 +224,6 @@ function getAutoReply(input) {
                 }
                 return hints[hintIndex];
             } else {
-                // 异常情况，重置
                 currentState = 'normal';
                 hintIndex = 0;
                 currentPuzzleModule = '';
@@ -250,7 +235,6 @@ function getAutoReply(input) {
             currentPuzzleModule = '';
             return "本次查询已结束。如有其他问题，请随时留言。";
         } else {
-            // 输入其他内容，退出提示流
             currentState = 'normal';
             hintIndex = 0;
             currentPuzzleModule = '';
@@ -291,7 +275,9 @@ function getAutoReply(input) {
             if (inputLower.indexOf(keywords[k].toLowerCase()) !== -1) {
                 var replies = rule.replies;
                 if (replies && replies.length) {
-                    return replies[Math.floor(Math.random() * replies.length)];
+                    var picked = replies[Math.floor(Math.random() * replies.length)];
+                    // 如果是函数，执行得到字符串；否则直接返回字符串
+                    return typeof picked === 'function' ? picked() : picked;
                 }
                 break;
             }
@@ -301,16 +287,18 @@ function getAutoReply(input) {
     return getDefaultReply();
 }
 
-// 获取默认兜底回复
+// 默认兜底回复
 function getDefaultReply() {
     var defaultRule = AUTO_REPLIES[AUTO_REPLIES.length - 1];
-    if (defaultRule && defaultRule.replies && defaultRule.replies.length) {
-        return defaultRule.replies[Math.floor(Math.random() * defaultRule.replies.length)];
+    var replies = defaultRule.replies;
+    if (replies && replies.length) {
+        var picked = replies[Math.floor(Math.random() * replies.length)];
+        return typeof picked === 'function' ? picked() : picked;
     }
     return '已收到你的留言，管理员将尽快回复。';
 }
 
-// 初始固定回复（首次加载时调用）
+// 初始欢迎消息
 function getInitialReply() {
     return "你好，这里是无锡市第一中学新生综合管理平台自动应答系统。\n\n我是系统管理员张老师。如果你在填写住宿申请、校服订购、查看通知公告时遇到操作上的疑问，可以直接输入关键词，系统会为你匹配相关解答。\n\n你可以尝试输入以下关键词：\n住宿申请 / 校服订购 / 尺码 / 提交失败 / 照片上传 / 查看通知 / 修改信息 / 截止时间\n\n如你需要查询历史归档数据或进行数据追溯，请输入：数据索引\n\n如以上关键词未匹配到你的问题，请简要描述，我会在收到后尽快回复。\n\n——信息技术中心，办公时间工作日8:30-11:30、14:00-17:00";
 }

@@ -111,7 +111,7 @@
                     <div class="nav-list border-default">
                         <ul>
                             <li><a href="home.html">新生流程</a></li>
-                            <li><a href="logout.html">退出登录</a></li>
+                            <li><a href="login.html">退出登录</a></li>
                         </ul>
                     </div>
                     <div class="ewm border-default">
@@ -170,6 +170,7 @@
 
 <!-- 引入独立的回复配置 -->
 <script src="js/replies.js"></script>
+<script src="js/common.js"></script>
 
 <script>
     // 获取精确系统时间
@@ -186,14 +187,14 @@
 
     // 加载用户信息
     function loadUserInfo() {
-        var name = localStorage.getItem('studentName');
-        if (!name) {
+        var info = StorageManager.getStudentInfo();
+        if (!info.name) {
             window.location.href = 'index.html';
             return;
         }
-        var surname = localStorage.getItem('studentSurname') || name.charAt(0);
-        var id = localStorage.getItem('studentID') || '270512';
-        var gender = localStorage.getItem('studentGender') || '保密';
+        var surname = info.surname || info.name.charAt(0);
+        var id = info.id;
+        var gender = info.gender;
         document.getElementById('student-info').innerHTML =
             '<div>你好，' + surname + '同学</div><div>学号：' + id + '</div><div>性别：' + gender + '</div>';
     }
@@ -210,7 +211,7 @@
         list.scrollTop = list.scrollHeight;
     }
 
-    // 初始化欢迎消息（使用getInitialReply）
+    // 初始化欢迎消息（使用 getInitialReply 来自 replies.js）
     function initWelcome() {
         var list = document.getElementById('message-list');
         list.innerHTML = '';

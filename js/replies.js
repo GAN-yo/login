@@ -3,29 +3,32 @@
 // 版本：2.0
 // 说明：可通过追加 AUTO_REPLIES 数组对象扩展关键词回复，
 //        通过追加 PUZZLE_HINTS 对象中的分支数组扩展谜题提示流。
+// 说明2：题目只是出着玩
 
 // ===========================
 // 工具函数
 // ===========================
 
-// 获取当前系统推算的显示年份
+// 获取当前系统推算的显示年份（使用全局函数）
 function getDisplayYear() {
+    // 如果全局函数存在则调用，否则自行定义（兼容）
+    if (typeof window.getDisplayYear === 'function') {
+        return window.getDisplayYear();
+    }
+    // 降级方案
     var now = new Date();
     var currentYear = now.getFullYear();
     var currentMonth = now.getMonth() + 1;
-    if (currentYear <= 2027) {
-        return 2027;
-    } else {
-        if (currentMonth < 7) {
-            return currentYear - 1;
-        } else {
-            return currentYear;
-        }
-    }
+    if (currentYear <= 2027) return 2027;
+    else return currentMonth < 7 ? currentYear - 1 : currentYear;
 }
 
-// 根据年份生成当前学号（示例规则：年份后两位 + 0512）
+// 根据年份生成当前学号（使用全局函数或自定义）
 function getStudentID() {
+    if (typeof window.StorageManager !== 'undefined' && StorageManager.getStudentID) {
+        return StorageManager.getStudentID();
+    }
+    // 降级
     var year = getDisplayYear();
     var yearSuffix = (year % 100).toString();
     return yearSuffix + '0512';

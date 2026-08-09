@@ -3,15 +3,14 @@
 // 版本：2.0
 // 说明：可通过追加 AUTO_REPLIES 数组对象扩展关键词回复，
 //        通过追加 PUZZLE_HINTS 对象中的分支数组扩展谜题提示流。
-// 说明2：题目只是出着玩
 
 // ===========================
-// 工具函数
+// 工具函数（函数声明，确保作用域提升）
 // ===========================
 
-// 获取当前系统推算的显示年份（使用全局函数）
+// 获取当前系统推算的显示年份
 function getDisplayYear() {
-    // 如果全局函数存在则调用，否则自行定义（兼容）
+    // 优先使用全局函数（如果已加载 common.js）
     if (typeof window.getDisplayYear === 'function') {
         return window.getDisplayYear();
     }
@@ -23,7 +22,7 @@ function getDisplayYear() {
     else return currentMonth < 7 ? currentYear - 1 : currentYear;
 }
 
-// 根据年份生成当前学号（使用全局函数或自定义）
+// 根据年份生成当前学号
 function getStudentID() {
     if (typeof window.StorageManager !== 'undefined' && StorageManager.getStudentID) {
         return StorageManager.getStudentID();
@@ -105,7 +104,7 @@ var AUTO_REPLIES = [
         ]
     },
     {
-        keywords: ["学号", "110512", "270512"],
+        keywords: ["学号", "110512", "270512", "0512", "280512"],
         replies: [
             "学号索引查询\n\n学号" + getStudentID() + "为当前年度（" + getDisplayYear() + "）系统分配学号，归属人可在个人信息页查看。\n\n学号110512为2011年度历史学号，对应记录已归档。两条记录因数据库迁移时索引字段耦合存在关联，属正常现象，不影响各自数据完整性。\n\n如需查询110512的详细归档内容，请输入“数据索引”。"
         ]
@@ -189,14 +188,12 @@ var AUTO_REPLIES = [
 // 谜题提示流配置（可扩充）
 // ===========================
 var PUZZLE_HINTS = {
-    // 住宿申请谜题提示
     "住宿申请": [
         "提示 1/4\n\n文档正文里好几处提到了时间或数量，比如“两周”、“半个月”这些。你试着把它们都换算成天数或具体的数字，应该能得到几个整数。\n\n——\n如需下一步提示，请发送“我还是不懂”。\n如已解决，请发送“停止”或“退出”结束本次查询。",
         "提示 2/4\n\n附录那张床位表，别盯着入住的人看，反过来看每个房间缺了哪几个床号。把缺失的号码列出来，每个房间都是一组1到6之间的组合。\n\n——\n如需下一步提示，请发送“我还是不懂”。\n如已解决，请发送“停止”或“退出”结束本次查询。",
         "提示 3/4\n\n正文换算出来的那几个整数，对应字母表序号（1=A）去翻译，会得到一个英文词。附录里每个房间缺失的床号组合，对照盲文的点位规则，也能得到另一个英文词。两个词都是独立答案。\n\n——\n如需下一步提示，请发送“我还是不懂”。\n如已解决，请发送“停止”或“退出”结束本次查询。",
         "提示 4/4\n\n完整解码步骤：\n\n· 正文：第一段“两个自然周”=2周×7=14→N；第二段“半个月”=15→O；第三段“双倍滞纳金”（10×2）=20→T；第四段“一个常规工作周的天数”=5→E，合起来就是 NOTE。这暗示你把答案填入备注栏。\n\n· 附录：逐间列出缺失床号，301缺1,2,3→盲文点位123=L，302缺2,4→24=I，303缺1,2,4,5→1245=G，304缺1,2,5→125=H，305缺2,3,4,5→2345=T，合起来是 LIGHT。\n\n这两个结果分别对应两个不同谜题，按各自需求使用即可。\n\n——\n全部提示已给出，本次查询自动结束。如有其他问题，请随时留言。"
     ],
-    // 校服订购谜题提示
     "校服订购": [
         "提示 1/4\n\n图片里既有表格又有实拍画面。表格里不少尺码数据是正常的，但也有个别明显不对劲的地方，先把那条反常的记录找出来。同时继续仔细观察画面。\n\n——\n如需下一步提示，请发送“我还是不懂”。\n如已解决，请发送“停止”或“退出”结束本次查询。",
         "提示 2/4\n\n找到那条异常数据后，查一下它对应的标准号型尺寸。用实测值减去标准值，每条尺寸都会得到一个差值，整理出来应该是几组两位数。\n\n——\n如需下一步提示，请发送“我还是不懂”。\n如已解决，请发送“停止”或“退出”结束本次查询。",
@@ -208,14 +205,10 @@ var PUZZLE_HINTS = {
 // ===========================
 // 状态机变量（由 contact.html 调用）
 // ===========================
-// 当前状态：'normal' | 'awaiting_module' | 'hinting_dormitory' | 'hinting_uniform'
-var currentState = 'normal';
-// 当前提示索引（从0开始）
-var hintIndex = 0;
-// 上次获取提示的时间戳（用于冷却判定）
-var lastHintTime = 0;
-// 当前选择的谜题模块名称
-var currentPuzzleModule = '';
+var currentState = 'normal';          // 状态：'normal' | 'awaiting_module' | 'hinting_dormitory' | 'hinting_uniform'
+var hintIndex = 0;                   // 当前提示索引
+var lastHintTime = 0;                // 上次获取提示的时间戳（毫秒）
+var currentPuzzleModule = '';        // 当前选择的谜题模块
 
 // ===========================
 // 核心函数：获取回复并更新状态
@@ -224,22 +217,20 @@ function getAutoReply(input) {
     var inputLower = input.trim().toLowerCase();
     var nowTime = new Date().getTime();
 
-    // ---------- 冷却状态检查 ----------
+    // 冷却状态检查（谜题提示流中）
     if (currentState === 'hinting_dormitory' || currentState === 'hinting_uniform') {
         if (inputLower === '我还是不懂') {
             var coolDown = 20 * 1000; // 20秒冷却
             if (nowTime - lastHintTime < coolDown) {
                 return "先自己想想。过一会儿再来问。\n如需退出，请发送“停止”。";
             }
-            // 冷却完毕，推送下一个提示
             hintIndex++;
             lastHintTime = nowTime;
             var hints = PUZZLE_HINTS[currentPuzzleModule];
             if (hints && hintIndex < hints.length) {
-                // 如果是最后一个提示，推送后自动结束
                 if (hintIndex === hints.length - 1) {
                     var finalReply = hints[hintIndex];
-                    // 自动结束
+                    // 自动结束谜题流
                     currentState = 'normal';
                     hintIndex = 0;
                     currentPuzzleModule = '';
@@ -247,20 +238,19 @@ function getAutoReply(input) {
                 }
                 return hints[hintIndex];
             } else {
-                // 异常情况，重置状态
+                // 异常情况，重置
                 currentState = 'normal';
                 hintIndex = 0;
                 currentPuzzleModule = '';
                 return getDefaultReply();
             }
         } else if (inputLower === '停止' || inputLower === '退出') {
-            // 退出提示流
             currentState = 'normal';
             hintIndex = 0;
             currentPuzzleModule = '';
             return "本次查询已结束。如有其他问题，请随时留言。";
         } else {
-            // 在提示流中输入其他内容，也退出
+            // 输入其他内容，退出提示流
             currentState = 'normal';
             hintIndex = 0;
             currentPuzzleModule = '';
@@ -268,7 +258,7 @@ function getAutoReply(input) {
         }
     }
 
-    // ---------- 等待模块确认状态 ----------
+    // 等待模块确认状态
     if (currentState === 'awaiting_module') {
         if (inputLower.indexOf('住宿申请') !== -1 || inputLower.indexOf('住宿') !== -1) {
             currentState = 'hinting_dormitory';
@@ -283,20 +273,17 @@ function getAutoReply(input) {
             lastHintTime = nowTime;
             return PUZZLE_HINTS['校服订购'][0];
         } else {
-            // 输入其他内容，退出待模块确认状态
             currentState = 'normal';
             return getDefaultReply();
         }
     }
 
-    // ---------- 正常状态：关键词匹配 ----------
-    // 特殊处理：输入“数据索引”直接进入等待模块状态
+    // 正常状态：关键词匹配
     if (inputLower.indexOf('数据索引') !== -1 || inputLower.indexOf('数据追溯') !== -1) {
         currentState = 'awaiting_module';
         return "索引号已确认。该索引关联的归档记录包含多条数据，其中部分字段可能存在异常。\n\n请确认你需要查询的具体模块：\n\n住宿申请\n校服订购\n\n请输入以上任一模块名称以继续。";
     }
 
-    // 遍历预设关键词库
     for (var i = 0; i < AUTO_REPLIES.length; i++) {
         var rule = AUTO_REPLIES[i];
         var keywords = rule.keywords || [];
@@ -311,7 +298,6 @@ function getAutoReply(input) {
         }
     }
 
-    // 未匹配任何关键词，返回默认回复
     return getDefaultReply();
 }
 
@@ -324,9 +310,7 @@ function getDefaultReply() {
     return '已收到你的留言，管理员将尽快回复。';
 }
 
-// ===========================
-// 初始固定回复（首次留言时调用）
-// ===========================
+// 初始固定回复（首次加载时调用）
 function getInitialReply() {
     return "你好，这里是无锡市第一中学新生综合管理平台自动应答系统。\n\n我是系统管理员张老师。如果你在填写住宿申请、校服订购、查看通知公告时遇到操作上的疑问，可以直接输入关键词，系统会为你匹配相关解答。\n\n你可以尝试输入以下关键词：\n住宿申请 / 校服订购 / 尺码 / 提交失败 / 照片上传 / 查看通知 / 修改信息 / 截止时间\n\n如你需要查询历史归档数据或进行数据追溯，请输入：数据索引\n\n如以上关键词未匹配到你的问题，请简要描述，我会在收到后尽快回复。\n\n——信息技术中心，办公时间工作日8:30-11:30、14:00-17:00";
 }

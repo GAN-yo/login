@@ -152,39 +152,27 @@
     </div>
 </div>
 
+<script src="js/common.js"></script>
 <script>
-    function getDisplayYear() {
-        var now = new Date();
-        var currentYear = now.getFullYear();
-        var currentMonth = now.getMonth() + 1;
-        if (currentYear <= 2027) {
-            return 2027;
-        } else {
-            if (currentMonth < 7) {
-                return currentYear - 1;
-            } else {
-                return currentYear;
-            }
-        }
-    }
-
     (function() {
-        var studentName = localStorage.getItem('studentName');
-        if (!studentName) {
-            window.location.href = 'login.html';
+        // 获取学生信息
+        var info = StorageManager.getStudentInfo();
+        if (!info.name) {
+            window.location.href = 'index.html';
             return;
         }
-        var surname = localStorage.getItem('studentSurname') || studentName.charAt(0);
-        var studentID = localStorage.getItem('studentID') || '270512';
-        var gender = localStorage.getItem('studentGender') || '保密';
+        var surname = info.surname || info.name.charAt(0);
+        var studentID = info.id;
+        var gender = info.gender;
 
         var infoHtml = '<div>你好，' + surname + '同学</div>';
         infoHtml += '<div>学号：' + studentID + '</div>';
         infoHtml += '<div>性别：' + gender + '</div>';
         document.getElementById('student-info').innerHTML = infoHtml;
 
-        var dormitoryDone = localStorage.getItem('dormitorySubmitted') === 'true';
-        var uniformDone = localStorage.getItem('uniformSubmitted') === 'true';
+        // 待办状态
+        var dormitoryDone = StorageManager.isDormitorySubmitted();
+        var uniformDone = StorageManager.isUniformSubmitted();
         var statusDiv = document.getElementById('task-status');
         if (dormitoryDone && uniformDone) {
             statusDiv.innerHTML = '你已完成全部待办事项。';
@@ -197,6 +185,7 @@
             statusDiv.style.color = '#b22222';
         }
 
+        // 文章列表
         var displayYear = getDisplayYear();
         var articles = [
             {

@@ -17,7 +17,7 @@
             background: #fafafa;
             border: 1px solid #eee;
             padding: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             max-height: 400px;
             overflow-y: auto;
         }
@@ -77,6 +77,19 @@
             margin-top: 6px;
             line-height: 1.5;
             text-align: center;
+        }
+        .clear-history {
+            text-align: right;
+            margin-bottom: 5px;
+        }
+        .clear-history a {
+            color: #999;
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .clear-history a:hover {
+            color: #b22222;
         }
     </style>
 </head>
@@ -138,7 +151,12 @@
                         </div>
 
                         <div class="contact-box">
-                            <p style="color:#555; font-size:14px; margin-bottom:15px;">如需帮助，请在此留言。管理员将尽快回复。常见问题可参考下方历史记录。</p>
+                            <p style="color:#555; font-size:14px; margin-bottom:10px;">如需帮助，请在此留言。管理员将尽快回复。常见问题可参考下方历史记录。</p>
+
+                            <!-- 清空历史记录按钮 -->
+                            <div class="clear-history">
+                                <a id="clear-history-btn">清空历史记录</a>
+                            </div>
 
                             <div class="message-list" id="message-list">
                                 <!-- 系统欢迎消息由JS动态生成 -->
@@ -211,7 +229,7 @@
         list.scrollTop = list.scrollHeight;
     }
 
-    // 初始化欢迎消息
+    // 初始化欢迎消息（仅保留第一条）
     function initWelcome() {
         var list = document.getElementById('message-list');
         list.innerHTML = '';
@@ -219,8 +237,24 @@
         addMessage('系统管理员', initialReply, getCurrentTime());
     }
 
-    // 发送消息
+    // 清空历史记录，但保留第一条欢迎消息
+    function clearHistory() {
+        var list = document.getElementById('message-list');
+        var children = list.children;
+        // 如果只有一条消息（欢迎消息）则不做任何操作
+        if (children.length <= 1) return;
+        // 删除除第一条外的所有消息
+        while (children.length > 1) {
+            list.removeChild(children[1]);
+        }
+    }
+
+    // 发送消息（增加按钮禁用检查）
     function sendMessage() {
+        var sendBtn = document.getElementById('send-btn');
+        // 如果按钮处于禁用状态（等待管理员回复），不允许发送
+        if (sendBtn.disabled) return;
+
         var input = document.getElementById('msg-input');
         var text = input.value.trim();
         if (!text) return;
@@ -230,7 +264,6 @@
         input.value = '';
 
         var delay = 800 + Math.floor(Math.random() * 1700);
-        var sendBtn = document.getElementById('send-btn');
         sendBtn.disabled = true;
         sendBtn.style.opacity = '0.6';
 
@@ -242,6 +275,7 @@
         }, delay);
     }
 
+    // 绑定事件
     document.getElementById('send-btn').addEventListener('click', sendMessage);
     document.getElementById('msg-input').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -249,6 +283,10 @@
         }
     });
 
+    // 清空历史记录按钮事件
+    document.getElementById('clear-history-btn').addEventListener('click', clearHistory);
+
+    // 启动
     loadUserInfo();
     initWelcome();
 </script>

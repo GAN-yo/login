@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>联系管理员 · 无锡市第一中学学生综合管理平台</title>
+    <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
+    <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
+    <style>
+        .contact-box {
+            background: #fff;
+            padding: 20px 30px;
+            line-height: 1.8;
+        }
+        .message-list {
+            background: #fafafa;
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .message-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .message-item:last-child {
+            border-bottom: none;
+        }
+        .message-item .sender {
+            font-weight: bold;
+            color: #333;
+            margin-right: 15px;
+        }
+        .message-item .time {
+            font-size: 12px;
+            color: #999;
+        }
+        .message-item .content {
+            color: #555;
+            margin-top: 6px;
+            padding-left: 5px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+        .input-group input {
+            flex: 1;
+            height: 38px;
+            border: 1px solid #ccc;
+            padding: 0 12px;
+            font-size: 14px;
+            border-radius: 2px;
+        }
+        .input-group button {
+            height: 38px;
+            background: #b22222;
+            color: #fff;
+            border: none;
+            padding: 0 22px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 2px;
+        }
+        .input-group button:hover {
+            background: #8b1a1a;
+        }
+        .disclaimer {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.5;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <!-- 头部 -->
+    <div class="head">
+        <div class="container position-relative">
+            <a href="home.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover;"></a>
+            <ul id="header_link">
+                <li><a href="home.html">首页</a></li>
+                <li><a href="article.html">通知公告</a></li>
+                <li><a href="article.html">温馨提示</a></li>
+            </ul>
+            <div id="quick"><a href="home.html" class="ci-btn"></a></div>
+            <div class="user-btn"><a href="home.html"><img src="img/home.png" alt=""></a></div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="container">
+            <div id="slider"><img src="img/banner.jpg" alt=""></div>
+            <div class="box">
+                <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/swiper-bundle.min.css">
+                <script src="https://yzxs.wxeic.com/public/default/js/swiper-bundle.min.js"></script>
+
+                <div class="sidebar">
+                    <div class="user border-default">
+                        <img src="img/nophoto.jpg" class="fl avatar border-default">
+                        <div class="text" id="student-info"></div>
+                    </div>
+                    <div class="nav-list border-default">
+                        <ul>
+                            <li><a href="home.html">新生流程</a></li>
+                            <li><a href="logout.html">退出登录</a></li>
+                        </ul>
+                    </div>
+                    <div class="ewm border-default">
+                        <div class="swiper-container" style="height:245px;">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="img/ewm.png" alt="">
+                                    <div class="qrcode-description">(无锡一中微信公众号)<br>扫描二维码添加关注</div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <div class="blogroll">
+                        <ul class="nav"><li><a href="https://yizhong.wxeic.cn/" target="_blank">学校主页</a></li></ul>
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div class="part border-default mt-10">
+                        <div class="title-panel">
+                            <div class="title-bar fl"><img src="img/notice.png" alt="">联系管理员</div>
+                            <div class="title-nav fr"></div>
+                        </div>
+
+                        <div class="contact-box">
+                            <p style="color:#555; font-size:14px; margin-bottom:15px;">如需帮助，请在此留言。管理员将尽快回复。常见问题可参考下方历史记录。</p>
+
+                            <div class="message-list" id="message-list">
+                                <!-- 系统欢迎消息由JS动态生成 -->
+                            </div>
+
+                            <div class="input-group">
+                                <input type="text" id="msg-input" placeholder="请输入你的问题...">
+                                <button id="send-btn">发送</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 尾部 -->
+    <div class="foot">
+        <div class="container">
+            <a href="#" class="botLogo"><img src="img/footer_logo.png" alt=""></a>
+            <p>Copyright &copy; 2026 无锡市第一中学 All Rights Reserved.</p>
+            <p class="disclaimer">
+                【免责声明】本作品为虚构的ARG网页解密游戏，所有人物、事件、机构、数据及历史线索均与现实无关。<br>
+                继续浏览或参与互动即表示您已充分理解并接受上述声明。
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- 引入独立的回复配置 -->
+<script src="js/replies.js"></script>
+
+<script>
+    // 获取精确系统时间
+    function getCurrentTime() {
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = ('0' + (d.getMonth() + 1)).slice(-2);
+        var day = ('0' + d.getDate()).slice(-2);
+        var hours = ('0' + d.getHours()).slice(-2);
+        var minutes = ('0' + d.getMinutes()).slice(-2);
+        var seconds = ('0' + d.getSeconds()).slice(-2);
+        return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+    }
+
+    // 加载用户信息
+    function loadUserInfo() {
+        var name = localStorage.getItem('studentName');
+        if (!name) {
+            window.location.href = 'index.html';
+            return;
+        }
+        var surname = localStorage.getItem('studentSurname') || name.charAt(0);
+        var id = localStorage.getItem('studentID') || '270512';
+        var gender = localStorage.getItem('studentGender') || '保密';
+        document.getElementById('student-info').innerHTML =
+            '<div>你好，' + surname + '同学</div><div>学号：' + id + '</div><div>性别：' + gender + '</div>';
+    }
+
+    // 添加一条消息到列表
+    function addMessage(sender, text, time) {
+        var list = document.getElementById('message-list');
+        var div = document.createElement('div');
+        div.className = 'message-item';
+        div.innerHTML =
+            '<div><span class="sender">' + sender + '</span><span class="time">' + time + '</span></div>' +
+            '<div class="content">' + text + '</div>';
+        list.appendChild(div);
+        list.scrollTop = list.scrollHeight;
+    }
+
+    // 初始化欢迎消息（使用getInitialReply）
+    function initWelcome() {
+        var list = document.getElementById('message-list');
+        list.innerHTML = '';
+        var initialReply = getInitialReply();
+        addMessage('系统管理员', initialReply, getCurrentTime());
+    }
+
+    // 发送消息
+    function sendMessage() {
+        var input = document.getElementById('msg-input');
+        var text = input.value.trim();
+        if (!text) return;
+
+        // 添加用户消息
+        var userTime = getCurrentTime();
+        addMessage('我', text, userTime);
+        input.value = '';
+
+        // 模拟延迟后添加管理员回复（随机800ms-2500ms）
+        var delay = 800 + Math.floor(Math.random() * 1700);
+        var sendBtn = document.getElementById('send-btn');
+        sendBtn.disabled = true;
+        sendBtn.style.opacity = '0.6';
+
+        setTimeout(function() {
+            var reply = getAutoReply(text);
+            addMessage('系统管理员', reply, getCurrentTime());
+            sendBtn.disabled = false;
+            sendBtn.style.opacity = '1';
+        }, delay);
+    }
+
+    // 绑定事件
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+    document.getElementById('msg-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    // 启动
+    loadUserInfo();
+    initWelcome();
+</script>
+<script src="https://yzxs.wxeic.com/public/baidu.js"></script>
+</body>
+</html>

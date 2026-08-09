@@ -23,15 +23,10 @@ a:hover { color: #990000; text-decoration: underline; }
 img { border: 0; }
 .clear { clear: both; height: 0; overflow: hidden; line-height: 0; }
 
-/* 页面外层改为全宽 */
-#page {
-    width: 100%;
-    min-width: 1000px;
-    margin: 0 auto;
-    text-align: left;
-}
+#page { width: 100%; min-width: 980px; margin: 0 auto; text-align: left; }
+#page-inner { width: 960px; margin: 0 auto; }
 
-/* 顶部红色品牌栏保持全宽 */
+/* 顶部红色品牌栏 */
 #header {
     height: 78px;
     border-top: 1px solid #600000;
@@ -40,16 +35,13 @@ img { border: 0; }
     box-shadow: 0 2px 4px #777777;
 }
 #header-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    height: 78px;
+    width: 960px; height: 78px; margin: 0 auto;
     position: relative;
-    padding: 0 20px;
     border-left: 1px solid #d2535b;
     border-right: 1px solid #690006;
 }
 #brand {
-    position: absolute; left: 20px; top: 10px;
+    position: absolute; left: 9px; top: 10px;
     height: 58px;
 }
 #brand-logo {
@@ -58,7 +50,7 @@ img { border: 0; }
     display: block;
 }
 #brand-platform {
-    position: absolute; left: 300px; top: 21px;
+    position: absolute; left: 280px; top: 21px;
     height: 37px; padding-left: 19px;
     border-left: 1px solid #e06970;
     color: #ffffff;
@@ -68,16 +60,14 @@ img { border: 0; }
     text-shadow: 1px 1px 0 #560006, -1px -1px 0 #d95c64;
 }
 
-/* 黑色导航全宽 */
+/* 黑色导航 */
 #black-nav {
     height: 29px;
     border-top: 1px solid #111111; border-bottom: 1px solid #000000;
     background: linear-gradient(to bottom, #4c4c4c 0px, #292929 9px, #111111 10px, #292929 100%);
     box-shadow: inset 0 1px 0 #777777, 0 1px 2px #999999;
 }
-#black-nav-inner {
-    max-width: 1200px; margin: 0 auto; height: 29px; padding: 0 20px;
-}
+#black-nav-inner { width: 960px; height: 29px; margin: 0 auto; }
 #black-nav ul { margin: 0; padding: 0; list-style: none; height: 29px; }
 #black-nav li { float: left; height: 29px; border-right: 1px solid #555555; border-left: 1px solid #111111; }
 #black-nav li a {
@@ -92,14 +82,10 @@ img { border: 0; }
     box-shadow: inset 1px 1px 0 #d45d64, inset -1px -1px 0 #350003;
 }
 
-/* 主工作区全宽自适应 */
+/* 主工作区 */
 #workspace {
-    width: auto;
-    max-width: 1200px;
-    margin: 10px auto 0 auto;
-    padding: 0;
-    background: #eeeeee;
-    border: 1px solid #a0a0a0;
+    width: 958px; margin: 10px auto 0 auto; padding: 0;
+    background: #eeeeee; border: 1px solid #a0a0a0;
     box-shadow: 1px 1px 0 #ffffff, 3px 3px 5px #999999;
 }
 
@@ -124,9 +110,10 @@ img { border: 0; }
 #utility-search input { width: 175px; height: 19px; padding: 0 5px; border: 1px solid #777777; background: #ffffff; font-family: Arial, "宋体", sans-serif; font-size: 12px; box-shadow: inset 1px 1px 2px #aaaaaa, 1px 1px 0 #ffffff; }
 #utility-search button { height: 22px; padding: 0 12px; border: 1px solid #5b0007; color: #ffffff; background: linear-gradient(to bottom, #d13a45 0px, #a10e1a 9px, #750008 10px, #a90f1b 100%); font-family: "宋体", SimSun, sans-serif; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: inset 1px 1px 0 #ed7d83, inset -1px -1px 0 #4c0005, 1px 1px 0 #ffffff; }
 
-/* Banner 改为宽幅比例 1392×507 自适应 */
+/* Banner 区域：加宽并按比例增高，移除文字 */
 #banner-wrap {
-    width: auto;
+    width: 946px;
+    height: 345px; /* 946 / 2.745 ≈ 345 */
     margin: 6px;
     padding: 4px;
     border: 1px solid #777777;
@@ -134,8 +121,8 @@ img { border: 0; }
     box-shadow: inset 2px 2px 3px #888888, inset -2px -2px 2px #ffffff, 1px 1px 0 #ffffff;
 }
 #banner {
-    width: 100%;
-    height: auto;
+    width: 946px;
+    height: 345px;
     position: relative;
     overflow: hidden;
     background: #777777;
@@ -143,11 +130,11 @@ img { border: 0; }
 #banner-image {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;          /* 保持图片比例，裁剪多余部分 */
     border: 1px solid #555555;
 }
-/* 删除标题文字，隐藏 */
-#banner-title { display: none; }
+/* 序号小方块位置微调 */
 #banner-index {
     position: absolute;
     right: 12px;
@@ -166,31 +153,12 @@ img { border: 0; }
     box-shadow: inset 1px 1px 0 #f18a90, inset -1px -1px 0 #4a0005;
 }
 
-/* 主体三栏也改为自适应 */
-#content {
-    width: auto;
-    margin: 0 6px 8px 6px;
-}
-#content-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-/* 左栏固定宽度，中栏自适应 */
-#left {
-    width: 230px;
-    vertical-align: top;
-    padding-right: 7px;
-}
-#middle {
-    width: auto;
-    vertical-align: top;
-    padding-right: 7px;
-}
-#right {
-    width: 260px;
-    vertical-align: top;
-}
+/* 主体三栏 */
+#content { width: 946px; margin: 0 6px 8px 6px; }
+#content-table { width: 946px; border-collapse: separate; border-spacing: 0; }
+#left { width: 218px; vertical-align: top; padding-right: 7px; }
+#middle { width: 463px; vertical-align: top; padding-right: 7px; }
+#right { width: 258px; vertical-align: top; }
 
 /* 复古模块 */
 .module { margin-bottom: 8px; border: 1px solid #898989; background: #ffffff; box-shadow: 1px 1px 0 #ffffff, 2px 2px 0 #b8b8b8; }
@@ -252,38 +220,18 @@ img { border: 0; }
 .helpbar { height: 27px; margin-top: 1px; border: 1px solid #999999; background: linear-gradient(to bottom, #fafafa 0px, #dddddd 12px, #c5c5c5 13px, #eeeeee 100%); color: #555555; line-height: 27px; text-indent: 10px; box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #aaaaaa; }
 .helpbar span { float: right; margin-right: 10px; color: #777777; }
 
-/* 页脚全宽 */
-#footer {
-    margin-top: 12px;
-    padding: 17px 0 22px 0;
-    border-top: 3px solid #600007;
-    background: linear-gradient(to bottom, #bd1b27 0px, #9d0b17 13px, #7b0008 14px, #8d0711 100%);
-    color: #ffffff;
-    text-align: center;
-    box-shadow: inset 0 1px 0 #df666d, 0 -2px 4px #999999;
-}
+/* 页脚 */
+#footer { margin-top: 12px; padding: 17px 0 22px 0; border-top: 3px solid #600007; background: linear-gradient(to bottom, #bd1b27 0px, #9d0b17 13px, #7b0008 14px, #8d0711 100%); color: #ffffff; text-align: center; box-shadow: inset 0 1px 0 #df666d, 0 -2px 4px #999999; }
 #footer .nav { font-size: 12px; line-height: 24px; }
 #footer .nav a { color: #ffffff; margin: 0 7px; }
 #footer .nav a:hover { color: #fff0b0; }
-#footer .line { width: 90%; max-width: 900px; height: 1px; margin: 7px auto; background: #6c0007; border-top: 1px solid #d86b72; }
+#footer .line { width: 900px; height: 1px; margin: 7px auto; background: #6c0007; border-top: 1px solid #d86b72; }
 #footer .copy { font-size: 12px; line-height: 22px; font-weight: bold; }
 #footer .address { font-size: 11px; line-height: 21px; }
 #footer .browser { color: #f0cccc; font-size: 11px; line-height: 21px; }
 
 /* 底部状态 */
-#bottom-status {
-    max-width: 1200px;
-    margin: 0 auto;
-    height: 22px;
-    border: 1px solid #999999;
-    border-top: 0;
-    background: linear-gradient(to bottom, #f8f8f8 0px, #dddddd 10px, #c8c8c8 11px, #eeeeee 100%);
-    color: #666666;
-    font: 11px/22px Arial, "宋体", sans-serif;
-    text-align: left;
-    text-indent: 8px;
-    box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #aaaaaa;
-}
+#bottom-status { width: 960px; height: 22px; margin: 0 auto; border: 1px solid #999999; border-top: 0; background: linear-gradient(to bottom, #f8f8f8 0px, #dddddd 10px, #c8c8c8 11px, #eeeeee 100%); color: #666666; font: 11px/22px Arial, "宋体", sans-serif; text-align: left; text-indent: 8px; box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #aaaaaa; }
 #bottom-status .right { float: right; margin-right: 8px; text-indent: 0; }
 </style>
 
@@ -343,6 +291,7 @@ function doSearch() {
     }
 }
 
+// 页面访问验证：必须已完成住宿申请和校服订购
 function checkAccess() {
     var dormitoryDone = localStorage.getItem('dormitorySubmitted') === 'true';
     var uniformDone = localStorage.getItem('uniformSubmitted') === 'true';
@@ -365,6 +314,7 @@ window.onload = function () {
 
 <div id="page">
 
+    <!-- 红色品牌栏 -->
     <div id="header">
         <div id="header-inner">
             <div id="brand">
@@ -374,6 +324,7 @@ window.onload = function () {
         </div>
     </div>
 
+    <!-- 黑色导航 -->
     <div id="black-nav">
         <div id="black-nav-inner">
             <ul>
@@ -406,6 +357,7 @@ window.onload = function () {
                 <div class="clear"></div>
             </div>
 
+            <!-- 加宽加高的 Banner，删掉文字 -->
             <div id="banner-wrap">
                 <div id="banner" onmouseover="stopBanner();" onmouseout="startBanner();">
                     <img id="banner-image" src="img/banner.jpg" alt="校园风貌" />
@@ -416,6 +368,7 @@ window.onload = function () {
                 </div>
             </div>
 
+            <!-- 三栏内容 -->
             <div id="content">
                 <table id="content-table" cellpadding="0" cellspacing="0" border="0">
                     <tr>
@@ -424,7 +377,7 @@ window.onload = function () {
                                 <div class="module-title"><span class="flag"></span>个人信息</div>
                                 <div class="module-body profile">
                                     <div class="profile-photo">
-                                        <img src="img/avatar.png" alt="学生头像" />
+                                        <img src="img/avatar.png" width="68" height="68" alt="学生头像" />
                                     </div>
                                     <div class="profile-text">
                                         <div class="big">林同学</div>
@@ -447,7 +400,7 @@ window.onload = function () {
                             <div class="module">
                                 <div class="module-title"><span class="flag"></span>关注我们</div>
                                 <div class="module-body qr">
-                                    <img src="img/ewm.png" alt="二维码" />
+                                    <img src="img/ewm.png" width="137" height="137" alt="二维码" />
                                     <p>扫描二维码<br />关注无锡市第一中学</p>
                                 </div>
                             </div>
@@ -536,6 +489,7 @@ window.onload = function () {
             </div>
         </div>
 
+        <!-- 页脚 -->
         <div id="footer">
             <div class="nav">
                 <a href="javascript:void(0);">关于学校</a> |

@@ -120,7 +120,8 @@
                             <div class="login-heading">新生登录</div>
                             <div class="login-body">
                                 <div class="form-group">
-                                    <a href="https://gan-yo.github.io/login" class="btn btn-user-home btn-block">点击登录</a>
+                                    <!-- 将 href 改为 #，避免跳转到外部 -->
+                                    <a href="javascript:void(0)" class="btn btn-user-home btn-block" onclick="document.getElementById('login-form').dispatchEvent(new Event('submit'));">点击登录</a>
                                 </div>
                             </div>
                         </div>
@@ -197,6 +198,8 @@
         </div>
     </div>
 
+    <!-- 引入 common.js -->
+    <script src="js/common.js"></script>
     <script src="https://yzxs.wxeic.com/public/baidu.js"></script>
 
     <script>
@@ -223,16 +226,16 @@
 
             loginInProgress = true;
 
-            // 存储信息
+            // 使用 StorageManager 存储信息
             var surname = name.charAt(0);
-            localStorage.setItem('studentName', name);
-            localStorage.setItem('studentSurname', surname);
-            localStorage.setItem('studentID', '270512');
-            localStorage.setItem('studentGender', gender);  // 存储性别
-            localStorage.setItem('dormitorySubmitted', 'false');
-            localStorage.setItem('uniformSubmitted', 'false');
-            localStorage.setItem('conflictTriggered', 'false');
-            localStorage.setItem('conflictTraceCode', '20110512-0001');
+            // 获取已有学号（若无则自动生成）
+            var studentID = StorageManager.getStudentID();
+            StorageManager.setStudentInfo(name, surname, studentID, gender);
+            // 初始化申请状态
+            StorageManager.setDormitorySubmitted(false);
+            StorageManager.setUniformSubmitted(false);
+            StorageManager.setConflictTriggered(false);
+            StorageManager.setConflictTraceCode('20110512-0001');
 
             // 获取元素
             var bannerNormal = document.getElementById('banner-normal');

@@ -30,7 +30,7 @@
     <!-- 头部 -->
     <div class="head">
         <div class="container position-relative">
-            <a href="home.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover;"></a>
+            <a href="coming-soon.html" id="logo" class="fl" style="background:url('img/header_logo.png') no-repeat; background-size:cover;"></a>
             <ul id="header_link">
                 <li><a href="coming-soon.html">首页</a></li>
                 <li><a href="coming-soon.html">通知公告</a></li>
@@ -56,7 +56,7 @@
                     <div class="nav-list border-default">
                         <ul>
                             <li><a href="coming-soon.html">新生流程</a></li>
-                            <li><a href="coming-soon.html">退出登录</a></li>
+                            <li><a href="login.html">退出登录</a></li>
                         </ul>
                     </div>
                     <div class="ewm border-default">
@@ -99,21 +99,22 @@
     </div>
 </div>
 
+<script src="js/common.js"></script>
 <script>
     (function() {
-        var name = localStorage.getItem('studentName');
-        if (!name) {
+        var info = StorageManager.getStudentInfo();
+        if (info.name) {
+            var surname = info.surname || info.name.charAt(0);
+            var studentID = info.id;
+            var gender = info.gender;
+            document.getElementById('student-info').innerHTML =
+                '<div>你好，' + surname + '同学</div>' +
+                '<div>学号：' + studentID + '</div>' +
+                '<div>性别：' + gender + '</div>';
+        } else {
             document.getElementById('student-info').innerHTML =
                 '<div>你好，同学</div><div>学号：------</div><div>性别：--</div>';
-            return;
         }
-        var surname = localStorage.getItem('studentSurname') || name.charAt(0);
-        var studentID = localStorage.getItem('studentID') || '114514';
-        var gender = localStorage.getItem('studentGender') || '保密';
-        document.getElementById('student-info').innerHTML =
-            '<div>你好，' + surname + '同学</div>' +
-            '<div>学号：' + studentID + '</div>' +
-            '<div>性别：' + gender + '</div>';
     })();
 </script>
 <script src="https://yzxs.wxeic.com/public/baidu.js"></script>

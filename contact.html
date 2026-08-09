@@ -168,9 +168,9 @@
     </div>
 </div>
 
-<!-- 引入独立的回复配置 -->
-<script src="js/replies.js"></script>
+<!-- 先加载公共模块，再加载回复配置，确保全局函数可用 -->
 <script src="js/common.js"></script>
+<script src="js/replies.js"></script>
 
 <script>
     // 获取精确系统时间
@@ -199,7 +199,7 @@
             '<div>你好，' + surname + '同学</div><div>学号：' + id + '</div><div>性别：' + gender + '</div>';
     }
 
-    // 添加一条消息到列表
+    // 添加消息
     function addMessage(sender, text, time) {
         var list = document.getElementById('message-list');
         var div = document.createElement('div');
@@ -211,11 +211,11 @@
         list.scrollTop = list.scrollHeight;
     }
 
-    // 初始化欢迎消息（使用 getInitialReply 来自 replies.js）
+    // 初始化欢迎消息
     function initWelcome() {
         var list = document.getElementById('message-list');
         list.innerHTML = '';
-        var initialReply = getInitialReply();
+        var initialReply = getInitialReply(); // 来自 replies.js
         addMessage('系统管理员', initialReply, getCurrentTime());
     }
 
@@ -225,12 +225,10 @@
         var text = input.value.trim();
         if (!text) return;
 
-        // 添加用户消息
         var userTime = getCurrentTime();
         addMessage('我', text, userTime);
         input.value = '';
 
-        // 模拟延迟后添加管理员回复（随机800ms-2500ms）
         var delay = 800 + Math.floor(Math.random() * 1700);
         var sendBtn = document.getElementById('send-btn');
         sendBtn.disabled = true;
@@ -244,7 +242,6 @@
         }, delay);
     }
 
-    // 绑定事件
     document.getElementById('send-btn').addEventListener('click', sendMessage);
     document.getElementById('msg-input').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -252,7 +249,6 @@
         }
     });
 
-    // 启动
     loadUserInfo();
     initWelcome();
 </script>

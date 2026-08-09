@@ -23,7 +23,6 @@
             color: #666;
             margin-top: 5px;
         }
-        /* 弹窗遮罩 */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -128,7 +127,6 @@
                             <div class="title-nav fr"></div>
                         </div>
 
-                        <!-- 提交状态提示（去除了emoji） -->
                         <div id="submit-status" class="submit-status" style="display:none;"></div>
 
                         <div class="form-box">
@@ -205,7 +203,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- 统一备注（谜题验证） -->
                                     <div class="form-group" style="margin-top:20px;">
                                         <label>备注 <span style="color:#999; font-size:12px;">(选填)</span>:</label>
                                         <div class="input-box">
@@ -252,26 +249,27 @@
     </div>
 </div>
 
+<script src="js/common.js"></script>
 <script>
-    const STORAGE_KEY = 'dormitory_data';
-
     function loadUserInfo() {
-        var name = localStorage.getItem('studentName');
-        if (!name) { window.location.href = 'login.html'; return; }
-        var surname = localStorage.getItem('studentSurname') || name.charAt(0);
-        var id = localStorage.getItem('studentID') || '270512';
-        var gender = localStorage.getItem('studentGender') || '保密';
+        var info = StorageManager.getStudentInfo();
+        if (!info.name) {
+            window.location.href = 'index.html';
+            return;
+        }
+        var surname = info.surname || info.name.charAt(0);
+        var id = info.id;
+        var gender = info.gender;
         document.getElementById('student-info').innerHTML =
             '<div>你好，' + surname + '同学</div><div>学号：' + id + '</div><div>性别：' + gender + '</div>';
     }
 
     function loadFormData() {
-        var saved = localStorage.getItem(STORAGE_KEY);
-        return saved ? JSON.parse(saved) : null;
+        return StorageManager.getDormitoryFormData();
     }
 
     function saveFormData(data) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        StorageManager.setDormitoryFormData(data);
     }
 
     function getCurrentFormData() {
@@ -287,7 +285,7 @@
             dis_path: document.getElementById('pdfFile').value,
             memo: document.getElementById('memo').value,
             submitted: true,
-            lightTriggered: localStorage.getItem('dormitory_light_triggered') === 'true' ? true : false
+            lightTriggered: StorageManager.getDormitoryLightTriggered()
         };
     }
 
@@ -366,17 +364,16 @@
         var formData = getCurrentFormData();
         if (isSubmittedBefore) {
             formData.submitted = true;
-            formData.lightTriggered = data.lightTriggered || false;
+            formData.lightTriggered = StorageManager.getDormitoryLightTriggered();
         } else {
             formData.submitted = true;
             formData.lightTriggered = false;
         }
         saveFormData(formData);
-        // 关键修复：无论备注是否触发谜题，都标记住宿申请已完成
-        localStorage.setItem('dormitorySubmitted', 'true');
+        StorageManager.setDormitorySubmitted(true); // 标记已完成
 
         if (currentMemo === 'LIGHT') {
-            localStorage.setItem('dormitory_light_triggered', 'true');
+            StorageManager.setDormitoryLightTriggered(true);
             showModal();
             checkSubmissionStatus();
             return false;

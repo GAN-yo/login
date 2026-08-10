@@ -12,7 +12,13 @@
    关键词：固定宽度、红色主色、白底、细线、小字号、表格布局、
    旧式渐变导航、宋体、普通按钮、密集链接与明显留白。
    ========================================================= */
-html,body{margin:0;padding:0;background:#fff;color:#333;font:12px/1.5 Arial,"宋体",SimSun,sans-serif;}
+html,body{
+    margin:0;padding:0;
+    /* 背景图片固定在页面底部，不随滚动移动 */
+    background:#fff url('img/bg.jpg') no-repeat fixed center bottom;
+    background-size:cover;
+    color:#333;font:12px/1.5 Arial,"宋体",SimSun,sans-serif;
+}
 body{text-align:center;}
 a{color:#174d76;text-decoration:none;}
 a:hover{color:#a40000;text-decoration:underline;}
@@ -21,7 +27,7 @@ ul,li{margin:0;padding:0;list-style:none;}
 .clear{clear:both;height:0;line-height:0;overflow:hidden;}
 #page{width:980px;margin:0 auto;text-align:left;background:#fff;}
 
-/* 顶部很像当时学校官网：logo、校名、简单链接，没有大面积 hero */
+/* 顶部：logo、校名、简单链接 */
 #header{height:94px;position:relative;border-bottom:3px solid #9e0000;background:#fff;}
 #header .logo{position:absolute;left:8px;top:13px;width:255px;height:65px;overflow:hidden;}
 #header .logo img{max-width:255px;height:65px;display:block;}
@@ -34,7 +40,7 @@ ul,li{margin:0;padding:0;list-style:none;}
 #header .search input{width:190px;height:18px;border:1px solid #999;padding:0 3px;font:12px Arial,"宋体",sans-serif;}
 #header .search button{width:55px;height:22px;padding:0;border:1px solid #8a0000;background:#b30000;color:#fff;font:12px "宋体",SimSun,sans-serif;}
 
-/* 第一层红色导航：故意做得薄、硬、像旧门户 */
+/* 第一层红色导航 */
 #nav{height:31px;background:#a50000;border-top:1px solid #d64b4b;border-bottom:1px solid #690000;}
 #nav ul{height:31px;padding-left:8px;}
 #nav li{float:left;height:31px;}
@@ -48,11 +54,11 @@ ul,li{margin:0;padding:0;list-style:none;}
 #subnav a{margin:0 10px;color:#555;}
 #subnav .welcome{float:right;color:#888;}
 
-/* 页面顶部信息行：当时常见的面包屑 */
+/* 面包屑 */
 #crumb{width:964px;margin:8px auto 0;height:22px;border-bottom:1px solid #ddd;color:#777;line-height:22px;}
 #crumb .right{float:right;color:#999;}
 
-/* 主体：左窄导航、中间内容、右窄新闻/服务 */
+/* 主体：左中右三栏 */
 #main{width:964px;margin:9px auto 0;}
 #leftcol{float:left;width:174px;}
 #centercol{float:left;width:548px;margin-left:10px;}
@@ -64,7 +70,7 @@ ul,li{margin:0;padding:0;list-style:none;}
 .box .boxtitle .more{float:right;margin-right:7px;font:11px/27px "宋体",SimSun,sans-serif;font-weight:normal;}
 .box .boxtitle .more a{color:#888;}
 
-/* 左栏故意像学校门户的“栏目导航” */
+/* 左栏 */
 .schoolname{padding:8px 7px 7px;border-bottom:1px dotted #ccc;line-height:19px;}
 .schoolname strong{display:block;color:#8d0000;font-size:14px;}
 .schoolname span{color:#999;font:10px Arial,sans-serif;}
@@ -84,14 +90,14 @@ ul,li{margin:0;padding:0;list-style:none;}
 .qr img{width:112px;height:112px;padding:2px;border:1px solid #aaa;}
 .qr p{margin:4px 0 0;color:#888;line-height:17px;}
 
-/* 中间 Banner：图片+右侧旧式热点列表 */
-#bannerbox{height:174px;margin-bottom:10px;}
-#bannerwrap{float:left;width:350px;height:172px;border:1px solid #aaa;background:#eee;position:relative;overflow:hidden;}
-#banner{width:350px;height:172px;position:relative;overflow:hidden;}
-#banner-image{width:350px;height:172px;display:block;}
+/* 中间 Banner：增大宽度以接近 1392×507 比例，热点列表保持右侧 */
+#bannerbox{height:146px;margin-bottom:10px;}  /* 高度随 banner 调整 */
+#bannerwrap{float:left;width:400px;height:146px;border:1px solid #aaa;background:#eee;position:relative;overflow:hidden;}
+#banner{width:400px;height:146px;position:relative;overflow:hidden;}
+#banner-image{width:100%;height:100%;display:block;object-fit:cover;}  /* 保证图片不变形 */
 #banner-index{position:absolute;right:5px;bottom:5px;}
 #banner-index a{display:inline-block;width:16px;height:15px;margin-left:2px;border:1px solid #777;background:#fff;color:#555;text-align:center;font:10px/15px Arial,sans-serif;}
-#hotbox{float:right;width:184px;height:172px;border:1px solid #ccc;}
+#hotbox{float:right;width:140px;height:146px;border:1px solid #ccc;}  /* 宽度与 banner 配合，高度相同 */
 #hotbox .hot-title{height:27px;border-bottom:2px solid #a40000;background:#f5f5f5;color:#8d0000;text-indent:8px;font:bold 13px/27px "宋体",SimSun,sans-serif;}
 #hotbox li{height:23px;margin:0 7px;border-bottom:1px dotted #ccc;line-height:23px;white-space:nowrap;overflow:hidden;}
 #hotbox li span{color:#a40000;margin-right:3px;}
@@ -123,7 +129,7 @@ ul,li{margin:0;padding:0;list-style:none;}
 .notice-highlight{padding:7px 8px 9px;background:#fffdf4;color:#666;line-height:20px;}
 .notice-highlight strong{color:#a00000;}
 
-/* 右栏：很像当时学校网站的“公告 / 服务 / 推荐” */
+/* 右栏 */
 .rightlinks a{display:block;height:25px;border-bottom:1px dotted #ccc;padding-left:8px;line-height:25px;color:#333;}
 .rightlinks a:hover{background:#fff1f1;color:#a00000;text-decoration:none;}
 .service{padding:7px 8px 8px;}
@@ -134,7 +140,7 @@ ul,li{margin:0;padding:0;list-style:none;}
 .ad .adtitle{height:20px;margin-bottom:4px;background:#eee;border:1px solid #ccc;color:#777;line-height:20px;}
 .ad .adbody{height:67px;border:1px solid #ddd;background:#fafafa;color:#aaa;line-height:67px;}
 
-/* 宽模块：故意使用旧式表格感，而不是卡片 */
+/* 宽模块 */
 .widebox{border:1px solid #ccc;margin-bottom:10px;}
 .widebox .title{height:28px;border-bottom:1px solid #c9c9c9;background:#f1f1f1;line-height:28px;color:#333;font:bold 13px "宋体",SimSun,sans-serif;}
 .widebox .title .bar{display:inline-block;width:4px;height:13px;margin:0 6px 0 7px;background:#a40000;vertical-align:-2px;}
@@ -148,7 +154,7 @@ ul,li{margin:0;padding:0;list-style:none;}
 #status{height:24px;border-top:1px solid #ccc;border-bottom:1px solid #ccc;background:#f7f7f7;color:#777;line-height:24px;text-indent:7px;margin-top:2px;}
 #status .right{float:right;margin-right:7px;}
 
-/* footer：大量白色，细灰线，红色顶线 */
+/* footer */
 #footer{width:980px;margin-top:24px;border-top:3px solid #a40000;background:#f5f5f5;color:#777;text-align:center;padding:11px 0 13px;}
 #footer .links{line-height:21px;}
 #footer .links a{color:#555;margin:0 7px;}
@@ -158,16 +164,13 @@ ul,li{margin:0;padding:0;list-style:none;}
 #bottom{height:22px;background:#ddd;border-top:1px solid #c4c4c4;color:#777;font:10px/22px Arial,"宋体",sans-serif;text-indent:7px;}
 #bottom .right{float:right;margin-right:7px;}
 
-
 /* =========================================================
-   手机端适配：保留 2011 年学校网站视觉，只改变布局尺寸。
-   不使用现代卡片/阴影/圆角；手机上仍然是白底、红色、细线、宋体。
-   优化图片自适应、间距、表单元素大小。
+   手机端适配：保留 2011 年学校网站视觉，优化图片与背景
    ========================================================= */
 @media screen and (max-width:700px){
- html,body{width:100%;min-width:0;margin:0;padding:0;overflow-x:hidden;background:#fff;font-size:12px;}
+ html,body{width:100%;min-width:0;margin:0;padding:0;overflow-x:hidden;font-size:12px;}
  body{text-align:left;}
- #page{width:100%;margin:0;background:#fff;}
+ #page{width:100%;margin:0;}
 
  #header{width:100%;height:auto;min-height:118px;border-bottom:3px solid #9e0000;box-sizing:border-box;padding:9px 10px 10px;position:relative;}
  #header .logo{position:relative;left:auto;top:auto;width:48%;max-width:220px;height:auto;min-height:42px;overflow:hidden;display:inline-block;vertical-align:top;}
@@ -333,15 +336,9 @@ function oldAlert(text){
 
 function doSearch(){
  var input=document.getElementById("search-input");
-
  if(input&&input.value!=""){
-  window.alert(
-   "站内搜索功能：\n\n“"+
-   input.value+
-   "”\n\n这是2011版学生综合管理平台演示页面。"
-  );
- }
- else{
+  window.alert("站内搜索功能：\n\n“"+input.value+"”\n\n这是2011版学生综合管理平台演示页面。");
+ } else {
   window.alert("请输入搜索内容。");
  }
 }
@@ -350,15 +347,12 @@ function doSearch(){
 function checkAccess(){
  var dormitoryDone=false;
  var uniformDone=false;
-
  try{
   if(window.localStorage){
    dormitoryDone=window.localStorage.getItem('dormitorySubmitted')==='true';
    uniformDone=window.localStorage.getItem('uniformSubmitted')==='true';
   }
- }
- catch(e){}
-
+ }catch(e){}
  if(!dormitoryDone || !uniformDone){
   document.body.innerHTML='<div style="text-align:center;padding:100px 20px;font-family:SimSun,宋体;font-size:18px;color:#8b0713;">该页面已丢失或不存在。<br>请返回首页继续操作。</div>';
   return false;
@@ -403,37 +397,14 @@ window.onload=function(){
 
  <div id="nav">
   <ul>
-   <li class="first current">
-    <a href="javascript:void(0);">首页</a>
-   </li>
-
-   <li>
-    <a href="#notice">通知公告</a>
-   </li>
-
-   <li>
-    <a href="#schoolnews">校园新闻</a>
-   </li>
-
-   <li>
-    <a href="#service">校园服务</a>
-   </li>
-
-   <li>
-    <a href="#tips">温馨提示</a>
-   </li>
-
-   <li>
-    <a href="javascript:void(0);" onclick="oldAlert('新生流程页面。');">新生流程</a>
-   </li>
-
-   <li>
-    <a href="javascript:void(0);" onclick="oldAlert('帮助中心。');">帮助中心</a>
-   </li>
-
-   <li>
-    <a href="javascript:void(0);" onclick="oldAlert('您确定退出登录吗？');">退出登录</a>
-   </li>
+   <li class="first current"><a href="javascript:void(0);">首页</a></li>
+   <li><a href="#notice">通知公告</a></li>
+   <li><a href="#schoolnews">校园新闻</a></li>
+   <li><a href="#service">校园服务</a></li>
+   <li><a href="#tips">温馨提示</a></li>
+   <li><a href="javascript:void(0);" onclick="oldAlert('新生流程页面。');">新生流程</a></li>
+   <li><a href="javascript:void(0);" onclick="oldAlert('帮助中心。');">帮助中心</a></li>
+   <li><a href="javascript:void(0);" onclick="oldAlert('您确定退出登录吗？');">退出登录</a></li>
   </ul>
  </div>
 
@@ -446,105 +417,47 @@ window.onload=function(){
    <a href="javascript:void(0);">学生工作</a> |
    <a href="javascript:void(0);">校园文化</a> |
    <a href="javascript:void(0);">下载中心</a>
-
-   <span class="welcome">
-    欢迎您，林同学　|　2011年07月10日
-   </span>
+   <span class="welcome">欢迎您，林同学　|　2011年07月10日</span>
   </div>
  </div>
 
 
  <div id="crumb">
   当前位置：无锡市第一中学 &gt; 学生综合管理平台 &gt; 首页
-  <span class="right">
-   当前用户：林同学　学号：110512
-  </span>
+  <span class="right">当前用户：林同学　学号：110512</span>
  </div>
 
 
  <div id="main">
 
   <div id="leftcol">
-
    <div class="box">
-    <div class="boxtitle">
-     <span class="redbar"></span>学生登录
-    </div>
-
+    <div class="boxtitle"><span class="redbar"></span>学生登录</div>
     <div class="login">
-     <label>用户名：</label>
-     <input type="text" value="110512" />
-
-     <label>登录密码：</label>
-     <input type="password" value="" />
-
-     <button
-      class="btn"
-      type="button"
-      onclick="oldAlert('登录功能为演示页面。');">
-      登录
-     </button>
-
+     <label>用户名：</label><input type="text" value="110512" />
+     <label>登录密码：</label><input type="password" value="" />
+     <button class="btn" type="button" onclick="oldAlert('登录功能为演示页面。');">登录</button>
      <a class="help" href="javascript:void(0);">忘记密码？</a>
     </div>
    </div>
 
-
    <div class="box">
-    <div class="boxtitle">
-     <span class="redbar"></span>栏目导航
-    </div>
-
-    <div class="schoolname">
-     <strong>学生综合管理平台</strong>
-     <span>WUXI NO.1 HIGH SCHOOL</span>
-    </div>
-
+    <div class="boxtitle"><span class="redbar"></span>栏目导航</div>
+    <div class="schoolname"><strong>学生综合管理平台</strong><span>WUXI NO.1 HIGH SCHOOL</span></div>
     <div class="leftlinks">
-
-     <a href="javascript:void(0);">
-      <span class="arrow">◆</span>个人信息
-     </a>
-
-     <a
-      href="javascript:void(0);"
-      onclick="oldAlert('新生流程：请按照学校通知完成报到。');">
-      <span class="arrow">◆</span>新生报到
-     </a>
-
-     <a href="javascript:void(0);">
-      <span class="arrow">◆</span>通知公告
-     </a>
-
-     <a href="javascript:void(0);">
-      <span class="arrow">◆</span>成绩查询
-     </a>
-
-     <a href="javascript:void(0);">
-      <span class="arrow">◆</span>课程信息
-     </a>
-
-     <a href="javascript:void(0);">
-      <span class="arrow">◆</span>宿舍信息
-     </a>
-
-     <a href="javascript:void(0);">
-      <span class="arrow">◆</span>校园卡服务
-     </a>
-
-     <a href="javascript:void(0);">
-      <span class="arrow">◆</span>资料下载
-     </a>
-
+     <a href="javascript:void(0);"><span class="arrow">◆</span>个人信息</a>
+     <a href="javascript:void(0);" onclick="oldAlert('新生流程：请按照学校通知完成报到。');"><span class="arrow">◆</span>新生报到</a>
+     <a href="javascript:void(0);"><span class="arrow">◆</span>通知公告</a>
+     <a href="javascript:void(0);"><span class="arrow">◆</span>成绩查询</a>
+     <a href="javascript:void(0);"><span class="arrow">◆</span>课程信息</a>
+     <a href="javascript:void(0);"><span class="arrow">◆</span>宿舍信息</a>
+     <a href="javascript:void(0);"><span class="arrow">◆</span>校园卡服务</a>
+     <a href="javascript:void(0);"><span class="arrow">◆</span>资料下载</a>
     </div>
    </div>
 
-
    <div class="box">
-    <div class="boxtitle">
-     <span class="redbar"></span>个人信息
-    </div>
-
+    <div class="boxtitle"><span class="redbar"></span>个人信息</div>
     <div class="profile">
      <img src="img/avatar.png" alt="学生头像" />
      <strong>林同学</strong>
@@ -554,516 +467,192 @@ window.onload=function(){
     </div>
    </div>
 
-
    <div class="box">
-    <div class="boxtitle">
-     <span class="redbar"></span>关注我们
-    </div>
-
+    <div class="boxtitle"><span class="redbar"></span>关注我们</div>
     <div class="qr">
      <img src="img/ewm.png" alt="二维码" />
-     <p>
-      扫一扫<br />
-      关注学校信息
-     </p>
+     <p>扫一扫<br />关注学校信息</p>
     </div>
    </div>
-
   </div>
 
 
   <div id="centercol">
-
    <div id="bannerbox">
-
     <div id="bannerwrap">
-     <div
-      id="banner"
-      onmouseover="stopBanner();"
-      onmouseout="startBanner();">
-
-      <img
-       id="banner-image"
-       src="img/banner.jpg"
-       alt="校园风貌" />
-
+     <div id="banner" onmouseover="stopBanner();" onmouseout="startBanner();">
+      <img id="banner-image" src="img/banner.jpg" alt="校园风貌" />
       <div id="banner-index">
-
-       <a
-        href="javascript:void(0);"
-        id="banner-0"
-        onclick="chooseBanner(0);">
-        1
-       </a>
-
-       <a
-        href="javascript:void(0);"
-        id="banner-1"
-        onclick="chooseBanner(1);">
-        2
-       </a>
-
+       <a href="javascript:void(0);" id="banner-0" onclick="chooseBanner(0);">1</a>
+       <a href="javascript:void(0);" id="banner-1" onclick="chooseBanner(1);">2</a>
       </div>
-
      </div>
     </div>
-
 
     <div id="hotbox">
-
-     <div class="hot-title">
-      校园要闻
-     </div>
-
+     <div class="hot-title">校园要闻</div>
      <ul>
-
-      <li>
-       <span>01</span>
-       <a href="javascript:void(0);">致2011级新同学的一封信</a>
-      </li>
-
-      <li>
-       <span>02</span>
-       <a href="javascript:void(0);">2011级新生报到注意事项</a>
-      </li>
-
-      <li>
-       <span>03</span>
-       <a href="javascript:void(0);">关于校园卡办理的通知</a>
-      </li>
-
-      <li>
-       <span>04</span>
-       <a href="javascript:void(0);">2011级新生军训安排</a>
-      </li>
-
-      <li>
-       <span>05</span>
-       <a href="javascript:void(0);">学生手册（2011版）</a>
-      </li>
-
-      <li>
-       <span>06</span>
-       <a href="javascript:void(0);">暑期校园开放时间安排</a>
-      </li>
-
+      <li><span>01</span><a href="javascript:void(0);">致2011级新同学的一封信</a></li>
+      <li><span>02</span><a href="javascript:void(0);">2011级新生报到注意事项</a></li>
+      <li><span>03</span><a href="javascript:void(0);">关于校园卡办理的通知</a></li>
+      <li><span>04</span><a href="javascript:void(0);">2011级新生军训安排</a></li>
+      <li><span>05</span><a href="javascript:void(0);">学生手册（2011版）</a></li>
+      <li><span>06</span><a href="javascript:void(0);">暑期校园开放时间安排</a></li>
      </ul>
-
     </div>
-
     <div class="clear"></div>
    </div>
 
-
    <div class="headline">
-
-    <h1>
-     欢迎进入无锡市第一中学学生综合管理平台
-    </h1>
-
-    <p>
-     本平台为2011级新生提供报到信息、校园通知、学生服务等信息查询。
-    </p>
-
+    <h1>欢迎进入无锡市第一中学学生综合管理平台</h1>
+    <p>本平台为2011级新生提供报到信息、校园通知、学生服务等信息查询。</p>
     <div class="links">
      <a href="javascript:void(0);">新生报到</a>
      <a href="javascript:void(0);">校园通知</a>
      <a href="javascript:void(0);">资料下载</a>
      <a href="javascript:void(0);">常见问题</a>
     </div>
-
    </div>
 
-
    <div class="twocol">
-
     <div class="half">
-
      <div class="box" id="schoolnews">
-
-      <div class="boxtitle">
-       <span class="redbar"></span>
-       校园新闻
-
-       <span class="more">
-        <a href="javascript:void(0);">更多&gt;&gt;</a>
-       </span>
-      </div>
-
+      <div class="boxtitle"><span class="redbar"></span>校园新闻<span class="more"><a href="javascript:void(0);">更多&gt;&gt;</a></span></div>
       <div class="list">
        <ul>
-
-        <li>
-         <span class="dot">◆</span>
-         <a href="javascript:void(0);">暑期校园开放时间安排</a>
-         <span class="date">07-10</span>
-        </li>
-
-        <li>
-         <span class="dot">◆</span>
-         <a href="javascript:void(0);">2011级新生报到工作安排</a>
-         <span class="date">07-08</span>
-        </li>
-
-        <li>
-         <span class="dot">◆</span>
-         <a href="javascript:void(0);">学生宿舍分配情况查询</a>
-         <span class="date">07-05</span>
-        </li>
-
-        <li>
-         <span class="dot">◆</span>
-         <a href="javascript:void(0);">校服领取时间通知</a>
-         <span class="date">07-02</span>
-        </li>
-
-        <li class="last">
-         <span class="dot">◆</span>
-         <a href="javascript:void(0);">新生校园卡办理说明</a>
-         <span class="date">07-01</span>
-        </li>
-
+        <li><span class="dot">◆</span><a href="javascript:void(0);">暑期校园开放时间安排</a><span class="date">07-10</span></li>
+        <li><span class="dot">◆</span><a href="javascript:void(0);">2011级新生报到工作安排</a><span class="date">07-08</span></li>
+        <li><span class="dot">◆</span><a href="javascript:void(0);">学生宿舍分配情况查询</a><span class="date">07-05</span></li>
+        <li><span class="dot">◆</span><a href="javascript:void(0);">校服领取时间通知</a><span class="date">07-02</span></li>
+        <li class="last"><span class="dot">◆</span><a href="javascript:void(0);">新生校园卡办理说明</a><span class="date">07-01</span></li>
        </ul>
       </div>
-
      </div>
-
     </div>
-
 
     <div class="half right">
-
      <div class="box" id="notice">
-
-      <div class="boxtitle">
-       <span class="redbar"></span>
-       通知公告
-
-       <span class="more">
-        <a href="javascript:void(0);">更多&gt;&gt;</a>
-       </span>
-      </div>
-
+      <div class="boxtitle"><span class="redbar"></span>通知公告<span class="more"><a href="javascript:void(0);">更多&gt;&gt;</a></span></div>
       <div class="list">
        <ul>
-
-        <li>
-         <span class="dot">◆</span>
-         <a
-          href="javascript:void(0);"
-          onclick="oldAlert('致2011级新同学的一封信');">
-          致2011级新同学的一封信
-         </a>
-        </li>
-
-        <li>
-         <span class="dot">◆</span>
-         <a href="javascript:void(0);">新生报到注意事项</a>
-        </li>
-
-        <li>
-         <span class="dot">◆</span>
-         <a href="javascript:void(0);">关于军训安排的通知</a>
-        </li>
-
-        <li>
-         <span class="dot">◆</span>
-         <a href="javascript:void(0);">学生手册（2011版）</a>
-        </li>
-
-        <li class="last">
-         <span class="dot">◆</span>
-         <a href="javascript:void(0);">校园卡办理通知</a>
-        </li>
-
+        <li><span class="dot">◆</span><a href="javascript:void(0);" onclick="oldAlert('致2011级新同学的一封信');">致2011级新同学的一封信</a></li>
+        <li><span class="dot">◆</span><a href="javascript:void(0);">新生报到注意事项</a></li>
+        <li><span class="dot">◆</span><a href="javascript:void(0);">关于军训安排的通知</a></li>
+        <li><span class="dot">◆</span><a href="javascript:void(0);">学生手册（2011版）</a></li>
+        <li class="last"><span class="dot">◆</span><a href="javascript:void(0);">校园卡办理通知</a></li>
        </ul>
       </div>
-
      </div>
-
     </div>
-
     <div class="clear"></div>
    </div>
-
 
    <div class="twocol">
-
     <div class="half">
-
      <div class="box">
-
-      <div class="boxtitle">
-       <span class="redbar"></span>
-       新生待办事项
-      </div>
-
+      <div class="boxtitle"><span class="redbar"></span>新生待办事项</div>
       <div class="todo">
-
        <ul>
-
-        <li>
-         <span class="num">1</span>
-         住宿申请
-         <span class="done">已完成</span>
-        </li>
-
-        <li class="last">
-         <span class="num">2</span>
-         校服订购
-         <span class="done">已完成</span>
-        </li>
-
+        <li><span class="num">1</span>住宿申请<span class="done">已完成</span></li>
+        <li class="last"><span class="num">2</span>校服订购<span class="done">已完成</span></li>
        </ul>
-
       </div>
-
      </div>
-
     </div>
-
-
     <div class="half right">
-
      <div class="box" id="tips">
-
-      <div class="boxtitle">
-       <span class="redbar"></span>
-       温馨提示
-      </div>
-
+      <div class="boxtitle"><span class="redbar"></span>温馨提示</div>
       <div class="notice-highlight">
-       <strong>提示：</strong>
-       完成住宿申请与校服订购后，新生报到流程即告完成。
-       请及时查看学校通知。
+       <strong>提示：</strong>完成住宿申请与校服订购后，新生报到流程即告完成。请及时查看学校通知。
       </div>
-
      </div>
-
     </div>
-
     <div class="clear"></div>
    </div>
 
-
    <div class="widebox">
-
-    <div class="title">
-     <span class="bar"></span>
-     系统公告
-
-     <span class="more">
-      <a href="javascript:void(0);">更多&gt;&gt;</a>
-     </span>
-    </div>
-
+    <div class="title"><span class="bar"></span>系统公告<span class="more"><a href="javascript:void(0);">更多&gt;&gt;</a></span></div>
     <div class="content">
-
-     <table
-      class="system-table"
-      cellpadding="0"
-      cellspacing="0"
-      border="0">
-
-      <tr>
-       <td class="label">系统维护：</td>
-       <td class="value">
-        每日22:00—23:00进行系统维护，请妥善保管登录密码。
-       </td>
-      </tr>
-
-      <tr>
-       <td class="label">访问建议：</td>
-       <td class="value">
-        建议使用 Internet Explorer 浏览器，建议分辨率 1024×768。
-       </td>
-      </tr>
-
-      <tr>
-       <td class="label">服务电话：</td>
-       <td class="value">
-        学生处：0510-85027666　信息中心：0510-85027668
-       </td>
-      </tr>
-
+     <table class="system-table" cellpadding="0" cellspacing="0" border="0">
+      <tr><td class="label">系统维护：</td><td class="value">每日22:00—23:00进行系统维护，请妥善保管登录密码。</td></tr>
+      <tr><td class="label">访问建议：</td><td class="value">建议使用 Internet Explorer 浏览器，建议分辨率 1024×768。</td></tr>
+      <tr><td class="label">服务电话：</td><td class="value">学生处：0510-85027666　信息中心：0510-85027668</td></tr>
      </table>
-
     </div>
    </div>
 
-
    <div class="widebox">
-
-    <div class="title">
-     <span class="bar"></span>
-     常用链接
-    </div>
-
+    <div class="title"><span class="bar"></span>常用链接</div>
     <div class="content">
-     <a href="javascript:void(0);">学校主页</a>
-    　|　
-     <a href="javascript:void(0);">教务系统</a>
-    　|　
-     <a href="javascript:void(0);">图书馆</a>
-    　|　
-     <a href="javascript:void(0);">校园邮箱</a>
-    　|　
-     <a href="javascript:void(0);">校园一卡通</a>
-    　|　
+     <a href="javascript:void(0);">学校主页</a>　|　
+     <a href="javascript:void(0);">教务系统</a>　|　
+     <a href="javascript:void(0);">图书馆</a>　|　
+     <a href="javascript:void(0);">校园邮箱</a>　|　
+     <a href="javascript:void(0);">校园一卡通</a>　|　
      <a href="javascript:void(0);">下载中心</a>
     </div>
-
    </div>
-
   </div>
 
 
   <div id="rightcol">
-
    <div class="box">
-
-    <div class="boxtitle">
-     <span class="redbar"></span>
-     学校公告
-
-     <span class="more">
-      <a href="javascript:void(0);">更多&gt;&gt;</a>
-     </span>
-    </div>
-
+    <div class="boxtitle"><span class="redbar"></span>学校公告<span class="more"><a href="javascript:void(0);">更多&gt;&gt;</a></span></div>
     <div class="list">
      <ul>
-
-      <li>
-       <span class="dot">◆</span>
-       <a href="javascript:void(0);">关于暑期值班的通知</a>
-      </li>
-
-      <li>
-       <span class="dot">◆</span>
-       <a href="javascript:void(0);">校园安全工作安排</a>
-      </li>
-
-      <li>
-       <span class="dot">◆</span>
-       <a href="javascript:void(0);">暑期维修施工公告</a>
-      </li>
-
-      <li>
-       <span class="dot">◆</span>
-       <a href="javascript:void(0);">新生报到相关说明</a>
-      </li>
-
-      <li class="last">
-       <span class="dot">◆</span>
-       <a href="javascript:void(0);">值班电话及联系人</a>
-      </li>
-
+      <li><span class="dot">◆</span><a href="javascript:void(0);">关于暑期值班的通知</a></li>
+      <li><span class="dot">◆</span><a href="javascript:void(0);">校园安全工作安排</a></li>
+      <li><span class="dot">◆</span><a href="javascript:void(0);">暑期维修施工公告</a></li>
+      <li><span class="dot">◆</span><a href="javascript:void(0);">新生报到相关说明</a></li>
+      <li class="last"><span class="dot">◆</span><a href="javascript:void(0);">值班电话及联系人</a></li>
      </ul>
     </div>
-
    </div>
 
-
    <div class="box" id="service">
-
-    <div class="boxtitle">
-     <span class="redbar"></span>
-     校园服务
-    </div>
-
+    <div class="boxtitle"><span class="redbar"></span>校园服务</div>
     <div class="rightlinks">
-
      <a href="javascript:void(0);">成绩查询</a>
      <a href="javascript:void(0);">课程信息</a>
      <a href="javascript:void(0);">宿舍信息</a>
      <a href="javascript:void(0);">校园卡服务</a>
      <a href="javascript:void(0);">资料下载</a>
      <a href="javascript:void(0);">常用电话</a>
-
     </div>
-
    </div>
 
-
    <div class="box">
-
-    <div class="boxtitle">
-     <span class="redbar"></span>
-     相关链接
-    </div>
-
+    <div class="boxtitle"><span class="redbar"></span>相关链接</div>
     <div class="service">
-
      <ul>
-
-      <li>
-       <a href="javascript:void(0);">无锡教育信息网</a>
-      </li>
-
-      <li>
-       <a href="javascript:void(0);">江苏省教育厅</a>
-      </li>
-
-      <li>
-       <a href="javascript:void(0);">无锡市教育局</a>
-      </li>
-
-      <li>
-       <a href="javascript:void(0);">学校校园网</a>
-      </li>
-
-      <li class="last">
-       <a href="javascript:void(0);">校内资源平台</a>
-      </li>
-
+      <li><a href="javascript:void(0);">无锡教育信息网</a></li>
+      <li><a href="javascript:void(0);">江苏省教育厅</a></li>
+      <li><a href="javascript:void(0);">无锡市教育局</a></li>
+      <li><a href="javascript:void(0);">学校校园网</a></li>
+      <li class="last"><a href="javascript:void(0);">校内资源平台</a></li>
      </ul>
-
     </div>
-
    </div>
-
 
    <div class="box">
-
-    <div class="boxtitle">
-     <span class="redbar"></span>
-     网站说明
-    </div>
-
+    <div class="boxtitle"><span class="redbar"></span>网站说明</div>
     <div class="ad">
-
-     <div class="adtitle">
-      校园信息服务
-     </div>
-
-     <div class="adbody">
-      信息中心　提供技术支持
-     </div>
-
+     <div class="adtitle">校园信息服务</div>
+     <div class="adbody">信息中心　提供技术支持</div>
     </div>
-
    </div>
-
   </div>
-
 
   <div class="clear"></div>
 
-
   <div id="status">
    当前状态：系统运行正常　|　最后登录：2011-07-10 08:42
-
-   <span class="right">
-    建议使用 IE7.0 / 1024×768
-   </span>
+   <span class="right">建议使用 IE7.0 / 1024×768</span>
   </div>
-
  </div>
 
 
  <div id="footer">
-
   <div class="links">
    <a href="javascript:void(0);">关于学校</a> |
    <a href="javascript:void(0);">网站导航</a> |
@@ -1072,34 +661,16 @@ window.onload=function(){
    <a href="javascript:void(0);">帮助中心</a> |
    <a href="javascript:void(0);">隐私声明</a>
   </div>
-
   <div class="line"></div>
-
-  <div class="copy">
-   无锡市第一中学　版权所有 © 2011
-  </div>
-
-  <div>
-   地址：江苏省无锡市运河东路98号　邮编：214002　
-   电话：0510-85027666　苏ICP备05012345号
-  </div>
-
-  <div class="small">
-   建议使用 IE7.0 以上浏览器，分辨率 1024×768　
-   本站最佳浏览效果：1024×768
-  </div>
-
+  <div class="copy">无锡市第一中学　版权所有 © 2011</div>
+  <div>地址：江苏省无锡市运河东路98号　邮编：214002　电话：0510-85027666　苏ICP备05012345号</div>
+  <div class="small">建议使用 IE7.0 以上浏览器，分辨率 1024×768　本站最佳浏览效果：1024×768</div>
  </div>
-
 
  <div id="bottom">
   无锡市第一中学学生综合管理平台　|　当前用户：林同学　|　学号：110512
-
-  <span class="right">
-   2011-07-10　欢迎登录
-  </span>
+  <span class="right">2011-07-10　欢迎登录</span>
  </div>
-
 </div>
 </body>
 </html>

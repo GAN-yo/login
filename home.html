@@ -8,46 +8,86 @@
     <link rel="stylesheet" href="https://yzxs.wxeic.com/public/default/css/style.css">
     <script src="https://yzxs.wxeic.com/public/default/js/jquery.min.js"></script>
     <style>
-        .grid-list li a:hover {
-            opacity: 0.85;
-            text-decoration: none;
-        }
-        .grid-list .title {
-            font-weight: bold;
-            margin-top: 8px;
-        }
-        .user .text div {
-            line-height: 1.6;
-        }
-        .disclaimer {
-            font-size: 11px;
-            color: #999;
-            margin-top: 6px;
-            line-height: 1.5;
-            text-align: center;
-        }
-        .article-list ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .article-list li {
+        .grid-list li a:hover { opacity: 0.85; text-decoration: none; }
+        .grid-list .title { font-weight: bold; margin-top: 8px; }
+        .user .text div { line-height: 1.6; }
+        .disclaimer { font-size: 11px; color: #999; margin-top: 6px; line-height: 1.5; text-align: center; }
+        .article-list ul { list-style: none; padding: 0; margin: 0; }
+        .article-list li { padding: 12px 20px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .article-list li a { color: #333; text-decoration: none; transition: color 0.2s; }
+        .article-list li a:hover { color: #b22222; }
+        .article-summary { font-size: 12px; color: #999; margin-top: 4px; }
+
+        /* 系统通知横幅 */
+        .system-banner {
+            display: none;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 2px;
+            color: #856404;
             padding: 12px 20px;
-            border-bottom: 1px solid #eee;
+            margin: 10px 0;
+            position: relative;
             font-size: 14px;
+            line-height: 1.5;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .article-list li a {
-            color: #333;
-            text-decoration: none;
-            transition: color 0.2s;
+        .system-banner .banner-icon {
+            position: absolute;
+            left: 15px;
+            top: 14px;
+            font-size: 20px;
+            line-height: 1;
         }
-        .article-list li a:hover {
-            color: #b22222;
+        .system-banner .banner-content {
+            margin-left: 30px;
+            margin-right: 30px;
         }
-        .article-summary {
-            font-size: 12px;
-            color: #999;
-            margin-top: 4px;
+        .system-banner .banner-content a {
+            color: #856404;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .system-banner .banner-close {
+            position: absolute;
+            right: 12px;
+            top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #856404;
+            cursor: pointer;
+            line-height: 1;
+            opacity: 0.7;
+        }
+        .system-banner .banner-close:hover { opacity: 1; }
+
+        /* 复制横幅：堆叠在页面上方 */
+        .cloned-banner {
+            position: fixed;
+            z-index: 9998;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 2px;
+            color: #856404;
+            padding: 12px 20px;
+            font-size: 14px;
+            line-height: 1.5;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            min-width: 280px;
+            max-width: 450px;
+            pointer-events: none;
+            font-family: Arial, "宋体", SimSun, sans-serif;
+        }
+        .cloned-banner .banner-icon {
+            position: absolute;
+            left: 15px;
+            top: 14px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        .cloned-banner .banner-text {
+            margin-left: 30px;
+            word-break: break-word;
         }
     </style>
 </head>
@@ -70,6 +110,15 @@
         <div class="container">
             <div id="slider">
                 <img src="img/banner.jpg" alt="校园风光">
+            </div>
+
+            <!-- 系统通知横幅（原始） -->
+            <div class="system-banner" id="system-banner">
+                <span class="banner-icon">⚠</span>
+                <div class="banner-content">
+                    部分历史数据索引校验未通过。你的学籍信息与一条归档记录存在关联。如需要核实，请<a href="#" id="banner-detail-link">点击此处查看详情</a>。
+                </div>
+                <span class="banner-close" id="banner-close-btn">&times;</span>
             </div>
 
             <div class="box">
@@ -154,8 +203,15 @@
 
 <script src="js/common.js"></script>
 <script>
+    // 禁用右键菜单和F12开发者工具
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
+            e.preventDefault();
+        }
+    });
+
     (function() {
-        // 获取学生信息
         var info = StorageManager.getStudentInfo();
         if (!info.name) {
             window.location.href = 'index.html';
@@ -170,7 +226,6 @@
         infoHtml += '<div>性别：' + gender + '</div>';
         document.getElementById('student-info').innerHTML = infoHtml;
 
-        // 待办状态
         var dormitoryDone = StorageManager.isDormitorySubmitted();
         var uniformDone = StorageManager.isUniformSubmitted();
         var statusDiv = document.getElementById('task-status');
@@ -184,6 +239,48 @@
             statusDiv.innerHTML = '待完成：' + remaining.join('、');
             statusDiv.style.color = '#b22222';
         }
+
+        // 显示横幅
+        var bannerDismissed = localStorage.getItem('bannerDismissed') === 'true';
+        if (dormitoryDone && uniformDone && !bannerDismissed) {
+            var banner = document.getElementById('system-banner');
+            banner.style.display = 'block';
+            document.getElementById('banner-detail-link').href = 'error.html?ref=' + studentID + '&archive=110512';
+        }
+
+        // 关闭按钮：触发大量相同横幅，尾部追加递增感叹号
+        document.getElementById('banner-close-btn').addEventListener('click', function() {
+            var banner = document.getElementById('system-banner');
+            banner.style.display = 'none';
+            localStorage.setItem('bannerDismissed', 'true');
+
+            // 基准文案
+            var baseText = '部分历史数据索引校验未通过。你的学籍信息与一条归档记录存在关联。';
+
+            // 创建N条横幅，每条间隔0.2秒，散落在页面各处
+            var totalBanners = 12;
+            var count = 0;
+            var interval = setInterval(function() {
+                if (count >= totalBanners) {
+                    clearInterval(interval);
+                    return;
+                }
+                // 递增感叹号数量
+                var exclamation = new Array(count + 1).fill('！').join('');
+                var fullText = baseText + exclamation;
+
+                var clone = document.createElement('div');
+                clone.className = 'cloned-banner';
+                // 随机位置，避开边缘
+                var left = Math.random() * (window.innerWidth - 350);
+                var top = Math.random() * (window.innerHeight - 80);
+                clone.style.left = Math.max(10, left) + 'px';
+                clone.style.top = Math.max(10, top) + 'px';
+                clone.innerHTML = '<span class="banner-icon">⚠</span><div class="banner-text">' + fullText + '</div>';
+                document.body.appendChild(clone);
+                count++;
+            }, 200);
+        });
 
         // 文章列表
         var displayYear = getDisplayYear();

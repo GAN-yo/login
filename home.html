@@ -68,6 +68,7 @@
 
         /* 追加横幅（不带关闭按钮） */
         .extra-banner {
+            display: none; /* 默认隐藏，后续用 fadeIn 显示 */
             background: #fff3cd;
             border: 1px solid #ffc107;
             border-radius: 2px;
@@ -206,9 +207,9 @@
 
 <script src="js/common.js"></script>
 <script>
-    // 禁用右键菜单和F12
+    // 禁用右键和F12
     document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('keydown', e => {
+    document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
             e.preventDefault();
         }
@@ -246,43 +247,46 @@
         var shouldShowBanner = dormitoryDone && uniformDone && !errorVisited;
 
         if (shouldShowBanner) {
-            // 显示原始横幅
-            var mainBanner = document.getElementById('system-banner');
-            mainBanner.style.display = 'block';
+            // 设置详情链接
             document.getElementById('banner-detail-link').href = 'error.html?ref=' + studentID + '&archive=110512';
 
-            // 如果之前已经触发过彩蛋，则禁用关闭按钮并生成追加横幅
+            // 延迟1.5秒后渐显横幅
+            setTimeout(function() {
+                $('#system-banner').fadeIn(600);
+            }, 1500);
+
+            // 如果之前已经触发过彩蛋，禁用关闭按钮，并生成追加横幅（逐个渐显）
             if (bannerSpammed) {
-                var closeBtn = document.getElementById('banner-close-btn');
-                closeBtn.classList.add('disabled');
-                generateExtraBanners();
+                $('#banner-close-btn').addClass('disabled');
+                generateExtraBannersWithFadeIn();
             }
         }
 
-        // 原始横幅关闭按钮事件
-        document.getElementById('banner-close-btn').addEventListener('click', function() {
-            if (bannerSpammed) return; // 已经触发过，不再响应
-            // 设置标记
+        // 关闭按钮事件
+        $('#banner-close-btn').click(function() {
+            if (bannerSpammed) return;
             localStorage.setItem('bannerSpammed', 'true');
             bannerSpammed = true;
-            // 禁用关闭按钮
-            this.classList.add('disabled');
-            // 生成追加横幅
-            generateExtraBanners();
+            $(this).addClass('disabled');
+            generateExtraBannersWithFadeIn();
         });
 
-        // 生成10条感叹号递增的横幅，插入到原始横幅后面
-        function generateExtraBanners() {
-            var container = document.getElementById('banner-container');
+        // 逐个渐显追加横幅
+        function generateExtraBannersWithFadeIn() {
+            var container = $('#banner-container');
             var baseText = '部分历史数据索引校验未通过。你的学籍信息与一条归档记录存在关联。';
+            // 创建10个元素，先隐藏
             for (var i = 0; i < 10; i++) {
                 var exclamation = new Array(i + 1).fill('！').join('');
                 var fullText = baseText + exclamation;
-                var extraDiv = document.createElement('div');
-                extraDiv.className = 'extra-banner';
-                extraDiv.innerHTML = '<span class="banner-icon">⚠</span><div class="banner-text">' + fullText + '</div>';
-                container.appendChild(extraDiv);
+                var extraDiv = $('<div class="extra-banner"></div>');
+                extraDiv.html('<span class="banner-icon">⚠</span><div class="banner-text">' + fullText + '</div>');
+                container.append(extraDiv);
             }
+            // 逐个淡入
+            $('.extra-banner').each(function(index) {
+                $(this).delay(300 * index).fadeIn(400);
+            });
         }
 
         // 文章列表

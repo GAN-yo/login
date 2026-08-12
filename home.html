@@ -60,34 +60,34 @@
             opacity: 0.7;
         }
         .system-banner .banner-close:hover { opacity: 1; }
+        .system-banner .banner-close.disabled {
+            cursor: default;
+            opacity: 0.3;
+            pointer-events: none;
+        }
 
-        /* 复制横幅：堆叠在页面上方 */
-        .cloned-banner {
-            position: fixed;
-            z-index: 9998;
+        /* 追加横幅（不带关闭按钮） */
+        .extra-banner {
             background: #fff3cd;
             border: 1px solid #ffc107;
             border-radius: 2px;
             color: #856404;
             padding: 12px 20px;
+            margin: 5px 0;
+            position: relative;
             font-size: 14px;
             line-height: 1.5;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-            min-width: 280px;
-            max-width: 450px;
-            pointer-events: none;
-            font-family: Arial, "宋体", SimSun, sans-serif;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .cloned-banner .banner-icon {
+        .extra-banner .banner-icon {
             position: absolute;
             left: 15px;
             top: 14px;
             font-size: 20px;
             line-height: 1;
         }
-        .cloned-banner .banner-text {
+        .extra-banner .banner-text {
             margin-left: 30px;
-            word-break: break-word;
         }
     </style>
 </head>
@@ -112,13 +112,16 @@
                 <img src="img/banner.jpg" alt="校园风光">
             </div>
 
-            <!-- 系统通知横幅（原始） -->
-            <div class="system-banner" id="system-banner">
-                <span class="banner-icon">⚠</span>
-                <div class="banner-content">
-                    部分历史数据索引校验未通过。你的学籍信息与一条归档记录存在关联。如需要核实，请<a href="#" id="banner-detail-link">点击此处查看详情</a>。
+            <!-- 横幅容器 -->
+            <div id="banner-container">
+                <!-- 原始横幅 -->
+                <div class="system-banner" id="system-banner">
+                    <span class="banner-icon">⚠</span>
+                    <div class="banner-content">
+                        部分历史数据索引校验未通过。你的学籍信息与一条归档记录存在关联。如需要核实，请<a href="#" id="banner-detail-link">点击此处查看详情</a>。
+                    </div>
+                    <span class="banner-close" id="banner-close-btn">&times;</span>
                 </div>
-                <span class="banner-close" id="banner-close-btn">&times;</span>
             </div>
 
             <div class="box">
@@ -203,9 +206,9 @@
 
 <script src="js/common.js"></script>
 <script>
-    // 禁用右键菜单和F12开发者工具
-    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-    document.addEventListener('keydown', function(e) {
+    // 禁用右键菜单和F12
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
             e.preventDefault();
         }
@@ -220,11 +223,8 @@
         var surname = info.surname || info.name.charAt(0);
         var studentID = info.id;
         var gender = info.gender;
-
-        var infoHtml = '<div>你好，' + surname + '同学</div>';
-        infoHtml += '<div>学号：' + studentID + '</div>';
-        infoHtml += '<div>性别：' + gender + '</div>';
-        document.getElementById('student-info').innerHTML = infoHtml;
+        document.getElementById('student-info').innerHTML =
+            '<div>你好，' + surname + '同学</div><div>学号：' + studentID + '</div><div>性别：' + gender + '</div>';
 
         var dormitoryDone = StorageManager.isDormitorySubmitted();
         var uniformDone = StorageManager.isUniformSubmitted();
@@ -240,68 +240,58 @@
             statusDiv.style.color = '#b22222';
         }
 
-        // 显示横幅
-        var bannerDismissed = localStorage.getItem('bannerDismissed') === 'true';
-        if (dormitoryDone && uniformDone && !bannerDismissed) {
-            var banner = document.getElementById('system-banner');
-            banner.style.display = 'block';
+        // ---- 横幅逻辑 ----
+        var errorVisited = localStorage.getItem('errorVisited') === 'true';
+        var bannerSpammed = localStorage.getItem('bannerSpammed') === 'true';
+        var shouldShowBanner = dormitoryDone && uniformDone && !errorVisited;
+
+        if (shouldShowBanner) {
+            // 显示原始横幅
+            var mainBanner = document.getElementById('system-banner');
+            mainBanner.style.display = 'block';
             document.getElementById('banner-detail-link').href = 'error.html?ref=' + studentID + '&archive=110512';
+
+            // 如果之前已经触发过彩蛋，则禁用关闭按钮并生成追加横幅
+            if (bannerSpammed) {
+                var closeBtn = document.getElementById('banner-close-btn');
+                closeBtn.classList.add('disabled');
+                generateExtraBanners();
+            }
         }
 
-        // 关闭按钮：触发大量相同横幅，尾部追加递增感叹号
+        // 原始横幅关闭按钮事件
         document.getElementById('banner-close-btn').addEventListener('click', function() {
-            var banner = document.getElementById('system-banner');
-            banner.style.display = 'none';
-            localStorage.setItem('bannerDismissed', 'true');
-
-            // 基准文案
-            var baseText = '部分历史数据索引校验未通过。你的学籍信息与一条归档记录存在关联。';
-
-            // 创建N条横幅，每条间隔0.2秒，散落在页面各处
-            var totalBanners = 12;
-            var count = 0;
-            var interval = setInterval(function() {
-                if (count >= totalBanners) {
-                    clearInterval(interval);
-                    return;
-                }
-                // 递增感叹号数量
-                var exclamation = new Array(count + 1).fill('！').join('');
-                var fullText = baseText + exclamation;
-
-                var clone = document.createElement('div');
-                clone.className = 'cloned-banner';
-                // 随机位置，避开边缘
-                var left = Math.random() * (window.innerWidth - 350);
-                var top = Math.random() * (window.innerHeight - 80);
-                clone.style.left = Math.max(10, left) + 'px';
-                clone.style.top = Math.max(10, top) + 'px';
-                clone.innerHTML = '<span class="banner-icon">⚠</span><div class="banner-text">' + fullText + '</div>';
-                document.body.appendChild(clone);
-                count++;
-            }, 200);
+            if (bannerSpammed) return; // 已经触发过，不再响应
+            // 设置标记
+            localStorage.setItem('bannerSpammed', 'true');
+            bannerSpammed = true;
+            // 禁用关闭按钮
+            this.classList.add('disabled');
+            // 生成追加横幅
+            generateExtraBanners();
         });
+
+        // 生成10条感叹号递增的横幅，插入到原始横幅后面
+        function generateExtraBanners() {
+            var container = document.getElementById('banner-container');
+            var baseText = '部分历史数据索引校验未通过。你的学籍信息与一条归档记录存在关联。';
+            for (var i = 0; i < 10; i++) {
+                var exclamation = new Array(i + 1).fill('！').join('');
+                var fullText = baseText + exclamation;
+                var extraDiv = document.createElement('div');
+                extraDiv.className = 'extra-banner';
+                extraDiv.innerHTML = '<span class="banner-icon">⚠</span><div class="banner-text">' + fullText + '</div>';
+                container.appendChild(extraDiv);
+            }
+        }
 
         // 文章列表
         var displayYear = getDisplayYear();
         var articles = [
-            {
-                title: '《致' + displayYear + '级新同学的一封信》',
-                summary: '亲爱的同学们，祝贺你成为无锡市第一中学的一员。这座百年学府期待与你共同书写新的篇章……',
-                id: 1
-            },
-            {
-                title: '《' + displayYear + '级新生暑期自主学习指南》',
-                summary: '请同学们合理安排暑期时间，为即将到来的高中生活做好充分准备……',
-                id: 2
-            },
-            {
-                title: '《关于' + displayYear + '级新生校园一卡通信息采集的通知》',
-                summary: '请各位新生在8月20日前上传一寸免冠照片，用于制作校园一卡通……',
-                id: 3
-            }
+            { title: '《致' + displayYear + '级新同学的一封信》', summary: '亲爱的同学们，祝贺你成为无锡市第一中学的一员……', id: 1 },
+            { title: '《' + displayYear + '级新生暑期自主学习指南》', summary: '请同学们合理安排暑期时间……', id: 2 },
+            { title: '《关于' + displayYear + '级新生校园一卡通信息采集的通知》', summary: '请各位新生在8月20日前上传一寸免冠照片……', id: 3 }
         ];
-
         var listHtml = '<ul>';
         for (var i = 0; i < articles.length; i++) {
             listHtml += '<li><a href="article.html?id=' + articles[i].id + '">' + articles[i].title + '</a>';

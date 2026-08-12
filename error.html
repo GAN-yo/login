@@ -23,41 +23,60 @@
             color: #a40000;
             font-weight: bold;
         }
+        /* 加载遮罩 */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            font-family: SimSun, "宋体", serif;
+            font-size: 18px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
+<!-- 加载遮罩 -->
+<div id="loading">正在加载数据，请稍候……</div>
 
 <script src="js/common.js"></script>
 <script>
     (function() {
-        // 检查两个任务是否都已完成
-        var dormitoryDone = StorageManager.isDormitorySubmitted();
-        var uniformDone = StorageManager.isUniformSubmitted();
+        // 加载延迟效果
+        setTimeout(function() {
+            document.getElementById('loading').style.display = 'none';
 
-        if (!dormitoryDone || !uniformDone) {
-            // 未完成，拦截访问
-            document.body.innerHTML = '<h3 class="denied">访问受限</h3><p>你尚未完成必要的新生流程，无法查看该页面。</p><p>请返回首页完成住宿申请与校服订购后再试。</p>';
-            return;
-        }
+            // 检查任务完成状态
+            var dormitoryDone = StorageManager.isDormitorySubmitted();
+            var uniformDone = StorageManager.isUniformSubmitted();
 
-        // 已完成，设置访问标记
-        localStorage.setItem('errorVisited', 'true');
+            if (!dormitoryDone || !uniformDone) {
+                document.body.innerHTML = '<h3 class="denied">访问受限</h3><p>你尚未完成必要的新生流程，无法查看该页面。</p><p>请返回首页完成住宿申请与校服订购后再试。</p>';
+                return;
+            }
 
-        // 读取URL参数显示学号
-        var params = new URLSearchParams(window.location.search);
-        var ref = params.get('ref') || '270512';
-        var archive = params.get('archive') || '110512';
+            // 设置已访问标记
+            localStorage.setItem('errorVisited', 'true');
 
-        // 动态生成错误页面内容
-        var html = '<h3>数据校验异常</h3>';
-        html += '<p>当前学籍记录（学号：' + ref + '）与历史归档记录（学号：' + archive + '）存在索引关联。系统已自动执行数据软合并。</p>';
-        html += '<p>关联字段：住宿申请、校服订购<br>历史记录时间：2011-07-10<br>归档状态：只读</p>';
-        html += '<p>如需查看关联的历史归档页面，请点击下方链接：</p>';
-        html += '<p><a href="archive-2011-110512.html">查看归档快照 →</a></p>';
-        html += '<hr><p><small>此异常不影响当前数据完整性。如有疑问，请联系信息技术中心。</small></p>';
-        document.body.innerHTML = html;
+            var params = new URLSearchParams(window.location.search);
+            var ref = params.get('ref') || '270512';
+            var archive = params.get('archive') || '110512';
+
+            var html = '<h3>数据校验异常</h3>';
+            html += '<p>当前学籍记录（学号：' + ref + '）与历史归档记录（学号：' + archive + '）存在索引关联。系统已自动执行数据软合并。</p>';
+            html += '<p>关联字段：住宿申请、校服订购<br>历史记录时间：2011-07-10<br>归档状态：只读</p>';
+            html += '<p>如需查看关联的历史归档页面，请点击下方链接：</p>';
+            html += '<p><a href="archive-2011-110512.html">查看归档快照 →</a></p>';
+            html += '<hr><p><small>此异常不影响当前数据完整性。如有疑问，请联系信息技术中心。</small></p>';
+            document.body.innerHTML = html;
+        }, 800);
     })();
 </script>
-
 </body>
 </html>
